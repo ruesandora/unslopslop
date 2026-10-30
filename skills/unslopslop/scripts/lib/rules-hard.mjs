@@ -108,7 +108,7 @@ export const HARD = [
       const out = [];
       for (const el of h.textEls()) {
         const t = h.own(el);
-        if (t.length < 16 || el.closest('[aria-hidden=true], [disabled], [aria-disabled=true]')) continue;
+        if (t.length < 16 || el.closest('[aria-hidden=true], [disabled], [aria-disabled=true], a, button, [role=button]')) continue;
         const s = h.cs(el);
         const fg = h.rgba(s.color), bg = h.bgOf(el);
         if (!fg || !bg || fg.a < 0.99) continue;

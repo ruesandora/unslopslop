@@ -4,32 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Receivables · Fluxly (example data)</title>
-<link rel="preload" href="../assets/fonts/gloock-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../assets/fonts/geist-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/schibsted-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face { font-family: "Gloock"; src: url("../assets/fonts/gloock-latin.woff2") format("woff2"); font-display: swap; }
-@font-face { font-family: "Geist"; src: url("../assets/fonts/geist-latin-var.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
-@font-face { font-family: "Geist Mono"; src: url("../assets/fonts/geist-mono-latin-var.woff2") format("woff2"); font-weight: 400 500; font-display: swap; }
+/* Same type system as the landing page: Schibsted Grotesk for titles, Atkinson Hyperlegible Next for everything read,
+   because invoice ids and amounts must never be misread (0/O, 1/l/I). */
+@font-face { font-family: "Schibsted Grotesk"; src: url("../assets/fonts/schibsted-grotesk-latin-var.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 
 /* Same combination as the landing page ("night ledger"), tuned for long work sessions:
    lower contrast surfaces, cobalt only for selection, the primary action and the cash series. */
 :root {
   --ink: #0b0e15; --ink-2: #11151f; --ink-3: #171c29; --hover: #1c2232;
   --line: rgba(236, 230, 218, .08); --line-2: rgba(236, 230, 218, .15);
-  --bone: #ece6da; --bone-2: #a7a294; --bone-3: #8d897d;
+  --bone: #ece6da; --bone-2: #c9c4b8; --bone-3: #b3aea2;
   --cobalt: #3a55f0; --cobalt-lit: #8a9dff;
   --in: cubic-bezier(.16, 1, .3, 1);
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 * { box-sizing: border-box; }
 html { background: var(--ink); }
-body { margin: 0; color: var(--bone); font: 400 14px/1.5 "Geist", system-ui, sans-serif; background: var(--grain), var(--ink); -webkit-font-smoothing: antialiased; }
+body { margin: 0; color: var(--bone); font: 400 15px/1.5 "Atkinson Hyperlegible Next", system-ui, sans-serif; background: var(--grain), var(--ink); -webkit-font-smoothing: antialiased; }
 ::selection { background: var(--cobalt); color: #fff; }
 a { color: inherit; text-decoration: none; }
 button, input { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--cobalt-lit); outline-offset: 2px; border-radius: 6px; }
 h1, h2, h3, p { margin: 0; }
-code { font-family: "Geist Mono", ui-monospace, monospace; font-size: 13px; }
+code { font: inherit; }
+h1, h2, .ws b { font-family: "Schibsted Grotesk", system-ui, sans-serif; }
 .num { font-variant-numeric: tabular-nums; }
 .muted { color: var(--bone-2); }
 
@@ -52,12 +54,12 @@ aside { position: sticky; top: 0; height: 100vh; padding: 20px 16px; border-righ
 /* ---------- main */
 main { min-width: 0; padding: 20px 32px 48px; background-image: radial-gradient(50% 40% at 70% 0%, rgba(58, 85, 240, .07), transparent 70%); background-repeat: no-repeat; }
 .bar { display: flex; align-items: center; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
-.bar h1 { font-family: "Gloock", serif; font-weight: 400; font-size: 34px; line-height: 1; margin-right: auto; }
+.bar h1 { font-weight: 700; font-size: 30px; line-height: 1; letter-spacing: -.02em; margin-right: auto; }
 .menu { display: none; }
 .search { display: flex; align-items: center; gap: 8px; width: 260px; padding: 8px 12px; border-radius: 8px; background: var(--ink-2); border: 1px solid var(--line); color: var(--bone-2); }
 .search input { border: 0; background: none; outline: none; width: 100%; color: var(--bone); }
 .search input::placeholder { color: var(--bone-3); }
-.search kbd { font: 13px "Geist", sans-serif; color: var(--bone-3); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 6px; }
+.search kbd { font: 13px "Atkinson Hyperlegible Next", sans-serif; color: var(--bone-3); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 6px; }
 .seg { display: inline-flex; padding: 3px; border-radius: 9px; background: var(--ink-2); border: 1px solid var(--line); }
 .seg button { border: 0; background: none; padding: 6px 12px; border-radius: 6px; color: var(--bone-2); cursor: pointer; transition: background-color 140ms ease-out, color 140ms ease-out; }
 .seg button[aria-pressed=true] { background: var(--ink-3); color: var(--bone); box-shadow: inset 0 0 0 1px var(--line-2); }
@@ -67,14 +69,13 @@ main { min-width: 0; padding: 20px 32px 48px; background-image: radial-gradient(
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; margin-top: 24px; }
 .surface { border-radius: 14px; background: linear-gradient(180deg, var(--ink-3), var(--ink-2)); border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 20px 40px -24px rgba(0, 0, 0, .28); }
 .head { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; }
-.head h2 { font-size: 14px; font-weight: 500; }
+.head h2 { font-size: 15px; font-weight: 600; }
 .head .muted { font-size: 13px; }
 
 /* lead: outstanding + ageing */
-.lead { padding: 4px 20px 20px; display: grid; grid-template-columns: auto 1fr; gap: 8px 40px; align-items: end; }
-.big { font-family: "Gloock", serif; font-size: 60px; line-height: 1; letter-spacing: -.01em; }
-.cmp { font-size: 14px; color: var(--bone-2); }
-.cmp b { color: var(--bone); font-weight: 500; }
+.lead { padding: 4px 20px 20px; display: grid; grid-template-columns: 1fr; gap: 8px; }
+.leadline { font: 600 26px/1.3 "Schibsted Grotesk", system-ui, sans-serif; letter-spacing: -.015em; max-width: 34ch; text-wrap: balance; }
+.leadline b { font-weight: 800; }
 .age { grid-column: 1 / -1; margin-top: 20px; }
 .agebar { display: flex; height: 12px; border-radius: 4px; overflow: hidden; gap: 2px; }
 .agebar i { display: block; height: 100%; transform-origin: left; }
@@ -149,7 +150,7 @@ td.r, th.r { text-align: right; }
   .seg button { padding: 10px 12px; }
   .primary { padding: 12px 16px; }
   .lead { grid-template-columns: 1fr; }
-  .big { font-size: 48px; }
+  .leadline { font-size: 22px; }
   .agekey { grid-template-columns: 1fr 1fr; }
   .facts { grid-template-columns: 1fr; }
   .facts div + div { padding-left: 0; border-left: 0; }
@@ -205,10 +206,9 @@ td.r, th.r { text-align: right; }
     <div class="grid">
       <div style="display:grid;gap:20px;min-width:0">
         <section class="surface" aria-labelledby="out-h">
-          <div class="head"><h2 id="out-h">Outstanding</h2><span class="muted">Example data, as of 30 Oct 2026</span></div>
+          <div class="head"><h2 id="out-h">Outstanding on 30 October</h2></div>
           <div class="lead">
-            <div class="big num" id="big">€18,460</div>
-            <p class="cmp">across 11 invoices · <b>down €2,840</b> from €21,300 on 1 Oct</p>
+            <p class="leadline"><b>€18,460</b> outstanding across 11 invoices, €2,840 less than on 1 October.</p>
             <div class="age">
               <div class="agebar" role="img" aria-label="Ageing: not yet due €11,850; 1 to 7 days late €1,790; 8 to 30 days late €2,420; over 30 days €2,400">
                 <i style="flex:11850;background:#8a9dff"></i><i style="flex:1790;background:#5f78f5"></i><i style="flex:2420;background:#3a55f0"></i><i style="flex:2400;background:#ece6da"></i>
@@ -240,7 +240,7 @@ td.r, th.r { text-align: right; }
       </div>
 
       <section class="surface" aria-labelledby="q-h">
-        <div class="head"><h2 id="q-h">Reminder queue</h2><span class="muted">sends tomorrow, 09:00</span></div>
+        <div class="head"><h2 id="q-h">Reminder queue, sends tomorrow 09:00</h2></div>
         <ul class="queue num">
           <li><b>Linden Print Works</b><b class="amt">€2,400</b><span class="sub"><code>INV-0398</code> · 34 days late</span><span class="tone firm">Final notice</span></li>
           <li><b>Harbour Street Dental</b><b class="amt">€1,200</b><span class="sub"><code>INV-0401</code> · 27 days late</span><span class="tone firm">Final notice</span></li>
@@ -250,7 +250,7 @@ td.r, th.r { text-align: right; }
           <li><b>Odd Lot Coffee</b><b class="amt">€390</b><span class="sub"><code>INV-0420</code> · 3 days late</span><span class="tone">Friendly</span></li>
         </ul>
         <div class="qactions"><button class="ghost" type="button">Review letters</button><button class="ghost" type="button">Hold all until Monday</button></div>
-        <div class="head" style="border-top:1px solid var(--line)"><h2>Matched this week</h2><span class="muted">from the bank feed</span></div>
+        <div class="head" style="border-top:1px solid var(--line)"><h2>Matched from the bank feed this week</h2></div>
         <ul class="queue num">
           <li><b>Fern &amp; Field</b><b class="amt">€1,750</b><span class="sub"><code>INV-0402</code> · 2 reminders cancelled</span><span class="st paid">Paid 28 Oct</span></li>
           <li><b>Kite Studio</b><b class="amt">€980</b><span class="sub"><code>INV-0407</code> · paid before any reminder</span><span class="st paid">Paid 27 Oct</span></li>
@@ -280,7 +280,7 @@ td.r, th.r { text-align: right; }
           <tr><td><code>INV-0424</code></td><td>Paper Lane Supplies</td><td class="hide-m">27 Oct</td><td class="hide-m">10 Nov</td><td class="hide-m muted">not due</td><td class="hide-m">Watch due date</td><td class="hide-m"><span class="st draft">Scheduled</span></td><td class="r">€1,940.00</td></tr>
         </tbody>
       </table>
-      <div class="foot num"><span>9 of 11 open invoices · example data</span><span>Total shown €14,300.00</span></div>
+      <div class="foot num"><span>9 of 11 open invoices</span><span>Total shown €14,300.00</span></div>
     </section>
   </main>
 </div>
@@ -307,10 +307,10 @@ td.r, th.r { text-align: right; }
     const yMax = 16000, y = (v) => T + ih - (v / yMax) * ih, yb = (v) => (v / 4000) * ih * 0.62;
     for (const v of [0, 4000, 8000, 12000, 16000]) {
       svg.append(el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: 'rgba(236,230,218,.08)' }));
-      const t = el('text', { x: L - 8, y: y(v) + 4, 'text-anchor': 'end', fill: '#8d897d', 'font-size': 12 }); t.textContent = v ? '€' + v / 1000 + 'k' : '0'; svg.append(t);
+      const t = el('text', { x: L - 8, y: y(v) + 4, 'text-anchor': 'end', fill: '#b3aea2', 'font-size': 12 }); t.textContent = v ? '€' + v / 1000 + 'k' : '0'; svg.append(t);
     }
     due.forEach((_, i) => { const d = new Date(start); d.setDate(d.getDate() + i); if (d.getDay() === 0 || d.getDay() === 6) svg.append(el('rect', { x: L + i * bw, y: T, width: bw, height: ih, fill: 'rgba(236,230,218,.025)' })); });
-    for (const i of [0, 7, 14, 21, 29]) { const t = el('text', { x: L + i * bw + bw / 2, y: H - 8, 'text-anchor': 'middle', fill: '#8d897d', 'font-size': 12 }); t.textContent = i ? label(i) : 'Today'; svg.append(t); }
+    for (const i of [0, 7, 14, 21, 29]) { const t = el('text', { x: L + i * bw + bw / 2, y: H - 8, 'text-anchor': 'middle', fill: '#b3aea2', 'font-size': 12 }); t.textContent = i ? label(i) : 'Today'; svg.append(t); }
     bars = due.map((v, i) => { const h = yb(v); const r = el('rect', { x: L + i * bw + bw * 0.22, y: T + ih - h, width: bw * 0.56, height: Math.max(h, 0), rx: 2, fill: '#3a55f0' }); r.style.transformOrigin = `0 ${T + ih}px`; r.style.transformBox = 'view-box'; svg.append(r); return r; });
     const pts = cum.map((v, i) => `${L + i * bw + bw / 2},${y(v)}`).join(' ');
     line = el('polyline', { points: pts, fill: 'none', stroke: '#ece6da', 'stroke-width': 2, 'stroke-linejoin': 'round' });

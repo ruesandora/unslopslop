@@ -6,14 +6,14 @@ import { pathToFileURL } from 'node:url';
 import { fileURLToPath } from 'node:url';
 
 const font = (f) => pathToFileURL(fileURLToPath(new URL(`../examples/assets/fonts/${f}`, import.meta.url))).href;
-const FACES = `@font-face{font-family:"Gloock";src:url("${font('gloock-latin.woff2')}") format("woff2");font-display:block}
-@font-face{font-family:"Geist";src:url("${font('geist-latin-var.woff2')}") format("woff2");font-weight:300 700;font-display:block}`;
-const PRELOAD = `<link rel="preload" as="font" type="font/woff2" crossorigin href="${font('gloock-latin.woff2')}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${font('geist-latin-var.woff2')}">`;
+const FACES = `@font-face{font-family:"Schibsted Grotesk";src:url("${font('schibsted-grotesk-latin-var.woff2')}") format("woff2");font-weight:400 900;font-display:block}
+@font-face{font-family:"Atkinson Hyperlegible Next";src:url("${font('atkinson-hyperlegible-next-latin-var.woff2')}") format("woff2");font-weight:200 800;font-display:block}`;
+const PRELOAD = `<link rel="preload" as="font" type="font/woff2" crossorigin href="${font('schibsted-grotesk-latin-var.woff2')}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${font('atkinson-hyperlegible-next-latin-var.woff2')}">`;
 
 const BASE_CSS = `${FACES}
 *{box-sizing:border-box}
-body{margin:0;font:17px/1.6 "Geist",system-ui,sans-serif;color:#e9e6df;background:#101317}
-h1,h2{font-family:"Gloock",serif;font-weight:400;margin:0 0 16px;line-height:1.05}
+body{margin:0;font:17px/1.6 "Atkinson Hyperlegible Next",system-ui,sans-serif;color:#e9e6df;background:#101317}
+h1,h2{font-family:"Schibsted Grotesk",sans-serif;font-weight:600;margin:0 0 16px;line-height:1.05}
 h1{font-size:64px}
 p{margin:0 0 16px;max-width:60ch}
 .wrap{max-width:1200px;margin:0 auto;padding:64px 32px}
