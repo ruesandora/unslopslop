@@ -24,3 +24,8 @@ test('type-flat-hierarchy compares the largest size per heading level, not the f
   const body = '<h2 style="font-size:20px">Card title</h2><h2 style="font-size:32px">Section title</h2><h3 style="font-size:20px">Sub</h3>' + Array.from({ length: 12 }, (_, i) => `<p>Paragraph ${i}.</p>`).join('');
   assert.equal(await fires('hier', { body }, 'type-flat-hierarchy'), false);
 });
+test('detail-numbered ignores axis labels inside a chart (role=img)', async () => {
+  const axis = '<div role="img" aria-label="Day axis">' + [10, 11, 12, 13, 14].map((d) => `<span style="margin-right:16px">${d}</span>`).join('') + '</div>';
+  assert.equal(await fires('axis', { body: axis }, 'detail-numbered'), false);
+  assert.equal(await fires('axis-bare', { body: axis.replace(' role="img" aria-label="Day axis"', '') }, 'detail-numbered'), true);
+});

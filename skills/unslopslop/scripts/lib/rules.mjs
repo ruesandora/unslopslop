@@ -585,7 +585,7 @@ const BASE = [
     why: '"01 / 02 / 03" on content that has no sequence is ornament.',
     fix: 'Number only real steps (use an ordered list). Otherwise drop the numbers.',
     check: (h) => {
-      const els = h.textEls().filter((e) => /^(0\d|\d{2})(\s*\/\s*\d{2})?\.?$/.test(h.own(e)) && !e.closest('ol'));
+      const els = h.textEls().filter((e) => /^(0\d|\d{2})(\s*\/\s*\d{2})?\.?$/.test(h.own(e)) && !e.closest('ol, table, figure, [role=img], [aria-hidden=true]'));
       return els.length >= 3 ? els.map((e) => ({ el: h.sel(e), detail: h.own(e) })) : [];
     },
   },

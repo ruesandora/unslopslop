@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluxly: late invoices, chased for you</title>
+<style>
+  :root { --paper: #f6f3ec; --surface: #fffdf8; --ink: #1d1b17; --muted: #5a554b; --line: #d9d3c5; --accent: #1f6f5c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 17px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--paper); color: var(--ink); }
+  h1, h2, h3 { font-family: Charter, "Iowan Old Style", Georgia, serif; font-weight: 500; margin: 0; }
+  a { color: var(--accent); transition: color 120ms ease-out; }
+  a:hover { color: var(--ink); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  header.top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .logo { font: 500 24px Charter, "Iowan Old Style", Georgia, serif; color: var(--ink); text-decoration: none; }
+  .top nav { display: flex; gap: 24px; align-items: center; }
+  .top nav a { padding: 8px 0; font-size: 15px; }
+  .btn { display: inline-block; padding: 12px 20px; border-radius: 6px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 500; transition: background-color 120ms ease-out; }
+  .btn:hover { background: #17564a; color: #fff; }
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: 64px 0; }
+  h1 { font-size: 56px; line-height: 1.08; margin-bottom: 20px; }
+  .lead { font-size: 20px; color: var(--muted); max-width: 30em; margin: 0 0 32px; }
+  .actions { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .invoice { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .invoice h2 { font-size: 20px; margin-bottom: 4px; }
+  .invoice .meta { margin: 0 0 16px; font-size: 14px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; font-weight: 500; font-size: 14px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  th, td { padding-right: 12px; }
+  td:last-child, th:last-child { text-align: right; padding-right: 0; }
+  .done { color: var(--accent); } .next { color: var(--ink); font-weight: 500; } .wait { color: var(--muted); }
+  .note { font-size: 14px; color: var(--muted); margin: 16px 0 0; }
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2.big { font-size: 32px; line-height: 1.2; margin-bottom: 32px; max-width: 20em; }
+  ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; counter-reset: s; }
+  ol li { counter-increment: s; }
+  ol li h3 { font-size: 20px; margin-bottom: 8px; }
+  ol li h3::before { content: counter(s) ". "; color: var(--muted); }
+  ol li p { margin: 0; max-width: 28em; color: var(--muted); }
+  ol li:first-child p { color: var(--ink); font-size: 20px; line-height: 1.5; }
+  .faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 44em; }
+  .faq summary { cursor: pointer; font-weight: 500; }
+  .faq p { margin: 8px 0 0; color: var(--muted); }
+  footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+  @media (max-width: 760px) {
+    h1 { font-size: 40px; }
+    .hero { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
+    ol { grid-template-columns: 1fr; gap: 24px; }
+    .top nav .hide { display: none; }
+    .btn { padding: 14px 20px; }
+    .top nav a { padding: 12px 0; display: inline-block; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#">Fluxly</a>
+    <nav><a class="hide" href="#how">How it works</a><a class="hide" href="#faq">Questions</a><a href="#start">Sign in</a></nav>
+  </header>
+
+  <section class="hero" style="border-top:0">
+    <div>
+      <h1>Late invoices, chased for you</h1>
+      <p class="lead">Fluxly sends the polite reminder on day 3, the firmer one on day 7, and stops the moment the money lands in your account.</p>
+      <div class="actions"><a class="btn" href="#start">Connect your invoices</a><a href="#how">See what it sends</a></div>
+    </div>
+    <div class="invoice" aria-label="Example invoice timeline">
+      <h2>Invoice 2026-041</h2>
+      <p class="meta">Example. Due 3 Oct, unpaid</p>
+      <table>
+        <thead><tr><th>Day</th><th>Message</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Day 3</td><td>Friendly reminder</td><td class="done">Sent</td></tr>
+          <tr><td>Day 7</td><td>Second notice with bank details</td><td class="next">Tomorrow</td></tr>
+          <tr><td>Day 14</td><td>Final notice, your phone number</td><td class="wait">Scheduled</td></tr>
+        </tbody>
+      </table>
+      <p class="note">A payment matched to the invoice cancels everything still scheduled.</p>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2 class="big">What happens after you send an invoice</h2>
+    <ol>
+      <li><h3>Fluxly watches the due date</h3><p>It reads the invoice from your accounting tool and starts a schedule the day it becomes overdue.</p></li>
+      <li><h3>It writes in your voice</h3><p>You approve the three templates once.</p></li>
+      <li><h3>It stops when paid</h3><p>Bank transactions are matched to invoice numbers.</p></li>
+    </ol>
+  </section>
+
+  <section id="faq" class="faq">
+    <h2 class="big">Questions freelancers ask</h2>
+    <details><summary>Can I edit a reminder before it goes out?</summary><p>Yes. Every message waits in a queue for 24 hours, and you can change or cancel it there.</p></details>
+    <details><summary>Does it contact my client on weekends?</summary><p>No. Reminders are sent on weekdays between 9:00 and 17:00 in your client's time zone.</p></details>
+    <details><summary>What if a client disputes the invoice?</summary><p>Pause the schedule from the invoice page. Nothing else is sent until you resume it.</p></details>
+  </section>
+
+  <section id="start">
+    <h2 class="big">Connect one invoice and see the schedule it would send</h2>
+    <a class="btn" href="#">Connect your invoices</a>
+  </section>
+  <footer>Fluxly, 2026. An illustrative example page from the unslopslop project.</footer>
+</div>
+</body>
+</html>
