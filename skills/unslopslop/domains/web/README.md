@@ -10,7 +10,7 @@ Status: **ready**.
 
 ## Workflow specifics
 1. Project read and brief (`../../references/project-read.md`).
-2. Build the first screen alone; screenshot 1440 and 390; Kapı R against the strongest reference.
+2. Build the first screen alone; screenshot 1440 and 390; the reference gate against the strongest reference.
 3. Add sections one at a time; each must earn its place (a fact, a proof, an interaction).
 4. `detect.mjs` until slop is clean and craft is 70+; then the template test.
 

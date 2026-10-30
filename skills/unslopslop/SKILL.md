@@ -23,7 +23,7 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 2. **Read both numbers.** Slop verdict: `heavy` (35+) rebuild, `light` polish, `clean` keep. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
 3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
 4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
-5. **Kapı R (reference gate).** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
+5. **Reference gate.** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
 6. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
 
 A page passes only with a clean slop verdict **and** craft at 70 or more (`--min-craft 70` in CI).
