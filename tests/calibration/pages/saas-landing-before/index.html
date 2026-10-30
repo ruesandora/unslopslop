@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluxly: Unleash seamless workflows</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', sans-serif; background: #0f172a; color: #94a3b8; line-height: 1.3; overflow-x: hidden; }
+  a { outline: none; color: inherit; text-decoration: none; }
+  .blob { position: absolute; top: -80px; left: 50%; width: 600px; height: 600px; border-radius: 50%; background: #8b5cf6; filter: blur(120px); opacity: .45; z-index: 0; animation: float 8s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateY(30px); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 50% { opacity: .3; transform: scale(1.6); } }
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+  nav .logo { font-weight: 800; color: #fff; font-size: 20px; }
+  nav .links a { margin-left: 22px; font-size: 14px; display: inline-block; padding: 4px 2px; }
+  .btn { display: inline-block; padding: 13px 26px; border-radius: 999px; background: linear-gradient(90deg, #6366f1, #a855f7); color: #fff; font-weight: 700; box-shadow: 0 0 40px rgba(139, 92, 246, .55); transition: all .3s ease; }
+  .btn:hover { transform: translateY(-4px) scale(1.05); }
+  .hero { text-align: center; padding: 70px 0 60px; }
+  .pill { display: inline-block; padding: 6px 14px; border: 1px solid #334155; border-radius: 999px; background: rgba(255,255,255,.06); font-size: 13px; color: #c4b5fd; margin-bottom: 24px; }
+  .eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: #a78bfa; margin-bottom: 12px; }
+  h1 { font-size: 56px; line-height: 1.05; letter-spacing: -.05em; font-weight: 900; margin: 0 0 20px; color: #fff; animation: rise .8s both; }
+  h1 span { background: linear-gradient(90deg, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-size: 20px; max-width: 640px; margin: 0 auto 32px; color: #64748b; animation: rise .8s .15s both; }
+  .proof { margin-top: 36px; display: flex; justify-content: center; align-items: center; gap: 14px; font-size: 14px; }
+  .avatars { display: flex; } .avatars i { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #0f172a; margin-left: -10px; background: #6366f1; display: block; }
+  .avatars i:nth-child(2) { background: #a855f7; } .avatars i:nth-child(3) { background: #ec4899; } .avatars i:nth-child(4) { background: #3b82f6; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0; }
+  .stat { padding: 18px; border-radius: 22px; border: 1px solid #1e293b; background: rgba(30,41,59,.5); backdrop-filter: blur(14px); text-align: center; animation: rise .8s .3s both; }
+  .stat b { display: block; font-size: 38px; color: #fff; font-weight: 900; } .stat small { font-size: 12px; color: #475569; }
+  section { padding: 54px 0; text-align: center; }
+  h2 { font-size: 34px; color: #fff; margin: 0 0 12px; letter-spacing: -.04em; font-weight: 800; }
+  h2.nots { margin-bottom: 36px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+  .card { padding: 26px; border-radius: 26px; background: #1e293b; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,.35); transition: all .3s; animation: rise .8s .4s both; }
+  .card:hover { transform: translateY(-6px); }
+  .card .ico { width: 48px; height: 48px; border-radius: 14px; background: rgba(99,102,241,.2); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+  .card h3 { color: #fff; font-size: 19px; margin: 0 0 8px; font-weight: 700; } .card p { margin: 0; font-size: 15px; color: #64748b; }
+  .card .more { display: inline-block; margin-top: 14px; color: #a78bfa; font-size: 14px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+  .step { border-left: 4px solid #6366f1; padding: 8px 0 8px 18px; animation: rise .8s .5s both; }
+  .step .n { font-size: 14px; color: #6366f1; } .step p { margin: 6px 0 0; font-size: 15px; }
+  .live { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 1.6s infinite; }
+  .cta { margin: 20px 0 60px; padding: 56px 20px; border-radius: 32px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #e0e7ff; }
+  .cta h2 { color: #fff; }
+  footer { padding: 24px 0 40px; font-size: 13px; color: #475569; text-align: center; }
+  .quote { margin: 40px auto 0; max-width: 560px; font-size: 16px; }
+</style>
+</head>
+<body>
+<div class="blob"></div>
+<div class="wrap">
+  <nav><span class="logo">Fluxly</span><span class="links"><a href="#f">Features</a><a href="#p">Pricing</a><a href="#d">Docs</a><a href="#s" class="btn" style="padding:8px 16px;box-shadow:none">Sign in</a></span></nav>
+
+  <header class="hero">
+    <span class="pill">✨ Introducing Fluxly 2.0 — now with AI</span>
+    <div class="eyebrow">Workflow automation</div>
+    <h1>Unleash <span>seamless workflows</span>. Not just a tool, it's a partner.</h1>
+    <p class="sub">Fluxly empowers modern teams to streamline invoicing and supercharge cash flow with cutting-edge, next-gen automation.</p>
+    <a class="btn" href="#s">Get started for free →</a>
+    <div class="proof"><div class="avatars"><i></i><i></i><i></i><i></i></div><span>Trusted by 10,000+ teams worldwide</span></div>
+    <div class="quote">"Fluxly changed how we work." — Jane Doe, CEO at Acme Inc.</div>
+    <div class="live" style="margin-top:20px"><i></i> All systems operational</div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b>10k+</b><small>Active users</small></div>
+    <div class="stat"><b>99.9%</b><small>Uptime</small></div>
+    <div class="stat"><b>4.9★</b><small>Rating</small></div>
+    <div class="stat"><b>24/7</b><small>Support</small></div>
+  </div>
+
+  <section id="f">
+    <div class="eyebrow">Features</div>
+    <h2 class="nots">Everything you need. Nothing you don't.</h2>
+    <div class="cards">
+      <div class="card"><div class="ico">⚡</div><h3>Lightning fast</h3><p>Experience blazing performance with our all-in-one platform built for scale.</p><a class="more" href="#">Learn more →</a></div>
+      <div class="card"><div class="ico">🔒</div><h3>Secure by design</h3><p>Enterprise-grade security keeps your data robust and protected at all times.</p><a class="more" href="#">Learn more →</a></div>
+      <div class="card"><div class="ico">🚀</div><h3>Effortless setup</h3><p>Get up and running in minutes and unlock the power of automation today.</p><a class="more" href="#">Learn more →</a></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">How it works</div>
+    <h2>Three simple steps</h2>
+    <div class="steps" style="margin-top:28px">
+      <div class="step"><div class="n">01</div><p>Connect your tools in a few clicks.</p></div>
+      <div class="step"><div class="n">02</div><p>Let AI handle the heavy lifting.</p></div>
+      <div class="step"><div class="n">03</div><p>Watch your productivity soar.</p></div>
+    </div>
+  </section>
+
+  <div class="cta" id="s">
+    <h2>Ready to elevate your workflow?</h2>
+    <p>Join thousands of teams already transforming the way they work.</p>
+    <a class="btn" href="#" style="background:#fff;color:#4f46e5;box-shadow:none">Start free trial →</a>
+  </div>
+  <footer>© 2026 Fluxly. All rights reserved.</footer>
+</div>
+</body>
+</html>

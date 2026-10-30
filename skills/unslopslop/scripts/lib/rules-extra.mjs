@@ -150,7 +150,7 @@ export const EXTRA = [
     why: 'Three or more small text elements make a page tiring to read, especially on phones.',
     fix: 'Raise captions and labels to at least 13 px (body 16 px).',
     check: (h) => {
-      const els = h.textEls().filter((e) => { const f = h.px(h.cs(e).fontSize); return f >= 11 && f < 13; });
+      const els = h.textEls().filter((e) => { const f = h.px(h.cs(e).fontSize); return f >= 11 && f < 13 && !e.closest('[aria-hidden="true"], [role=img], figure, svg'); });
       return els.length >= 3 ? els.map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px` })) : [];
     },
   },
@@ -159,7 +159,7 @@ export const EXTRA = [
     title: 'Text under 11 px',
     why: 'Text this small cannot be read by most people, even in an app.',
     fix: 'Never go below 11 px; aim for 13 px or more.',
-    check: (h) => h.textEls().filter((e) => h.px(h.cs(e).fontSize) < 11).map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px "${h.snip(h.own(e), 24)}"` })),
+    check: (h) => h.textEls().filter((e) => h.px(h.cs(e).fontSize) < 11 && !e.closest('[aria-hidden="true"], [role=img], figure, svg')).map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px "${h.snip(h.own(e), 24)}"` })),
   },
   {
     id: 'type-long-headline', pass: 'typography', severity: 'minor', scope: 'page', viewports: ['desktop'],
@@ -191,6 +191,7 @@ export const EXTRA = [
       for (const el of h.all()) {
         const bi = h.cs(el).backgroundImage;
         if (!/gradient\(/.test(bi)) continue;
+        if ((h.cs(el).webkitBackgroundClip === 'text' || h.cs(el).backgroundClip === 'text') && parseFloat(h.cs(el).backgroundSize) >= 200) continue;
         const hs = h.colorTokens(bi).map((t) => h.rgba(t)).filter((c) => c && c.a > 0.3).map((c) => h.hsl(c)).filter((c) => c.s > 0.25 && c.l > 0.12 && c.l < 0.9).map((c) => c.h);
         if (hs.length < 2) continue;
         const spread = (a) => { const s = [...a].sort((x, y) => x - y); let gap = 0; for (let i = 0; i < s.length; i++) gap = Math.max(gap, (s[(i + 1) % s.length] - s[i] + 360) % 360); return 360 - gap; };

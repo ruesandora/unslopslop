@@ -44,3 +44,22 @@ for (const name of Object.keys(COMPONENTS)) {
     assert.match(off.stdout, new RegExp(`✖ rich page earns points for ${name}`));
   });
 }
+
+// Same proof for the taste components and the reference gate: switching one off must fail exactly its test.
+import { TASTE_COMPONENTS } from '../skills/unslopslop/scripts/lib/taste.mjs';
+const tasteFile = fileURLToPath(new URL('./taste.test.mjs', import.meta.url));
+const tasteTests = { ...Object.fromEntries(Object.keys(TASTE_COMPONENTS).map((n) => [n, `taste component ${n} earns points on the good page`])), reference: 'reference gate: without a side-by-side' };
+for (const [gate, title] of Object.entries(tasteTests)) {
+  test(`switching off taste ${gate} breaks its test`, () => {
+    const run = (off) =>
+      spawnSync(process.execPath, ['--test', '--test-reporter=spec', tasteFile], {
+        encoding: 'utf8',
+        env: { ...cleanEnv, UNSLOP_TASTE_ONLY: gate, UNSLOP_TASTE_OFF: off },
+      });
+    const on = run('');
+    assert.equal(on.status, 0, `control run must pass for ${gate}:\n${on.stdout}`);
+    const off = run(gate);
+    assert.notEqual(off.status, 0, `${gate}: taste test still passes with it off`);
+    assert.match(off.stdout, new RegExp(`✖ ${title}`));
+  });
+}

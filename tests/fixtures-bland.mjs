@@ -38,6 +38,21 @@ ${css}</style></head><body class="${bodyClass}"><main class="wrap">${body}</main
 }
 
 export const RICH = cpage({ body: HERO() });
+// TASTE_GOOD earns every taste component: one muted drawing (about 45% of the first screen, no labels, so a
+// subject and not a chart), a 100 px display line crossing it, one flat ground, no coloured keyword.
+const drawing = (w, h) => `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="max-width:100%;height:auto" role="img" aria-label="Example drawing">${Array.from({ length: 14 }, (_, i) => `<circle cx="${40 + i * 60}" cy="${h / 2 + Math.sin(i) * h / 4}" r="${18 + (i % 4) * 8}" fill="hsl(${190 + i * 9} 22% ${34 + (i % 5) * 6}%)"/>`).join('')}</svg>`;
+export const TASTE_GOOD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>fixture</title>${PRELOAD}<style>${FACES}
+*{box-sizing:border-box}body{margin:0;font:17px/1.6 "Atkinson Hyperlegible Next",system-ui,sans-serif;color:#e9e6df;background:#101317;overflow-x:hidden}
+.stage{position:relative;min-height:900px;padding:64px 48px}
+h1{font:600 104px/1 "Schibsted Grotesk",sans-serif;margin:0;position:relative;z-index:2;max-width:900px}
+.art{position:absolute;right:48px;top:140px;width:900px;z-index:1}
+.lede{position:relative;z-index:2;max-width:46ch;margin-top:32px}
+.cta{display:inline-block;padding:12px 20px;border-radius:8px;background:#3b5bff;color:#fff;text-decoration:none;margin-top:16px}
+.bar{height:8px;width:200px;border-radius:4px;background:#3b5bff;transform-origin:left;animation:fill 1.6s cubic-bezier(.16,1,.3,1) 1 both}
+@keyframes fill{from{transform:scaleX(.2)}to{transform:scaleX(1)}}
+@media (max-width:760px){h1{font-size:44px}.art{position:static;width:100%}.stage{padding:24px 16px;min-height:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style></head><body><main class="stage"><h1>Late invoices, chased politely</h1><div class="art">${drawing(900, 640)}</div><p class="lede">Reminders go out on day 3, 7 and 14 and stop the moment the money lands.</p><a class="cta" href="#start">Connect invoices</a><div class="bar" style="margin-top:24px"></div></main></body></html>`;
+export const RICH_IMG = TASTE_GOOD;
 export const DOC = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>doc</title><style>body{margin:0;font:17px/1.6 Georgia,serif;color:#222;background:#f6f3ec}main{max-width:640px;margin:0 auto;padding:48px 16px}h1{font-size:34px;font-weight:500}a{color:#333}</style></head>
 <body><main><h1>Late invoices, chased politely</h1><p>Reminders go out on day 3, 7 and 14 and stop the moment the money lands.</p><p><a href="#s" style="background:#222;color:#fff;padding:12px 20px;text-decoration:none">Connect invoices</a></p><h2>How it works</h2><p>It reads the due date and starts a schedule.</p></main></body></html>`;
 

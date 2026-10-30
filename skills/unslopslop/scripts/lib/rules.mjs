@@ -50,7 +50,9 @@ const BASE = [
         const isCtl = ['BUTTON', 'A', 'INPUT'].includes(el.tagName) || el.getAttribute('role') === 'button';
         const long = h.own(el).length >= 12;
         if (!isCtl && !long) continue;
-        const bad = isCtl ? pl < 8 || pr < 8 || pt < 4 || pb < 4 : Math.min(pl, pr, pt, pb) < 8;
+        // a control with a fixed height (line-height / height set instead of padding) is not cramped vertically
+        const tall = isCtl && h.rect(el).height >= 28;
+        const bad = isCtl ? pl < 8 || pr < 8 || (!tall && (pt < 4 || pb < 4)) : Math.min(pl, pr, pt, pb) < 8;
         if (bad) out.push({ el: h.sel(el), detail: `padding ${pt}/${pr}/${pb}/${pl}px` });
       }
       return out;
@@ -68,6 +70,8 @@ const BASE = [
       for (const el of h.all()) {
         const bi = h.cs(el).backgroundImage;
         if (!/gradient\(/.test(bi)) continue;
+        // a text highlight that sweeps across (background wider than the text) is a reveal effect, not a fill
+        if ((h.cs(el).webkitBackgroundClip === 'text' || h.cs(el).backgroundClip === 'text') && parseFloat(h.cs(el).backgroundSize) >= 200) continue;
         const stops = h.colorTokens(bi).map((t) => h.rgba(t)).filter((c) => c && c.a > 0.05).map((c) => h.hsl(c));
         const violet = stops.some((c) => c.h >= 245 && c.h <= 320 && c.s > 0.3 && c.l > 0.15 && c.l < 0.85);
         if (violet && stops.length >= 2) out.push({ el: h.sel(el), detail: h.snip(bi, 80) });
@@ -83,7 +87,7 @@ const BASE = [
     check: (h) =>
       h.textEls().filter((el) => {
         const s = h.cs(el);
-        return (s.webkitBackgroundClip === 'text' || s.backgroundClip === 'text') && /gradient\(/.test(s.backgroundImage);
+        return (s.webkitBackgroundClip === 'text' || s.backgroundClip === 'text') && /gradient\(/.test(s.backgroundImage) && !(parseFloat(s.backgroundSize) >= 200);
       }).map((el) => ({ el: h.sel(el), detail: h.snip(h.own(el)) })),
   },
   {
@@ -726,7 +730,10 @@ const BASE = [
         if (s.animationName === 'none' || !/infinite/.test(s.animationIterationCount)) continue;
         const r = h.rect(el);
         if (r.width <= 16 && r.height <= 16) continue;
-        if (el.closest('[role=progressbar], [aria-busy=true], [role=status]') || /spin|loader|loading|skeleton/i.test(el.className + s.animationName)) continue;
+        if (el.closest('[role=progressbar], [aria-busy=true], [role=status]') || /spin|loader|loading|skeleton|shimmer|breath/i.test(el.className + s.animationName)) continue;
+        // a long loop that replays a product demo (it holds text or media) has a job; ornaments are empty shapes
+        const dur = Math.max(...s.animationDuration.split(',').map((d) => parseFloat(d) * (/ms/.test(d) ? 0.001 : 1)));
+        if (dur >= 5 && (h.own(el).length > 0 || el.querySelector('img, video, canvas, svg, [class]') && h.textEls().some((t) => el.contains(t)))) continue;
         out.push({ el: h.sel(el), detail: `animation ${s.animationName}` });
       }
       return out;

@@ -1,6 +1,6 @@
 ---
 name: unslopslop
-description: Design anything (web page, app screen, dashboard, email, logo, motion, social visual) so it looks like a strong studio made it for this specific project, and prove it with two numbers: slop (default moves, lower is better) and craft (hierarchy, focal point, real visual, purposeful motion, identity, density; higher is better). Use when building or redesigning UI, when something "looks AI-made", "looks generic", "looks bland", or when the user says "unslop". Reads the project first, picks a direction, palette combination, texture and motion for it, loads the matching domain and style packs, then detects, compares with references and iterates.
+description: Design anything (web page, app screen, dashboard, email, logo, motion, social visual) so it looks like a strong studio made it for this specific project, and prove it with two numbers: slop (owner reading, 100 is the worst: taste not proven plus genre-default tells) and craft (hierarchy, focal point, real visual, purposeful motion, identity, density; higher is better). Use when building or redesigning UI, when something "looks AI-made", "looks generic", "looks bland", or when the user says "unslop". Reads the project first, picks a direction, palette combination, texture and motion for it, loads the matching domain and style packs, then detects, compares with references and iterates.
 ---
 
 # unslopslop
@@ -20,14 +20,14 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 ## Loop
 
 1. **Capture** the current state (if there is one): `node scripts/detect.mjs <file|url> --out .unslop/before`. Open both PNGs.
-2. **Read both numbers.** Slop verdict: `heavy` (35+) rebuild, `light` polish, `clean` keep. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
+2. **Read both numbers.** Slop (100 is the worst) is the worse of "taste not proven" and the genre-default tells: `heavy` (35+) rebuild, `light` polish, `clean` (under 20) keep. The report lists the taste proof components (real subject at 25-60% of the first screen, display line 80 px+, deliberate overlap, one ground colour with accents under 3%, no coloured headline keyword): a page with zero slop patterns but no proof still scores 90. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
 3. **Build or rebuild** from the brief: first screen first, with real content, following recipe 1 of `references/craft-recipes.md` (decide the subject, then the display scale, then the layer order, then corner facts, then colour shares). Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`). When the direction brief calls for texture or depth, pick one texture or effect from `effects/` (gallery: `effects/index.html`) instead of improvising one.
 4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
 5. **Reference gate (required).** Put your first screen next to each picked reference board at 1440 (`node scripts/compare.mjs ../../inspiration/boards/<board>.html <yours> --out ref-gate-<id>.png --labels "Reference,Mine" --max-height 900`); if the user gave a live reference, compare against it too. Then fill a table, one row per picked id: the entry's measured number vs yours for display size, cap height share, subject area, overlap (yes/no), colour shares, depth layers, corner labels, motion. Every **Check** line in `references/craft-recipes.md` sections 1 to 4 is answered yes, or the brief says why not. Ask honestly: would a picky designer put yours on the same wall as the reference? Fix, re-run. At most three rounds.
 6. **Independent review (mandatory).** Before anything is shown to the user, a different agent with fresh context reviews it with the fixed checklist in `references/independent-review.md`, using the detector report, screenshots at 1440 and 390, and zoomed crops (`node scripts/review-crops.mjs <page> --out <dir>/crops`). Fix every blocker, let the reviewer re-check; at most three rounds. Report the reviewer's verdict.
 7. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
 
-A page passes only with a clean slop verdict **and** craft at 70 or more (`--min-craft 70` in CI).
+A page passes only with slop under 35, craft at 70 or more **and** taste proof at 60 or more. It stays **UNPROVEN** until step 7's side-by-side compare was run and attested with `detect.mjs --compared <compare.png>`. Never report a pass without that.
 
 ## Rules of the road
 

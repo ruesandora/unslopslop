@@ -2,23 +2,16 @@
 
 A Claude Code skill for designing things that look like a strong studio made them for *this* project, with a detector that proves it in two numbers:
 
-- **Slop score** (0 to 100, lower is better): the default moves. Purple gradients, icon tiles, coloured headline keywords, identical card rows, cliche copy, fake social proof, low contrast, missing focus rings, and about 80 more rules.
+- **Slop score** (0 to 100; **100 is the worst**, the way the owner reads it): the worse of two things. (1) *Taste not proven*: 100 minus the **taste proof**, which a page has to earn with a real subject at 25-60% of the first screen, a display line of 80 px or more, deliberate overlap, one ground colour with accents under 3%, and no coloured headline keyword. (2) The genre-default tells (purple gradients, coloured keywords, icon tiles, identical card rows, cliche copy, fake social proof ...), which count less the more is proven. The other ~60 hygiene rules (small text, padding, tap targets, contrast ...) are reported but do not move this number.
 - **Craft score** (0 to 100, higher is better): hierarchy, a focal point, a real visual, purposeful motion, identity (type, colour combination, depth, texture) and density that fits the page type.
 
-A page passes only with **low slop and high craft**. Removing slop is not the goal: a beige document with a default serif scores zero slop and fails on craft, and the detector says why (`bland-*` signals). unslopslop removes slop **and** raises craft.
+A page passes only with **slop under 35, craft 70+ and taste proof 60+**, and stays **UNPROVEN** until a side-by-side compare against a strong reference was run (`detect.mjs --compared compare.png`). `--compared` is an attestation: the tool only checks that the file exists and does not verify that a real side-by-side look happened, so the human or agent passing it is vouching for it. Removing slop is not the goal: a beige document with a default serif scores zero slop and fails on craft, and the detector says why (`bland-*` signals). unslopslop removes slop **and** raises craft.
 
 ## Example
 
 Two self-made slop pages for a made-up invoice-chasing tool, "Fluxly", each shown three times: the slop original, a first rewrite that only stripped things out (`after-v1`, kept on purpose because it is the opposite failure), and the rewrite done with the full loop. All names and numbers on the pages are samples.
 
-| Page | Version | Slop (lower better) | Craft (higher better) | Result |
-|---|---|---|---|---|
-| SaaS landing | before | 100 (heavy) | 51 | fail |
-| | after-v1 (stripped) | 0 (clean) | 64 | fail: bland |
-| | **after** | **0 (clean)** | **100** | **pass** |
-| Dashboard | before | 100 (heavy) | 49 | fail |
-| | after-v1 (stripped) | 0 (clean) | 62 | fail: bland |
-| | **after** | **0 (clean)** | **94** | **pass** |
+The first version of this detector only counted known bad patterns, so a page that dodged the checklist but had no real subject scored 0 slop. The owner rejected our own "after" pages (and a consultancy homepage redesign) as just as bad as the originals. `tests/calibration/` now holds our own rejected pages with human labels next to derived measurements of strong reference pages (third-party pages are never stored in the repo; optional local copies are read from `UNSLOP_CALIBRATION_DIR` and `UNSLOP_GOLD_FILE`); the detector must put the rejected pages at 90+ slop and keep the strong ones passing. The example "after" pages below are being rebuilt and are not shown as passing.
 
 ![SaaS landing, before and after](examples/saas-landing/compare-desktop.png)
 
@@ -95,7 +88,9 @@ Cookie and consent banners are hidden (never accepted) before rules run and scre
 
 ## How the scores work
 
-**Slop:** each rule has a severity (critical 12, major 6, minor 2 points); extra occurrences add 25% each, capped at twice the weight; the sum is capped at 100. Verdict `heavy` at 35+, `clean` below 10 with no critical finding, otherwise `light`.
+**Slop (owner reading, 100 is the worst):** `max(100 - taste proof, tells x (0.2 + 0.8 x (1 - proof/100)))`. Tells are the genre-default rules, weighted critical 12, major 6, minor 2 (extra occurrences +25% each, capped at twice). Verdict `heavy` at 35+, `clean` below 20 with no critical tell, otherwise `light`. Rule-only pattern slop is still reported as `patternScore`.
+
+**Taste proof (0 to 100):** subject 30, display 25, overlap 15, ground 15, keyword 15. Caps: no real subject (a CSS box or a labelled data chart does not count) means at most 10; a display line under 80 px on a non-app page means at most 55. Pass mark 60. Measured on strong references (display 86-104 px) against template pages (mostly 48-72 px).
 
 **Craft:** six components, hierarchy 15, focal 15, visual 20, motion 15, identity 20, density 15. Pass mark 70. App screens (a table on the first screen or a side navigation) are judged on density and a smaller type ratio. Full catalogue with fixes: `skills/unslopslop/references/rules.md`.
 

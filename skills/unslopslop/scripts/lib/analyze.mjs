@@ -8,6 +8,7 @@ import { makeHelpers } from './helpers.mjs';
 import { score, verdict, rulePoints } from './score.mjs';
 import { BLAND } from './rules-bland.mjs';
 import { craftProbe, craftScore, MOTION_INIT } from './craft.mjs';
+import { tasteProbe, tasteScore, ownerSlop, pixelProbe, TELLS } from './taste.mjs';
 
 export const VIEWPORTS = { desktop: { w: 1440, h: 900 }, mobile: { w: 390, h: 844 } };
 // Extra pass: desktop size with the reduced-motion preference on (screenshots are never taken here).
@@ -34,7 +35,7 @@ function pageScript(rules, vp, withCraft = false) {
     for (const r of [${defs}]) {
       try { out[r.id] = r.check(h); } catch (e) { out[r.id] = { error: String(e && e.message || e) }; }
     }
-    if (${withCraft}) { try { out.__craft = (${craftProbe.toString()})(h); } catch (e) { out.__craft = { error: String(e && e.message || e) }; } }
+    if (${withCraft}) { try { out.__taste = (${tasteProbe.toString()})(h); } catch (e) { out.__taste = { error: String(e && e.message || e) }; } try { out.__craft = (${craftProbe.toString()})(h); } catch (e) { out.__craft = { error: String(e && e.message || e) }; } }
     return out;
   })()`;
 }
@@ -71,7 +72,7 @@ async function collectCss(page, url) {
  * Render `target` at 1440 and 390 and run every enabled rule.
  * Returns {target, score, verdict, findings, errors, screenshots?}.
  */
-export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null, craft = !only, keepConsent = false } = {}) {
+export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null, craft = !only, keepConsent = false, compared = false } = {}) {
   const url = toUrl(target);
   const off = disabledSet(disable);
   const pick = (r) => !off.has(r.id) && (!only || only.includes(r.id));
@@ -81,7 +82,7 @@ export async function analyze(browser, target, { disable = [], only = null, fast
   const blandIds = new Set(blandRules.map((r) => r.id));
   const merged = new Map();
   const blandMerged = new Map();
-  let signals = null;
+  let signals = null, tasteSignals = null;
   const errors = [];
   let css = '';
   const shots = {};
@@ -104,6 +105,13 @@ export async function analyze(browser, target, { disable = [], only = null, fast
         if (v && v.error) { errors.push(`${r.id}: ${v.error}`); continue; }
         record(blandIds.has(r.id) ? blandMerged : merged, r, v || [], name);
       }
+      if (res.__taste) {
+        if (res.__taste.error) errors.push(`taste: ${res.__taste.error}`);
+        else {
+          tasteSignals = res.__taste;
+          try { Object.assign(tasteSignals, await page.evaluate(`(${pixelProbe.toString()})(${JSON.stringify((await page.screenshot()).toString('base64'))})`)); } catch (e) { errors.push(`taste pixels: ${e.message}`); }
+        }
+      }
       if (res.__craft) { if (res.__craft.error) errors.push(`craft: ${res.__craft.error}`); else signals = res.__craft; }
       if (screenshotDir && name !== 'reduced') {
         const file = `${screenshotDir}/${name}.png`;
@@ -120,12 +128,20 @@ export async function analyze(browser, target, { disable = [], only = null, fast
     record(merged, r, v, 'desktop');
   }
   const findings = [...merged.values()].map((f) => ({ ...f, points: +rulePoints(f.severity, f.count).toFixed(1) })).sort((a, b) => b.points - a.points);
-  const points = score(findings);
-  const v = verdict(points, findings);
+  const patternScore = score(findings);
   const bland = [...blandMerged.values()].map((f) => ({ ...f, points: 0 }));
   const craftRes = signals ? { ...craftScore(signals, css), signals, findings: bland } : { score: null, pass: null, components: {}, findings: bland };
-  const overall = craftRes.score === null ? null : v === 'clean' && craftRes.pass ? 'pass' : 'fail';
-  return { target, score: points, verdict: v, findings, errors, screenshots: shots, craft: craftRes, overall };
+  const taste = signals && tasteSignals ? tasteScore(tasteSignals, craftRes.score, { compared }) : null;
+  // Owner reading: pattern slop and "not proven good" both count. Without craft data it stays the pattern score.
+  const tells = findings.filter((f) => TELLS.has(f.rule)).reduce((a, f) => a + f.points, 0);
+  const points = taste ? ownerSlop(tells, taste.proof) : patternScore;
+  const v = verdict(points, findings, taste ? 20 : 10);
+  let overall = null;
+  if (craftRes.score !== null) {
+    const earned = v !== 'heavy' && craftRes.pass && (!taste || taste.pass);
+    overall = !earned ? 'fail' : taste && !taste.compared ? 'unproven' : 'pass';
+  }
+  return { target, score: points, patternScore, tells: Math.round(tells), verdict: v, findings, errors, screenshots: shots, craft: craftRes, taste, overall };
 }
 
 function record(map, rule, hits, vpName) {
