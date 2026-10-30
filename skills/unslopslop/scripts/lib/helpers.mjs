@@ -172,9 +172,9 @@ export function makeHelpers(vp) {
     return w.size ? [...w].sort((a, b) => b[1] - a[1])[0][0] : 16;
   };
   const saturated = (c) => { if (!c || c.a < 0.5) return false; const k = hsl(c); return k.s >= 0.4 && k.l >= 0.2 && k.l <= 0.8; };
-  // App screen: a data table with 5+ rows, or a tall side navigation on the left.
+  // App screen: a data table with 5+ rows on the first screen, or a tall side navigation on the left.
   const isApp = () => {
-    const rows = [...document.querySelectorAll('table tr, [role=row]')].filter(visible).length;
+    const rows = [...document.querySelectorAll('table tr, [role=row]')].filter((r) => visible(r) && rect(r).top < vp.h).length;
     const side = [...document.querySelectorAll('aside, nav')].some((e) => { const r = rect(e); return visible(e) && r.height >= 0.6 * vp.h && r.width < 0.3 * vp.w && r.left < 40; });
     return rows >= 5 || side;
   };

@@ -585,7 +585,14 @@ const BASE = [
     why: '"01 / 02 / 03" on content that has no sequence is ornament.',
     fix: 'Number only real steps (use an ordered list). Otherwise drop the numbers.',
     check: (h) => {
-      const els = h.textEls().filter((e) => /^(0\d|\d{2})(\s*\/\s*\d{2})?\.?$/.test(h.own(e)) && !e.closest('ol, table, figure, [role=img], [aria-hidden=true]'));
+      const els = h.textEls().filter((e) => {
+        const t = h.own(e);
+        if (e.closest('ol, nav, table, figure, [role=img], [aria-hidden=true]')) return false;
+        // leading-zero ornaments (01, 02 / 05), or a bare two-digit number sitting right before a heading
+        if (/^0\d(\s*\/\s*\d{2})?\.?$/.test(t)) return true;
+        const next = e.nextElementSibling;
+        return /^\d{2}\.?$/.test(t) && !!next && h.heading(next);
+      });
       return els.length >= 3 ? els.map((e) => ({ el: h.sel(e), detail: h.own(e) })) : [];
     },
   },
