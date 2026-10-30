@@ -7,7 +7,7 @@
   "private": false,
   "engines": { "node": ">=20" },
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test tests/*.test.mjs",
     "detect": "node skills/unslopslop/scripts/detect.mjs",
     "catalogue": "node skills/unslopslop/scripts/lib/gen-catalogue.mjs"
   }
