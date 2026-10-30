@@ -19,7 +19,7 @@ test('intake captures fonts, palette, full easing curves and a catalogue row', a
     assert.equal(r.status, 0, r.stderr);
     const [dir] = (await readdir(root)).filter((d) => d.startsWith('2026-10-30-'));
     const notes = await readFile(join(root, dir, 'notes.md'), 'utf8');
-    assert.match(notes, /Gloock/);
+    assert.match(notes, /Schibsted Grotesk/);
     assert.match(notes, /rgb\(12, 15, 23\)/);
     assert.match(notes, /cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
     assert.match(notes, /`domain:web`/);

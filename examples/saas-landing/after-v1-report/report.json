@@ -2,22 +2,89 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/saas-landing/after-v1.html",
-  "score": 0,
-  "rawPoints": 0,
-  "verdict": "clean",
-  "rulesChecked": 85,
+  "score": 21,
+  "rawPoints": 21,
+  "verdict": "light",
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 0,
-    "color": 0,
+    "color": 12,
     "icons": 0,
     "copy": 0,
-    "typography": 0,
+    "typography": 9,
     "layout": 0,
     "detail": 0,
     "imagery": 0,
     "motion": 0
   },
-  "findings": [],
+  "findings": [
+    {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 7,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "p.lead",
+          "detail": "6.68:1 \"Fluxly sends the polite remin…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"You approve the three templat…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"Bank transactions are matched…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"Yes. Every message waits in a…\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "type-heading-muted-subtitle",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Heading plus grey subtitle, section after section",
+      "why": "A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.",
+      "fix": "Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.",
+      "count": 3,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1 + p.lead",
+          "detail": "\"Late invoices, chased for you\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"It writes in your voice\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"It stops when paid\" with a greyed subtitle",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 9
+    }
+  ],
   "craft": {
     "score": 64,
     "passMark": 70,

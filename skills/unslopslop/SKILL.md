@@ -24,7 +24,8 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
 4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
 5. **Reference gate.** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
-6. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
+6. **Independent review (mandatory).** Before anything is shown to the user, a different agent with fresh context reviews it with the fixed checklist in `references/independent-review.md`, using the detector report, screenshots at 1440 and 390, and zoomed crops (`node scripts/review-crops.mjs <page> --out <dir>/crops`). Fix every blocker, let the reviewer re-check; at most three rounds. Report the reviewer's verdict.
+7. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
 
 A page passes only with a clean slop verdict **and** craft at 70 or more (`--min-craft 70` in CI).
 
@@ -33,7 +34,8 @@ A page passes only with a clean slop verdict **and** craft at 70 or more (`--min
 - The numbers measure tells and presence, not taste. Always look at the screenshots at 1440 and 390.
 - Do not copy another site's look. From references take timing, proportion and ideas; never shapes, copy, imagery or palettes as-is (`references/motion-measurement.md`).
 - No paid generation without the user's approval of the cost. Image priority in `references/passes.md`.
-- Never invent proof: user counts, ratings, logos, testimonials. Example data is labelled as such.
+- Never invent proof: user counts, ratings, logos, testimonials. Example data is labelled once per page, not under every element.
+- Hard no's (detector rules, each with a fix): AI-default fonts without a project reason (`references/ai-default-fonts.md`), giant display numbers, captions under every block, paper / letter / receipt props, stamps and tilted stickers, emoji (unless the user asked), coloured side stripes on boxes, faded grey text (readable text 7:1, 4.5:1 from 24 px), heading + grey subtitle as the section template, rainbow tiles, floating chat pills.
 - Keep changes reversible: write next to the user's file or on a branch.
 - Disabling a rule (`--disable id`) needs a reason in the report.
 

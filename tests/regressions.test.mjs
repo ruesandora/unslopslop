@@ -42,3 +42,7 @@ test('layout-text-overlap ignores the hidden body of a closed <details>', async 
   const body = '<details><summary>First question</summary><p>Hidden answer text</p></details><details><summary>Second question</summary><p>Another answer</p></details>';
   assert.equal(await fires('details', { body }, 'layout-text-overlap'), false);
 });
+test('layout-side-stripe catches a bar drawn with ::before and a 2 px inset shadow', async () => {
+  assert.equal(await fires('pseudo-bar', { css: '.n{position:relative;padding:16px;background:#fff}.n::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#f5c518}', body: '<div class="n">Cookie notice text</div>' }, 'layout-side-stripe'), true);
+  assert.equal(await fires('inset-2', { body: '<div style="padding:16px;box-shadow:inset 2px 0 0 #3a55f0">Highlighted row text</div>' }, 'layout-side-stripe'), true);
+});
