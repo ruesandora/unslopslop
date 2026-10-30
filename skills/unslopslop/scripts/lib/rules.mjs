@@ -9,6 +9,7 @@ export const WEIGHTS = { critical: 12, major: 6, minor: 2 };
 const BOTH = ['desktop', 'mobile'];
 
 import { EXTRA } from './rules-extra.mjs';
+import { HARD } from './rules-hard.mjs';
 
 const BASE = [
   // ---------------------------------------------------------------- spacing
@@ -299,21 +300,6 @@ const BASE = [
 
   // ------------------------------------------------------------- typography
   {
-    id: 'type-reflex-font', pass: 'typography', severity: 'minor', scope: 'page', viewports: ['desktop'],
-    title: 'Reflex font family',
-    why: 'Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.',
-    fix: 'Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.',
-    check: (h) => {
-      const reflex = ['inter', 'roboto', 'open sans', 'poppins', 'dm sans', 'space grotesk', 'outfit', 'plus jakarta sans', 'instrument sans', 'instrument serif', 'fraunces', 'playfair display', 'syne', 'montserrat', 'jetbrains mono', 'space mono'];
-      const out = [];
-      for (const el of [document.body, document.querySelector('h1')].filter(Boolean)) {
-        const first = h.cs(el).fontFamily.split(',')[0].replace(/["']/g, '').trim().toLowerCase();
-        if (reflex.includes(first)) out.push({ el: h.sel(el), detail: first });
-      }
-      return out;
-    },
-  },
-  {
     id: 'type-flat-hierarchy', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
     title: 'Flat type hierarchy',
     why: 'When the largest text is barely bigger than body text, nothing leads the eye.',
@@ -486,8 +472,14 @@ const BASE = [
           if (w >= 3 && s['border' + side + 'Style'] !== 'none' && c && c.a > 0.3 && h.px(s.borderTopWidth) <= 1 && h.px(s.borderBottomWidth) <= 1 && el.tagName !== 'INPUT')
             out.push({ el: h.sel(el), detail: `${w}px ${side.toLowerCase()} border` });
         }
-        if (/inset\s+-?[3-9]px\s+0(px)?\s+0/.test(s.boxShadow) || /\)\s*inset\s+-?[3-9]px\s+0px\s+0px/.test(s.boxShadow))
+        if (/inset\s+-?[2-9]px\s+0(px)?\s+0/.test(s.boxShadow) || /\)\s*inset\s+-?[2-9]px\s+0px\s+0px/.test(s.boxShadow) || /^inset\s+-?[2-9]px\s+0px\s+0px/.test(s.boxShadow) || /\s-?[2-9]px 0px 0px 0px inset/.test(s.boxShadow))
           out.push({ el: h.sel(el), detail: 'inset side shadow' });
+        for (const pseudo of ['::before', '::after']) {
+          const ps = getComputedStyle(el, pseudo);
+          if (!ps || ps.content === 'none' || ps.position !== 'absolute') continue;
+          const w = h.px(ps.width), hh = h.px(ps.height), bgc = h.rgba(ps.backgroundColor);
+          if (w >= 2 && w <= 8 && hh >= h.rect(el).height * 0.6 && bgc && bgc.a > 0.3 && (h.px(ps.left) <= 2 || h.px(ps.right) <= 2)) out.push({ el: h.sel(el), detail: `${w}px bar drawn with ${pseudo}` });
+        }
       }
       return out;
     },
@@ -788,5 +780,5 @@ const BASE = [
   },
 ];
 
-export const RULES = [...BASE, ...EXTRA];
+export const RULES = [...BASE, ...EXTRA, ...HARD];
 export const RULE_IDS = RULES.map((r) => r.id);
