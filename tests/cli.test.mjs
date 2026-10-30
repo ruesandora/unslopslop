@@ -10,13 +10,15 @@ import { page } from './fixtures.mjs';
 const S = (n) => fileURLToPath(new URL(`../skills/unslopslop/scripts/${n}`, import.meta.url));
 const env = { ...process.env };
 delete env.NODE_TEST_CONTEXT;
-let dir, slop, clean, anim;
+let dir, slop, clean, anim, consent;
 
 before(async () => {
   dir = await mkdtemp(join(tmpdir(), 'unslop-cli-'));
   slop = join(dir, 'slop.html');
   clean = join(dir, 'clean.html');
   anim = join(dir, 'anim.html');
+  consent = join(dir, 'consent.html');
+  await writeFile(consent, page({ body: '<div id="onetrust-banner-sdk"><p>We use cookies to unleash seamless experiences</p></div>' }));
   await writeFile(slop, page({ body: '<h2>Unleash seamless power</h2><p>Lorem ipsum dolor sit amet</p><h2 style="background:linear-gradient(90deg,#6d28d9,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent">Go</h2><div style="width:2000px;height:10px"></div>' }));
   await writeFile(clean, page({ body: '' }));
   await writeFile(anim, page({
@@ -79,4 +81,13 @@ test('motion-probe reads declared duration and measures an ease-out fade', () =>
   assert.equal(j.measured.channel, 'opacity');
   assert.ok(j.measured.durationMs > 250 && j.measured.durationMs < 600, JSON.stringify(j.measured));
   assert.equal(j.measured.easingClass, 'ease-out');
+});
+test('consent banners are hidden by default and kept with --keep-consent', () => {
+  const ids = (args) => JSON.parse(run('detect.mjs', [consent, '--json', ...args]).stdout).findings.map((f) => f.rule);
+  assert.ok(!ids([]).includes('copy-cliche'));
+  assert.ok(ids(['--keep-consent']).includes('copy-cliche'));
+});
+test('--min-craft exits 1 below the mark', () => {
+  assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '70']).status, 1);
+  assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '0']).status, 0);
 });

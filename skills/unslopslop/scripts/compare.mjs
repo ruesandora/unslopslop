@@ -1,24 +1,26 @@
 #!/usr/bin/env node
 // Side-by-side before/after PNG.
-//   node compare.mjs <before> <after> --out compare.png [--viewport desktop|mobile] [--max-height 4000]
+//   node compare.mjs <before> <after> --out compare.png [--viewport desktop|mobile] [--max-height 4000] [--wait ms]
+// --wait: ms to wait after load (let a one-shot demo reach its final frame). Consent banners are hidden.
 // <before>/<after> are HTML files or URLs. Both are rendered at the same size (desktop 1440, mobile 390).
 import { resolve } from 'node:path';
 import { mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { launch } from './lib/browser.mjs';
+import { launch, hideConsent } from './lib/browser.mjs';
 import { toUrl, VIEWPORTS } from './lib/analyze.mjs';
 
 const args = process.argv.slice(2);
-const o = { out: 'compare.png', viewport: 'desktop', maxHeight: 4000 };
+const o = { out: 'compare.png', viewport: 'desktop', maxHeight: 4000, wait: 800 };
 const pos = [];
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--out') o.out = args[++i];
   else if (args[i] === '--viewport') o.viewport = args[++i];
   else if (args[i] === '--max-height') o.maxHeight = +args[++i];
+  else if (args[i] === '--wait') o.wait = +args[++i];
   else pos.push(args[i]);
 }
 if (pos.length !== 2 || !VIEWPORTS[o.viewport]) {
-  console.error('Usage: node compare.mjs <before> <after> --out compare.png [--viewport desktop|mobile] [--max-height 4000]');
+  console.error('Usage: node compare.mjs <before> <after> --out compare.png [--viewport desktop|mobile] [--max-height 4000] [--wait ms]');
   process.exit(2);
 }
 const vp = VIEWPORTS[o.viewport];
@@ -27,7 +29,8 @@ async function shoot(target) {
   const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h } });
   const page = await ctx.newPage();
   await page.goto(toUrl(target), { waitUntil: 'load', timeout: 20000 });
-  await page.waitForTimeout(800);
+  await hideConsent(page);
+  await page.waitForTimeout(o.wait);
   const h = await page.evaluate(() => document.documentElement.scrollHeight);
   const buf = await page.screenshot({ fullPage: true, clip: undefined, ...(h > o.maxHeight ? { fullPage: false, clip: { x: 0, y: 0, width: vp.w, height: o.maxHeight } } : {}) });
   await ctx.close();

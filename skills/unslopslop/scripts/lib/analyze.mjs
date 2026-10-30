@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { RULES } from './rules.mjs';
+import { hideConsent } from './browser.mjs';
 import { makeHelpers } from './helpers.mjs';
 import { score, verdict, rulePoints } from './score.mjs';
 import { BLAND } from './rules-bland.mjs';
@@ -70,7 +71,7 @@ async function collectCss(page, url) {
  * Render `target` at 1440 and 390 and run every enabled rule.
  * Returns {target, score, verdict, findings, errors, screenshots?}.
  */
-export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null, craft = !only } = {}) {
+export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null, craft = !only, keepConsent = false } = {}) {
   const url = toUrl(target);
   const off = disabledSet(disable);
   const pick = (r) => !off.has(r.id) && (!only || only.includes(r.id));
@@ -93,6 +94,7 @@ export async function analyze(browser, target, { disable = [], only = null, fast
     const page = await ctx.newPage();
     try {
       await page.goto(url, { waitUntil: 'load', timeout: 20000 });
+      if (!keepConsent) await hideConsent(page);
       await settle(page, fast);
       if (name === 'desktop') css = await collectCss(page, url);
       const pageRules = rules.filter((r) => r.scope === 'page' && r.viewports.includes(name));

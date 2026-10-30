@@ -38,3 +38,7 @@ test('detail-numbered leaves data counts alone but still catches numbers stacked
   assert.equal(await fires('counts', { body: '<p>Sent <b>23</b></p><p>Open <span>11</span></p><p>Paid <span>13</span></p>' }, 'detail-numbered'), false);
   assert.equal(await fires('over-heads', { body: '<div><span>12</span><h3>Plan</h3></div><div><span>13</span><h3>Build</h3></div><div><span>14</span><h3>Ship</h3></div>' }, 'detail-numbered'), true);
 });
+test('layout-text-overlap ignores the hidden body of a closed <details>', async () => {
+  const body = '<details><summary>First question</summary><p>Hidden answer text</p></details><details><summary>Second question</summary><p>Another answer</p></details>';
+  assert.equal(await fires('details', { body }, 'layout-text-overlap'), false);
+});

@@ -263,7 +263,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 14p
         </div>
 
         <article class="sheet" aria-hidden="true">
-          <div class="stamp" id="stamp">Overdue</div>
+          <div class="stamp num" id="stamp">Overdue</div>
           <h3>Invoice</h3>
           <div class="meta"><span>Studio Lind to North Pier Studio</span></div>
           <dl class="num">
@@ -434,8 +434,8 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 14p
     const p = local(t, 6100, 500);
     paid.style.opacity = p; bank.style.opacity = local(t, 6400, 500);
     bank.style.transform = `translateY(${(1 - local(t, 6400, 500)) * 8}px)`;
-    if (paidNow) { stamp.textContent = 'Paid 12 Oct'; stamp.className = 'stamp paid'; stamp.style.scale = 1 + 0.25 * (1 - local(t, 6100, 450)); }
-    else { stamp.textContent = day >= 1 ? `Overdue ${Math.floor(day)} days` : 'Due today'; stamp.className = 'stamp'; stamp.style.scale = 1; }
+    if (paidNow) { stamp.textContent = 'Paid 12 Oct'; stamp.className = 'stamp num paid'; stamp.style.scale = 1 + 0.25 * (1 - local(t, 6100, 450)); }
+    else { stamp.textContent = day >= 1 ? `Overdue ${Math.floor(day)} days` : 'Due today'; stamp.className = 'stamp num'; stamp.style.scale = 1; }
   }
   window.fluxlyRender = render;
 
