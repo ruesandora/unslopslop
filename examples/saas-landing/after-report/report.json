@@ -5,7 +5,7 @@
   "score": 0,
   "rawPoints": 0,
   "verdict": "clean",
-  "rulesChecked": 72,
+  "rulesChecked": 85,
   "byPass": {
     "spacing": 0,
     "color": 0,
@@ -18,5 +18,74 @@
     "motion": 0
   },
   "findings": [],
+  "craft": {
+    "score": 100,
+    "passMark": 70,
+    "pass": true,
+    "components": {
+      "hierarchy": {
+        "points": 15,
+        "max": 15,
+        "why": "display 107px / body 15px = 7.10x, 16 sizes"
+      },
+      "focal": {
+        "points": 15,
+        "max": 15,
+        "why": "headline 7.1x, largest visual 40% of the screen"
+      },
+      "visual": {
+        "points": 20,
+        "max": 20,
+        "why": "40% of the first screen is visual (surface)"
+      },
+      "motion": {
+        "points": 15,
+        "max": 15,
+        "why": "moves inside the visual, 15 moving elements, reduced motion handled"
+      },
+      "identity": {
+        "points": 20,
+        "max": 20,
+        "why": "web font, display face differs from text, accent used 12x in 1 hue band(s), 10 shadows, 8 layers, 5 textured areas (image, gradient)"
+      },
+      "density": {
+        "points": 15,
+        "max": 15,
+        "why": "landing, 62% of the first screen holds content"
+      }
+    },
+    "findings": [],
+    "signals": {
+      "body": 15,
+      "display": 106.56,
+      "steps": 16,
+      "visFrac": 0.4015856481481481,
+      "bestVis": 0.4015856481481481,
+      "visKinds": [
+        "surface"
+      ],
+      "raf": 95,
+      "mut": 1010,
+      "movers": 15,
+      "inVisual": 14,
+      "canvasLive": false,
+      "mq": 1,
+      "webfont": true,
+      "distinctFaces": true,
+      "accentUses": 12,
+      "accentHues": 1,
+      "shadows": 10,
+      "layered": 8,
+      "textures": 5,
+      "textureKinds": [
+        "image",
+        "gradient"
+      ],
+      "app": false,
+      "firstTexts": 54,
+      "coverage": 0.615625
+    }
+  },
+  "overall": "pass",
   "errors": []
 }

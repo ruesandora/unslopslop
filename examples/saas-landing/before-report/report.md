@@ -1,23 +1,41 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/before.html`
-- Slop score: **100/100** (0 = clean; raw points before the 100 cap: 247)
-- Verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 72; findings: 38
+- Slop score: **100/100** (lower is better; raw points before the 100 cap: 257)
+- Craft score: **51/100** (higher is better; pass mark 70)
+- Overall: **FAIL** (needs a clean slop verdict and craft >= 70)
+- Slop verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
+- Rules checked: 85; findings: 40
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
 | spacing | 6 |
-| color | 57 |
+| color | 61 |
 | icons | 19.5 |
 | copy | 31.5 |
-| typography | 22 |
+| typography | 28 |
 | layout | 48 |
 | detail | 37 |
 | imagery | 12 |
 | motion | 14 |
+
+## Craft
+
+| Component | Points | Reading |
+|---|---|---|
+| hierarchy | 15/15 | display 56px / body 15px = 3.73x, 11 sizes |
+| focal | 9/15 | headline 3.7x, largest visual 0% of the screen |
+| visual | 0/20 | 0% of the first screen is visual (none) |
+| motion | 7/15 | moves outside any visual, 15 moving elements, reduced motion not handled |
+| identity | 8/20 | no web font, one face, accent used 26x in 5 hue band(s), 4 shadows, 1 layers, 1 textured areas (gradient) |
+| density | 12/15 | landing, 25% of the first screen holds content |
+
+### Bland signals (the opposite failure: stripped too far)
+
+- **bland-no-hero-visual** (major): No real visual on the first screen. A first screen of text alone asks the reader to imagine the product. Strong pages show it: a product view, a photo, a drawing. Fix: Put the product itself in the first screen: a built UI view, a real screenshot, a photo or a meaningful drawing, at least 8% of the screen.
+  - `first screen`: no image, canvas, drawing or product surface
 
 ## spacing
 
@@ -71,6 +89,14 @@ Coloured glow shadow. Large zero-offset shadows in a saturated colour fake "ener
 Fix: Use a neutral, low-alpha shadow with a real offset, or no shadow and a 1 px border.
 - `a.btn`: boxShadow rgba(139, 92, 246, 0.55) 0px 0px 40px 0px [desktop]
 
+### color-accent-decorative (minor, 4 pts, x16, desktop)
+Accent colour spent on decoration. When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.
+Fix: Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.
+- `div.blob`: accent on a non-interactive, non-state element [desktop]
+- `div.eyebrow`: accent on a non-interactive, non-state element [desktop]
+- `span`: accent on a non-interactive, non-state element [desktop]
+- `i`: accent on a non-interactive, non-state element [desktop]
+
 ## icons
 
 ### icon-emoji-ui (major, 10.5 pts, x4, desktop)
@@ -122,6 +148,11 @@ Fix: Delete it, or fold the information into the heading. Keep at most one, and 
 - `div.eyebrow`: Workflow automation [desktop]
 - `div.eyebrow`: Features [desktop]
 - `div.eyebrow`: How it works [desktop]
+
+### type-accent-keyword (major, 6 pts, x1, desktop)
+One word of the headline in the accent colour. Colouring or gradient-filling one keyword of the headline is the most common template tell, even on design-tool sites.
+Fix: Let the whole headline speak in one colour. If a second tone is wanted, make it a quieter grey for a whole line, not a bright keyword.
+- `h1`: "seamless workflows" coloured inside "Unleash seamless workflows. Not just a …" [desktop]
 
 ### type-heavy-weight (minor, 4 pts, x10, desktop)
 Heavy weights carry the hierarchy. Weights of 800 to 900, or bold on most text, flatten emphasis. Hierarchy should come from size and colour.

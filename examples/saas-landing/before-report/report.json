@@ -3,15 +3,15 @@
   "version": 1,
   "target": "examples/saas-landing/before.html",
   "score": 100,
-  "rawPoints": 247,
+  "rawPoints": 257,
   "verdict": "heavy",
-  "rulesChecked": 72,
+  "rulesChecked": 85,
   "byPass": {
     "spacing": 6,
-    "color": 57,
+    "color": 61,
     "icons": 19.5,
     "copy": 31.5,
-    "typography": 22,
+    "typography": 28,
     "layout": 48,
     "detail": 37,
     "imagery": 12,
@@ -575,6 +575,26 @@
       "points": 6
     },
     {
+      "rule": "type-accent-keyword",
+      "pass": "typography",
+      "severity": "major",
+      "title": "One word of the headline in the accent colour",
+      "why": "Colouring or gradient-filling one keyword of the headline is the most common template tell, even on design-tool sites.",
+      "fix": "Let the whole headline speak in one colour. If a second tone is wanted, make it a quieter grey for a whole line, not a bright keyword.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1",
+          "detail": "\"seamless workflows\" coloured inside \"Unleash seamless workflows. Not just a …\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
       "rule": "detail-focus-ring",
       "pass": "detail",
       "severity": "major",
@@ -765,6 +785,41 @@
         {
           "el": "small",
           "detail": "12px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "color-accent-decorative",
+      "pass": "color",
+      "severity": "minor",
+      "title": "Accent colour spent on decoration",
+      "why": "When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.",
+      "fix": "Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.",
+      "count": 16,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.blob",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.eyebrow",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
           "viewport": "desktop"
         }
       ],
@@ -1078,5 +1133,92 @@
       "points": 2
     }
   ],
+  "craft": {
+    "score": 51,
+    "passMark": 70,
+    "pass": false,
+    "components": {
+      "hierarchy": {
+        "points": 15,
+        "max": 15,
+        "why": "display 56px / body 15px = 3.73x, 11 sizes"
+      },
+      "focal": {
+        "points": 9,
+        "max": 15,
+        "why": "headline 3.7x, largest visual 0% of the screen"
+      },
+      "visual": {
+        "points": 0,
+        "max": 20,
+        "why": "0% of the first screen is visual (none)"
+      },
+      "motion": {
+        "points": 7,
+        "max": 15,
+        "why": "moves outside any visual, 15 moving elements, reduced motion not handled"
+      },
+      "identity": {
+        "points": 8,
+        "max": 20,
+        "why": "no web font, one face, accent used 26x in 5 hue band(s), 4 shadows, 1 layers, 1 textured areas (gradient)"
+      },
+      "density": {
+        "points": 12,
+        "max": 15,
+        "why": "landing, 25% of the first screen holds content"
+      }
+    },
+    "findings": [
+      {
+        "rule": "bland-no-hero-visual",
+        "pass": "craft",
+        "severity": "major",
+        "title": "No real visual on the first screen",
+        "why": "A first screen of text alone asks the reader to imagine the product. Strong pages show it: a product view, a photo, a drawing.",
+        "fix": "Put the product itself in the first screen: a built UI view, a real screenshot, a photo or a meaningful drawing, at least 8% of the screen.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "first screen",
+            "detail": "no image, canvas, drawing or product surface",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
+    "signals": {
+      "body": 15,
+      "display": 56,
+      "steps": 11,
+      "visFrac": 0,
+      "bestVis": 0,
+      "visKinds": [],
+      "raf": 0,
+      "mut": 1,
+      "movers": 15,
+      "inVisual": 0,
+      "canvasLive": false,
+      "mq": 0,
+      "webfont": false,
+      "distinctFaces": false,
+      "accentUses": 26,
+      "accentHues": 5,
+      "shadows": 4,
+      "layered": 1,
+      "textures": 1,
+      "textureKinds": [
+        "gradient"
+      ],
+      "app": false,
+      "firstTexts": 22,
+      "coverage": 0.2546875
+    }
+  },
+  "overall": "fail",
   "errors": []
 }

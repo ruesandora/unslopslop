@@ -91,3 +91,11 @@ test('--min-craft exits 1 below the mark', () => {
   assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '70']).status, 1);
   assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '0']).status, 0);
 });
+test('compare.mjs keeps tall pages up to --max-height, not just the first screen', async () => {
+  const tall = join(dir, 'tall.html');
+  await writeFile(tall, page({ body: '<div style="height:3000px"></div>' }));
+  const out = join(dir, 'tall.png');
+  assert.equal(run('compare.mjs', [clean, tall, '--out', out, '--max-height', '2000', '--wait', '50']).status, 0);
+  const buf = await readFile(out);
+  assert.ok(buf.readUInt32BE(20) > 1900, `height ${buf.readUInt32BE(20)}`);
+});

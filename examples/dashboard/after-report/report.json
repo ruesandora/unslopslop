@@ -5,7 +5,7 @@
   "score": 0,
   "rawPoints": 0,
   "verdict": "clean",
-  "rulesChecked": 72,
+  "rulesChecked": 85,
   "byPass": {
     "spacing": 0,
     "color": 0,
@@ -18,5 +18,77 @@
     "motion": 0
   },
   "findings": [],
+  "craft": {
+    "score": 94,
+    "passMark": 70,
+    "pass": true,
+    "components": {
+      "hierarchy": {
+        "points": 13,
+        "max": 15,
+        "why": "display 60px / body 14px = 4.29x, 5 sizes"
+      },
+      "focal": {
+        "points": 15,
+        "max": 15,
+        "why": "headline 4.3x, largest visual 20% of the screen"
+      },
+      "visual": {
+        "points": 20,
+        "max": 20,
+        "why": "65% of the first screen is visual (surface, surface, surface, surface)"
+      },
+      "motion": {
+        "points": 11,
+        "max": 15,
+        "why": "moves inside the visual, 36 moving elements, reduced motion handled"
+      },
+      "identity": {
+        "points": 20,
+        "max": 20,
+        "why": "web font, display face differs from text, accent used 14x in 1 hue band(s), 7 shadows, 0 layers, 6 textured areas (image, gradient)"
+      },
+      "density": {
+        "points": 15,
+        "max": 15,
+        "why": "app screen, 112 text items on the first screen"
+      }
+    },
+    "findings": [],
+    "signals": {
+      "body": 14,
+      "display": 60,
+      "steps": 5,
+      "visFrac": 0.651783950617284,
+      "bestVis": 0.2023148148148148,
+      "visKinds": [
+        "surface",
+        "surface",
+        "surface",
+        "surface"
+      ],
+      "raf": 64,
+      "mut": 1134,
+      "movers": 36,
+      "inVisual": 35,
+      "canvasLive": true,
+      "mq": 1,
+      "webfont": true,
+      "distinctFaces": true,
+      "accentUses": 14,
+      "accentHues": 1,
+      "shadows": 7,
+      "layered": 0,
+      "textures": 6,
+      "textureKinds": [
+        "image",
+        "gradient"
+      ],
+      "app": true,
+      "firstTexts": 112,
+      "coverage": 0.7625
+    }
+  },
+  "overall": "pass",
   "errors": []
 }
