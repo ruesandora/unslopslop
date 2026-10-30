@@ -1,6 +1,6 @@
 # Inspiration catalogue
 
-Measured references, written without names, links or copied material. Every number below was measured by us on 30 October 2026 (computed styles in a 1440 x 900 headless browser, palette shares from the first-screen pixels, motion from declared animations or frame differences). Values read from screen recordings are scaled to a 1440 x 900 frame and are approximate (about ±10%). Hex values are measurements, not palettes to reuse.
+The catalogue holds 32 measured entries (C01 to C23, W18, W19, W26 to W32) plus 5 short notes from an earlier batch (B01 to B05). Measured references, written without names, links or copied material. Every number below was measured by us on 30 October 2026 (computed styles in a 1440 x 900 headless browser, palette shares from the first-screen pixels, motion from declared animations or frame differences). Values read from screen recordings are scaled to a 1440 x 900 frame and are approximate (about ±10%). Hex values are measurements, not palettes to reuse.
 
 **How to use it.** Before building, pick 2 or 3 entries whose tags match the brief (the gold ones first) and write their ids in the brief's `References:` line with what you take from each. Open the matching composition board in `boards/` and put your first screen next to it with `scripts/compare.mjs`. Check your page against the measured ranges in `skills/unslopslop/references/craft-recipes.md`. Never copy a shape, subject, wording or palette; take the proportion, the layer order, the timing.
 
@@ -10,7 +10,7 @@ Measured references, written without names, links or copied material. Every numb
 
 1. **Scale is the difference.** Type-led gold heroes set the display line at 86 to 104 px on product pages (cap height 6.7 to 8% of the screen) and about 115 to 440 px on poster-like pages (9 to 38%). The component-shop and template-landing pages sit at 48 to 88 px, most at 48 to 72 (3.7 to 5.6%). Size alone does not save a page (counter W26 uses 88 px, W18 uses 104 px), but no gold hero is small and text-only.
 2. **One subject, and it touches the type.** 5 of the 8 cinematic heroes put a single real subject (object, character, face, product UI) across or behind the display line with a deliberate z-order. None used a blurred orb.
-3. **Two big colours, one small one.** Gold first screens are carried by one or two fields (55 to 95% of pixels) and an accent under 3%, or by two fields that split about 60/25. Accent on a headline keyword appeared only in counter examples.
+3. **Two big colours, one small one.** Unless the first screen is a full-bleed photograph, gold first screens are carried by one ground at 55 to 97% of pixels and an accent under 3%, or by two fields that split about 60/25. Accent on a headline keyword appeared only in counter examples.
 4. **The frame is designed.** Gold heroes put 9 to 13 px uppercase labels (often mono, tracked) in two to four corners of the screen; the middle stays for subject and display type.
 5. **Depth comes from light and overlap, not from card shadows.** One light source on a dark stage, a product card laid over a photograph, a layer that crosses the edge of another. Box shadows, where present, use negative spread or a 1 px inset line.
 
