@@ -1,31 +1,24 @@
 # Fluxly dashboard (example direction)
 
-## Overview
-Same product and system as the landing example (`../saas-landing/DESIGN.md`), in a working screen. One question per screen: how much is overdue, and is it getting better.
-Signature move: the chart is the screen. One large bar chart, the current week in a different colour, everything else is a short table.
+## Project read
+The working screen of the same product. One question: how much money is outstanding, and what happens next. Used daily in short sessions, often on a laptop in the evening.
 
-## Colors
-Same tokens as the landing page, plus rust `#9a3412` for "late" only (text on paper 7:1).
+## Direction
+Same night-ledger combination as the landing page, tuned for long sessions: lower contrast surfaces, dense 13 to 15 px UI, one display word (the page title and the lead number in Gloock).
+Signature move: the lead number sits on an ageing bar drawn as one cobalt ramp (not yet due to over 30 days), with the next actions (reminder queue) beside it.
+Rejected default: greeting title, four KPI cards, rainbow chart; also the bare document version (`after-v1.html`).
+
+## Colour combination
+ink `#0b0e15` ground; surfaces `#11151f` to `#171c29`; bone `#ece6da` text; cobalt ramp `#8a9dff` / `#5f78f5` / `#3a55f0` for ageing and the cash series; bone for the running total line.
 
 ## Typography
-Serif headings (Charter stack) at 32 and 20 px, system body at 16 px, table text 15 px, captions 14 px.
+Gloock for the title and the lead number; Geist 13 to 15 px for UI; Geist Mono for invoice ids in `<code>`; tabular figures everywhere.
 
 ## Layout
-- Sidebar 240 px, content max 1200 px. Chart takes two thirds, table one third.
-- 4 px rhythm: 8, 16, 24, 32.
+Sidebar 248 px with counts and saved views; header row with search, period switch and the one primary action; grid of lead card + forecast chart (left) and reminder queue + matched payments (right); full-width invoice table. Phones: sidebar folds into a menu button, table keeps invoice, client and amount.
 
-## Elevation
-None. One bordered surface (the chart); the table sits on the page.
-
-## Shapes
-Radius 10 px for the chart surface, 6 px for nav rows, 4 px for bar tops.
-
-## Components
-- Lead line: the one number that matters, with its comparison base and date (`$4,820 overdue ... against $6,110 on 2 Oct`).
-- Table: right-aligned amounts, late days in rust text. No pills.
-
-## Do / Don't
-- Do give every number a unit and a comparison. Don't use a greeting as the title, KPI strips, sparklines, glass, glow, emoji or live dots.
+## Data
+All data is example data and says so (sidebar note, card header, table footer). Totals agree across widgets.
 
 ## Motion
-Colour change on hover 120 ms ease-out. No entrance animation. Reduced motion: no transitions.
+Forecast bars rise and the running-total line draws in once (1.1 s, written as `render(t)`); ageing bar fills left to right. Hover tooltip on the chart. Reduced motion: final state.

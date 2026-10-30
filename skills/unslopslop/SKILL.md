@@ -1,48 +1,47 @@
 ---
 name: unslopslop
-description: Detect and fix AI-generated-looking ("slop") UI. Use when a page, landing, dashboard or component looks generic, templated or "made by AI", when the user says "unslop", "make this look less AI", "this looks generic", or before shipping any generated front end. Renders the page, scores it with a repeatable detector, then fixes it in a fixed pass order and proves the improvement.
+description: Design anything (web page, app screen, dashboard, email, logo, motion, social visual) so it looks like a strong studio made it for this specific project, and prove it with two numbers: slop (default moves, lower is better) and craft (hierarchy, focal point, real visual, purposeful motion, identity, density; higher is better). Use when building or redesigning UI, when something "looks AI-made", "looks generic", "looks bland", or when the user says "unslop". Reads the project first, picks a direction, palette combination, texture and motion for it, loads the matching domain and style packs, then detects, compares with references and iterates.
 ---
 
 # unslopslop
 
-Slop is not "made with AI". It is what remains when no decision was taken: default fonts, default palette, default card grid, filler copy. This skill finds those leftovers with a script, then replaces each with a decision.
+Two failures, one goal. **Slop** is what is left when nothing was decided (default gradient, card grid, filler copy). **Bland** is what is left when slop is stripped and nothing is put back (beige document, default serif, no visual, no motion). The goal is the third thing: a design made for this project, with layers, tones, texture, depth, a real visual and purposeful motion. Read `../../PHILOSOPHY.md` once if this folder sits inside the unslopslop repo.
 
-Scripts live next to this file (`scripts/`). They need Node 20+ and Playwright with Chromium already installed (nothing is bundled). Paths below are relative to this skill folder.
+Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled). Paths are relative to this folder.
+
+## Before anything: load context
+
+1. `references/project-read.md`: read the project, write the direction brief. No brief, no design.
+2. Pick the **domain pack** from the request: `domains/web`, `domains/dashboard`, `domains/mobile`, `domains/email`, `domains/logo-brand`, `domains/motion`, `domains/social`. Read its README.
+3. If a style is named ("retro pixel", "swiss", "ASCII art") or clearly fits, load `styles/<style>/README.md` and combine it with the domain pack (style decides look, domain decides constraints). Styles marked *early* are thin; say so.
+4. If `../../inspiration/catalog.md` exists, pick 2 or 3 references whose tags match (domain, style, mood, palette, motion). Measure them, never copy them.
+5. Colour: `references/palette-combinations.md`. Sets of two to four with roles and shares, chosen for the mood.
 
 ## Loop
 
-1. **Capture.** Before touching anything, save the current state:
-   `node scripts/detect.mjs <file|url> --out .unslop/before`
-   (writes report.json, report.md, desktop.png, mobile.png). Look at both PNGs yourself. Audit a production build, not a dev server (rule `env-dev-server` warns).
-2. **Read the verdict.** `heavy` (score 35+): rebuild. `light` (10 to 34, or any critical finding): polish. `clean` (under 10): leave it alone and go to step 6.
-3. **Direction.** Write the five-line direction contract (what it is, who it is for, tone, the one signature move, what it must never look like), then a `DESIGN.md` (template: `references/design-md-template.md`). Heavy pages only; light pages inherit the existing system.
-4. **Fix.**
-   - Light: run the nine passes in order, one pass at a time: spacing, color, icons, copy, typography, layout, detail, imagery, motion (`references/passes.md`). Fix only what the report lists.
-   - Heavy: rebuild in this order: type, color, layout, states, components (recipe in `references/passes.md`), then run the passes as an audit.
-   After each pass re-run the detector and note the score. Stop a pass when its points reach zero.
-5. **Rounds.** Check three widths (1440, 768, 390). Fix the worst three issues, re-run, repeat. At most three rounds; if findings remain, report them as open, do not hide them.
-6. **Prove it.**
-   - `node scripts/detect.mjs <page> --out .unslop/after`
-   - `node scripts/compare.mjs <before> <after> --out .unslop/compare.png` (and `--viewport mobile`). Open the PNG.
-   - Template test (`references/template-test.md`): swap the brand name; if the page still fits, it is generic, add a signature move.
-   - Report: score before and after, verdict, the PNG paths, findings left open and why.
+1. **Capture** the current state (if there is one): `node scripts/detect.mjs <file|url> --out .unslop/before`. Open both PNGs.
+2. **Read both numbers.** Slop verdict: `heavy` (35+) rebuild, `light` polish, `clean` keep. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
+3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
+4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
+5. **Reference gate.** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
+6. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
+
+A page passes only with a clean slop verdict **and** craft at 70 or more (`--min-craft 70` in CI).
 
 ## Rules of the road
 
-- The detector measures tells, not taste. A clean score is necessary, never sufficient: always look at the screenshots.
-- Do not copy another site's look. When the user gives a reference, measure its timing with `scripts/motion-probe.mjs` (`references/motion-measurement.md`); take durations, easing and rhythm, never shapes, colours, text or imagery.
-- No paid image generation. Image priority: the project's own assets, then generated locally in code, then open-licensed (CC0, CC BY, CC BY-SA, with credit), code-drawn illustration last.
-- Never invent proof: user counts, ratings, logos, testimonials. Cite a source or delete the claim.
-- Keep every change reversible: do not delete the user's file, write the fixed version next to it or on a branch.
-- Disabling a rule (`--disable id`) needs a stated reason in the report.
+- The numbers measure tells and presence, not taste. Always look at the screenshots at 1440 and 390.
+- Do not copy another site's look. From references take timing, proportion and ideas; never shapes, copy, imagery or palettes as-is (`references/motion-measurement.md`).
+- No paid generation without the user's approval of the cost. Image priority in `references/passes.md`.
+- Never invent proof: user counts, ratings, logos, testimonials. Example data is labelled as such.
+- Keep changes reversible: write next to the user's file or on a branch.
+- Disabling a rule (`--disable id`) needs a reason in the report.
 
 ## Files
 
-- `scripts/detect.mjs`: render at 1440 and 390 (plus a reduced-motion pass), run all rules, scored JSON and markdown. `--fail-on light|heavy` for CI.
-- `scripts/compare.mjs`: before/after side-by-side PNG.
-- `scripts/motion-probe.mjs`: declared durations and easings, plus frame-sampled measurement of one element.
-- `references/rules.md`: the rule catalogue with severities (generated from code).
-- `references/passes.md`: the nine passes, rebuild recipe, image priority, rounds.
-- `references/design-md-template.md`: DESIGN.md template with a Motion section.
-- `references/motion-measurement.md`: measuring motion, and writing animation as a pure function of time.
-- `references/template-test.md`: the swap test.
+- `scripts/detect.mjs`: renders at 1440 and 390 (plus a reduced-motion pass), runs slop rules, bland rules and the craft probe; JSON and markdown; hides consent banners (`--keep-consent` to keep). `--fail-on`, `--min-craft`.
+- `scripts/compare.mjs`: side-by-side PNG (`--wait` lets a one-shot demo finish).
+- `scripts/motion-probe.mjs`: declared and measured timing of one element.
+- `scripts/intake.mjs`: capture a reference URL into `inspiration/` (screenshot, palette, fonts, motion timings).
+- `references/`: project read, palette combinations, passes and recipes, rule catalogue (generated), DESIGN.md template, motion measurement, template test.
+- `domains/`, `styles/`: packs, loaded on demand.

@@ -1,0 +1,174 @@
+{
+  "tool": "unslopslop",
+  "version": 1,
+  "target": "examples/dashboard/after-v1.html",
+  "score": 0,
+  "rawPoints": 0,
+  "verdict": "clean",
+  "rulesChecked": 85,
+  "byPass": {
+    "spacing": 0,
+    "color": 0,
+    "icons": 0,
+    "copy": 0,
+    "typography": 0,
+    "layout": 0,
+    "detail": 0,
+    "imagery": 0,
+    "motion": 0
+  },
+  "findings": [],
+  "craft": {
+    "score": 62,
+    "passMark": 70,
+    "pass": false,
+    "components": {
+      "hierarchy": {
+        "points": 14,
+        "max": 15,
+        "why": "display 32px / body 14px = 2.29x, 6 sizes"
+      },
+      "focal": {
+        "points": 14,
+        "max": 15,
+        "why": "headline 2.3x, largest visual 20% of the screen"
+      },
+      "visual": {
+        "points": 13,
+        "max": 20,
+        "why": "20% of the first screen is visual (surface)"
+      },
+      "motion": {
+        "points": 10,
+        "max": 15,
+        "why": "moves outside any visual, 1 moving elements, reduced motion handled"
+      },
+      "identity": {
+        "points": 7,
+        "max": 20,
+        "why": "no web font, display face differs from text, accent used 14x in 2 hue band(s), 0 shadows, 0 layers, 0 textured areas (none)"
+      },
+      "density": {
+        "points": 4,
+        "max": 15,
+        "why": "app screen, 31 text items on the first screen"
+      }
+    },
+    "findings": [
+      {
+        "rule": "bland-no-depth",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No depth at all",
+        "why": "No shadow, no layered surface, one flat colour everywhere: the page looks like printed paper, not an interface.",
+        "fix": "Add one layer system: a raised surface for the product view (soft layered shadow), a second surface tone, or one overlapping element.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "0 shadows, 2 surface tone(s)",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-no-texture",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No texture, pattern or tonal light anywhere",
+        "why": "Every surface is one flat fill. Good pages carry a material: grain, a faint pattern or watermark, a tonal light behind the product.",
+        "fix": "Add one material that suits the project: fine grain, a subtle pattern in one zone, a watermark, or a soft light behind the main visual. Keep it quiet (under 10% opacity).",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no background image, gradient, mask or noise on any large area",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-static",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "Nothing moves, even where a demo would explain the product",
+        "why": "A product page with a call to action but no motion leaves the reader to guess how the product behaves over time.",
+        "fix": "Animate the product view once: one short sequence (render(t) or a few keyframes) that shows what happens, then stops. Respect reduced motion.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no animation, 0 animation frames, 1 DOM changes after load",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-default-serif",
+        "pass": "craft",
+        "severity": "major",
+        "title": "Default system serif",
+        "why": "Georgia, Times and other built-in serifs are what a browser shows when nobody chose a type face.",
+        "fix": "Choose a face on purpose (a real web font with a licence that allows self-hosting) and pair it with one text face.",
+        "count": 2,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "h1",
+            "detail": "Charter, \"Iowan Old Style\", Georgia, serif",
+            "viewport": "desktop"
+          },
+          {
+            "el": "h2",
+            "detail": "Charter, \"Iowan Old Style\", Georgia, serif",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
+    "signals": {
+      "body": 14,
+      "display": 32,
+      "steps": 6,
+      "visFrac": 0.20330864197530865,
+      "bestVis": 0.20330864197530865,
+      "visKinds": [
+        "surface"
+      ],
+      "raf": 0,
+      "mut": 1,
+      "movers": 1,
+      "inVisual": 0,
+      "canvasLive": false,
+      "mq": 0,
+      "webfont": false,
+      "distinctFaces": true,
+      "accentUses": 14,
+      "accentHues": 2,
+      "shadows": 0,
+      "layered": 0,
+      "textures": 0,
+      "textureKinds": [],
+      "app": true,
+      "firstTexts": 31,
+      "coverage": 0.3375
+    }
+  },
+  "overall": "fail",
+  "errors": []
+}

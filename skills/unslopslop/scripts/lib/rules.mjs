@@ -585,7 +585,14 @@ const BASE = [
     why: '"01 / 02 / 03" on content that has no sequence is ornament.',
     fix: 'Number only real steps (use an ordered list). Otherwise drop the numbers.',
     check: (h) => {
-      const els = h.textEls().filter((e) => /^(0\d|\d{2})(\s*\/\s*\d{2})?\.?$/.test(h.own(e)) && !e.closest('ol'));
+      const els = h.textEls().filter((e) => {
+        const t = h.own(e);
+        if (e.closest('ol, nav, table, figure, [role=img], [aria-hidden=true]')) return false;
+        // leading-zero ornaments (01, 02 / 05), or a bare two-digit number sitting right before a heading
+        if (/^0\d(\s*\/\s*\d{2})?\.?$/.test(t)) return true;
+        const next = e.nextElementSibling;
+        return /^\d{2}\.?$/.test(t) && !!next && h.heading(next);
+      });
       return els.length >= 3 ? els.map((e) => ({ el: h.sel(e), detail: h.own(e) })) : [];
     },
   },
@@ -755,6 +762,18 @@ const BASE = [
     check: (css) => {
       const moves = /@keyframes|animation\s*:|animation-name\s*:|transition\s*:\s*[^;}]*\d/i.test(css);
       return moves && !/prefers-reduced-motion/i.test(css) ? [{ el: 'stylesheet', detail: 'animations present, no reduced-motion query' }] : [];
+    },
+  },
+  {
+    id: 'motion-shadow-animated', pass: 'motion', severity: 'minor', scope: 'css', viewports: ['desktop'],
+    title: 'Shadow animated frame by frame',
+    why: 'Animating box-shadow repaints every frame and smears; on a layer that moves away from its base the shadow also ends up in the wrong place.',
+    fix: 'Put two pre-blurred shadow shapes behind the element (rest and raised) and crossfade their opacity; animate transform and opacity only.',
+    check: (css) => {
+      const kf = [...css.matchAll(/@keyframes\s+[\w-]+\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)].find((m) => /box-shadow\s*:/.test(m[1]));
+      const tr = css.match(/transition(-property)?\s*:[^;}]*\bbox-shadow\b[^;}]*/i);
+      const hit = kf ? `keyframes animate box-shadow` : tr ? tr[0].replace(/\s+/g, ' ').slice(0, 60) : null;
+      return hit ? [{ el: 'stylesheet', detail: hit }] : [];
     },
   },
   {

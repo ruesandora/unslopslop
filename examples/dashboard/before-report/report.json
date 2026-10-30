@@ -3,12 +3,12 @@
   "version": 1,
   "target": "examples/dashboard/before.html",
   "score": 100,
-  "rawPoints": 156.5,
+  "rawPoints": 160.5,
   "verdict": "heavy",
-  "rulesChecked": 72,
+  "rulesChecked": 85,
   "byPass": {
     "spacing": 4,
-    "color": 69,
+    "color": 73,
     "icons": 12,
     "copy": 11,
     "typography": 16.5,
@@ -526,6 +526,41 @@
       "points": 4
     },
     {
+      "rule": "color-accent-decorative",
+      "pass": "color",
+      "severity": "minor",
+      "title": "Accent colour spent on decoration",
+      "why": "When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.",
+      "fix": "Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.",
+      "count": 22,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.eyebrow",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
       "rule": "type-reflex-font",
       "pass": "typography",
       "severity": "minor",
@@ -656,5 +691,92 @@
       "points": 2
     }
   ],
+  "craft": {
+    "score": 49,
+    "passMark": 70,
+    "pass": false,
+    "components": {
+      "hierarchy": {
+        "points": 15,
+        "max": 15,
+        "why": "display 32px / body 13px = 2.46x, 8 sizes"
+      },
+      "focal": {
+        "points": 11,
+        "max": 15,
+        "why": "headline 2.5x, largest visual 9% of the screen"
+      },
+      "visual": {
+        "points": 4,
+        "max": 20,
+        "why": "9% of the first screen is visual (surface)"
+      },
+      "motion": {
+        "points": 7,
+        "max": 15,
+        "why": "moves outside any visual, 6 moving elements, reduced motion not handled"
+      },
+      "identity": {
+        "points": 6,
+        "max": 20,
+        "why": "no web font, one face, accent used 27x in 5 hue band(s), 7 shadows, 0 layers, 0 textured areas (none)"
+      },
+      "density": {
+        "points": 6,
+        "max": 15,
+        "why": "app screen, 38 text items on the first screen"
+      }
+    },
+    "findings": [
+      {
+        "rule": "bland-no-texture",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No texture, pattern or tonal light anywhere",
+        "why": "Every surface is one flat fill. Good pages carry a material: grain, a faint pattern or watermark, a tonal light behind the product.",
+        "fix": "Add one material that suits the project: fine grain, a subtle pattern in one zone, a watermark, or a soft light behind the main visual. Keep it quiet (under 10% opacity).",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no background image, gradient, mask or noise on any large area",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
+    "signals": {
+      "body": 13,
+      "display": 32,
+      "steps": 8,
+      "visFrac": 0.08815447847342786,
+      "bestVis": 0.08815447847342786,
+      "visKinds": [
+        "surface"
+      ],
+      "raf": 0,
+      "mut": 1,
+      "movers": 6,
+      "inVisual": 0,
+      "canvasLive": false,
+      "mq": 0,
+      "webfont": false,
+      "distinctFaces": false,
+      "accentUses": 27,
+      "accentHues": 5,
+      "shadows": 7,
+      "layered": 0,
+      "textures": 0,
+      "textureKinds": [],
+      "app": true,
+      "firstTexts": 38,
+      "coverage": 0.2453125
+    }
+  },
+  "overall": "fail",
   "errors": []
 }

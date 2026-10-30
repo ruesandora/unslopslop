@@ -1,4 +1,6 @@
 import { PASSES, RULES } from './rules.mjs';
+import { BLAND } from './rules-bland.mjs';
+import { CRAFT_PASS } from './craft.mjs';
 
 const NEXT = {
   heavy: 'Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.',
@@ -10,7 +12,9 @@ export function toJson(result) {
   const byPass = Object.fromEntries(PASSES.map((p) => [p, result.findings.filter((f) => f.pass === p).reduce((a, f) => a + f.points, 0)]));
   return {
     tool: 'unslopslop', version: 1, target: result.target, score: result.score, rawPoints: +result.findings.reduce((a, f) => a + f.points, 0).toFixed(1), verdict: result.verdict,
-    rulesChecked: RULES.length - (result.disabled || 0), byPass, findings: result.findings, errors: result.errors,
+    rulesChecked: RULES.length + BLAND.length - (result.disabled || 0), byPass, findings: result.findings,
+    craft: result.craft ? { score: result.craft.score, passMark: CRAFT_PASS, pass: result.craft.pass, components: result.craft.components, findings: result.craft.findings, signals: result.craft.signals } : null,
+    overall: result.overall ?? null, errors: result.errors,
   };
 }
 
@@ -19,13 +23,28 @@ export function toMarkdown(result) {
   const L = [];
   L.push(`# unslopslop report`, '');
   L.push(`- Target: \`${result.target}\``);
-  L.push(`- Slop score: **${j.score}/100** (0 = clean; raw points before the 100 cap: ${j.rawPoints})`);
-  L.push(`- Verdict: **${j.verdict.toUpperCase()}**. ${NEXT[j.verdict]}`);
+  L.push(`- Slop score: **${j.score}/100** (lower is better; raw points before the 100 cap: ${j.rawPoints})`);
+  if (j.craft && j.craft.score !== null) L.push(`- Craft score: **${j.craft.score}/100** (higher is better; pass mark ${j.craft.passMark})`);
+  if (j.overall) L.push(`- Overall: **${j.overall.toUpperCase()}** (needs a clean slop verdict and craft >= ${CRAFT_PASS})`);
+  L.push(`- Slop verdict: **${j.verdict.toUpperCase()}**. ${NEXT[j.verdict]}`);
   L.push(`- Rules checked: ${j.rulesChecked}; findings: ${j.findings.length}`, '');
   L.push('## Points by fix pass', '', '| Pass | Points |', '|---|---|');
   for (const p of PASSES) L.push(`| ${p} | ${+j.byPass[p].toFixed(1)} |`);
   L.push('');
-  if (!j.findings.length) L.push('No findings.', '');
+  if (j.craft && j.craft.score !== null) {
+    L.push('## Craft', '', '| Component | Points | Reading |', '|---|---|---|');
+    for (const [k, v] of Object.entries(j.craft.components)) L.push(`| ${k} | ${v.points}/${v.max} | ${v.why} |`);
+    L.push('');
+    if (j.craft.findings.length) {
+      L.push('### Bland signals (the opposite failure: stripped too far)', '');
+      for (const f of j.craft.findings) {
+        L.push(`- **${f.rule}** (${f.severity}): ${f.title}. ${f.why} Fix: ${f.fix}`);
+        for (const e of f.examples) L.push(`  - \`${e.el}\`: ${e.detail}`);
+      }
+      L.push('');
+    }
+  }
+  if (!j.findings.length) L.push('No slop findings.', '');
   for (const p of PASSES) {
     const fs = j.findings.filter((f) => f.pass === p);
     if (!fs.length) continue;

@@ -1,16 +1,18 @@
 # unslopslop report
 
 - Target: `examples/dashboard/before.html`
-- Slop score: **100/100** (0 = clean; raw points before the 100 cap: 156.5)
-- Verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 72; findings: 23
+- Slop score: **100/100** (lower is better; raw points before the 100 cap: 160.5)
+- Craft score: **49/100** (higher is better; pass mark 70)
+- Overall: **FAIL** (needs a clean slop verdict and craft >= 70)
+- Slop verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
+- Rules checked: 85; findings: 24
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
 | spacing | 4 |
-| color | 69 |
+| color | 73 |
 | icons | 12 |
 | copy | 11 |
 | typography | 16.5 |
@@ -18,6 +20,22 @@
 | detail | 20.5 |
 | imagery | 0 |
 | motion | 4 |
+
+## Craft
+
+| Component | Points | Reading |
+|---|---|---|
+| hierarchy | 15/15 | display 32px / body 13px = 2.46x, 8 sizes |
+| focal | 11/15 | headline 2.5x, largest visual 9% of the screen |
+| visual | 4/20 | 9% of the first screen is visual (surface) |
+| motion | 7/15 | moves outside any visual, 6 moving elements, reduced motion not handled |
+| identity | 6/20 | no web font, one face, accent used 27x in 5 hue band(s), 7 shadows, 0 layers, 0 textured areas (none) |
+| density | 6/15 | app screen, 38 text items on the first screen |
+
+### Bland signals (the opposite failure: stripped too far)
+
+- **bland-no-texture** (minor): No texture, pattern or tonal light anywhere. Every surface is one flat fill. Good pages carry a material: grain, a faint pattern or watermark, a tonal light behind the product. Fix: Add one material that suits the project: fine grain, a subtle pattern in one zone, a watermark, or a soft light behind the main visual. Keep it quiet (under 10% opacity).
+  - `body`: no background image, gradient, mask or noise on any large area
 
 ## spacing
 
@@ -70,6 +88,14 @@ Fix: Use a neutral, low-alpha shadow with a real offset, or no shadow and a 1 px
 - `div.kpi`: boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px [desktop]
 - `div.kpi`: boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px [desktop]
 - `div.kpi`: boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px [desktop]
+
+### color-accent-decorative (minor, 4 pts, x22, desktop)
+Accent colour spent on decoration. When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.
+Fix: Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.
+- `div.eyebrow`: accent on a non-interactive, non-state element [desktop]
+- `b`: accent on a non-interactive, non-state element [desktop]
+- `span`: accent on a non-interactive, non-state element [desktop]
+- `i`: accent on a non-interactive, non-state element [desktop]
 
 ## icons
 

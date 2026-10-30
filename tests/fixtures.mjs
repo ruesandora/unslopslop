@@ -208,9 +208,37 @@ export const FIXTURES = {
     bad: { css: '.x{transition:all .2s ease}', body: '<p class="x">hi</p>' },
     good: { css: '.x{transition:opacity .2s ease}', body: '<p class="x">hi</p>' },
   },
+  'type-accent-keyword': {
+    bad: { body: '<h2>Invoices that <span style="color:#2a5bd7">chase themselves</span></h2>' },
+    good: { body: '<h2>Invoices that <span style="color:#777">chase themselves</span></h2>' },
+  },
+  'type-live-number-proportional': {
+    bad: { body: '<p id="t">0:00</p><script>let i=0;const t=document.getElementById("t");setInterval(()=>{t.textContent="0:0"+(++i%10)},5)</script>' },
+    good: { body: '<p id="t" style="font-variant-numeric:tabular-nums">0:00</p><script>let i=0;const t=document.getElementById("t");setInterval(()=>{t.textContent="0:0"+(++i%10)},5)</script>' },
+  },
+  'layout-text-overlap': {
+    bad: { body: '<div style="position:relative;height:60px"><p style="position:absolute;top:0;left:0">Upload failed</p><p style="position:absolute;top:4px;left:10px">Retry later</p></div>' },
+    good: { body: '<div style="position:relative;height:60px"><p style="position:absolute;top:0;left:0">Upload failed</p><p style="position:absolute;top:4px;left:10px;background:#fafaf7">Retry later</p></div>' },
+  },
+  'color-accent-decorative': {
+    bad: { body: '<p style="border-top:3px solid #2a5bd7;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part four of the story.</p>' },
+    good: { body: '<p style="border-top:3px solid #ccc;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Paid on 12 Oct.</p>' },
+  },
+  'layout-stock-dark-launch': {
+    bad: { css: 'body{background:#050505;color:#eee}h1{text-align:center}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+    good: { css: 'body{background:#050505;color:#eee}h1{text-align:left}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+  },
+  'detail-showcase-ornament': {
+    bad: { body: '<div class="glow orb" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+    good: { body: '<div class="photo" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+  },
+  'motion-shadow-animated': {
+    bad: { css: '.c{transition:box-shadow 200ms ease-out}.c:hover{box-shadow:0 8px 16px rgba(0,0,0,.2)}', body: '<div class="c">Card</div>' },
+    good: { css: '.c{transition:opacity 200ms ease-out}.c:hover{opacity:.9}', body: '<div class="c">Card</div>' },
+  },
 };
 
-// ---- batch #1 rules ----
+// ---- page frame, app screens, visual poverty, accessibility ----
 const LONG = 'Long enough text to count as real content on the page. '.repeat(3);
 Object.assign(FIXTURES, {
   'page-no-heading': {
