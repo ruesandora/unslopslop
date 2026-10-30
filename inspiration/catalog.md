@@ -8,8 +8,8 @@ Measured references, written without names, links or copied material. Every numb
 
 ## Batch 2026-10-30: what repeated
 
-1. **Scale is the difference.** In the gold set the display line's cap height is 9 to 38% of the screen height (roughly 115 to 440 px type at 1440 x 900). In the component-shop and SaaS pages it is 5 to 8% (48 to 72 px). Our own failed outputs sat in the second group.
-2. **One subject, and it touches the type.** 6 of the 8 cinematic heroes put a single real subject (object, character, face, product UI) across or behind the display line with a deliberate z-order. None used a blurred orb.
+1. **Scale is the difference.** Type-led gold heroes set the display line at 86 to 104 px on product pages (cap height 6.7 to 8% of the screen) and about 115 to 440 px on poster-like pages (9 to 38%). The component-shop and template-landing pages sit at 48 to 88 px, most at 48 to 72 (3.7 to 5.6%). Size alone does not save a page (counter W26 uses 88 px, W18 uses 104 px), but no gold hero is small and text-only.
+2. **One subject, and it touches the type.** 5 of the 8 cinematic heroes put a single real subject (object, character, face, product UI) across or behind the display line with a deliberate z-order. None used a blurred orb.
 3. **Two big colours, one small one.** Gold first screens are carried by one or two fields (55 to 95% of pixels) and an accent under 3%, or by two fields that split about 60/25. Accent on a headline keyword appeared only in counter examples.
 4. **The frame is designed.** Gold heroes put 9 to 13 px uppercase labels (often mono, tracked) in two to four corners of the screen; the middle stays for subject and display type.
 5. **Depth comes from light and overlap, not from card shadows.** One light source on a dark stage, a product card laid over a photograph, a layer that crosses the edge of another. Box shadows, where present, use negative spread or a 1 px inset line.

@@ -30,7 +30,8 @@ Density:      <app dense / landing balanced / reading airy>
 Signature:    <the one move only this product would make>
 Rejected:     <the first default that came to mind and why it is out>
 Domain/style: <packs to load>
-References:   <2-3 from inspiration/catalog.md by tag, or found and logged>
+References:   <2-3 ids from inspiration/catalog.md, at least one role:gold, each with what you take: e.g. "C10: product card on a photo, third layer crossing the edge"> (required)
+Targets:      <from references/craft-recipes.md: display px, subject share of the first screen, layer order, ground/accent shares>
 ```
 
 ## 3. The generic-answer check
