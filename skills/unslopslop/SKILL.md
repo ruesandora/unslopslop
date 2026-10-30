@@ -21,7 +21,7 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 
 1. **Capture** the current state (if there is one): `node scripts/detect.mjs <file|url> --out .unslop/before`. Open both PNGs.
 2. **Read both numbers.** Slop verdict: `heavy` (35+) rebuild, `light` polish, `clean` keep. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
-3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
+3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`). When the direction brief calls for texture or depth, pick one texture or effect from `effects/` (gallery: `effects/index.html`) instead of improvising one.
 4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
 5. **Reference gate.** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
 6. **Independent review (mandatory).** Before anything is shown to the user, a different agent with fresh context reviews it with the fixed checklist in `references/independent-review.md`, using the detector report, screenshots at 1440 and 390, and zoomed crops (`node scripts/review-crops.mjs <page> --out <dir>/crops`). Fix every blocker, let the reviewer re-check; at most three rounds. Report the reviewer's verdict.
@@ -47,3 +47,4 @@ A page passes only with a clean slop verdict **and** craft at 70 or more (`--min
 - `scripts/intake.mjs`: capture a reference URL into `inspiration/` (screenshot, palette, fonts, motion timings).
 - `references/`: project read, palette combinations, passes and recipes, rule catalogue (generated), DESIGN.md template, motion measurement, template test.
 - `domains/`, `styles/`: packs, loaded on demand.
+- `effects/`: texture, light and glass effects (grain, ribbed and frosted glass, dither, halftone, ASCII, mesh gradient, caustics and more), each a live single-file demo with parameters, cost and a slop warning.
