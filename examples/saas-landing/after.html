@@ -13,7 +13,8 @@
 @font-face { font-family: "Schibsted Grotesk"; src: url("../assets/fonts/schibsted-grotesk-latin-var.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
 @font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 
-/* Combination "night ledger": ink ground, bone text, cobalt only for action and the paid state. */
+/* Combination "night ledger": ink ground, bone text; periwinkle (light cobalt) fills carry ink text for action and the paid state,
+   deep cobalt only in drawn graphics. */
 :root {
   --ink: #0c0f17; --ink-2: #131826; --ink-3: #1a2031; --ink-4: #222a3e;
   --line: rgba(236, 230, 218, .1); --line-2: rgba(236, 230, 218, .18);
@@ -33,8 +34,8 @@ h1, h2, h3 { font-family: var(--head); margin: 0; text-wrap: balance; }
 p { margin: 0; text-wrap: pretty; }
 .num { font-family: var(--head); font-variant-numeric: tabular-nums; }
 .wrap { max-width: 1312px; margin: 0 auto; padding: 0 32px; }
-.btn { white-space: nowrap; display: inline-flex; align-items: center; padding: 14px 22px; border-radius: 10px; background: var(--cobalt); color: #fff; font: 600 17px var(--head); text-decoration: none; border: 0; cursor: pointer; transition: background-color 160ms ease-out; }
-.btn:hover { background: #2f48d6; }
+.btn { white-space: nowrap; display: inline-flex; align-items: center; padding: 14px 22px; border-radius: 10px; background: var(--cobalt-lit); color: var(--ink); font: 600 17px var(--head); text-decoration: none; border: 0; cursor: pointer; transition: background-color 160ms ease-out; }
+.btn:hover { background: #b6c2ff; }
 .quiet { color: var(--bone); padding: 12px 4px; font-weight: 500; }
 
 /* ---------- top */
@@ -50,13 +51,13 @@ p { margin: 0; text-wrap: pretty; }
   background: linear-gradient(118deg, transparent 38%, rgba(236, 230, 218, .045) 52%, rgba(156, 172, 255, .06) 58%, transparent 70%), radial-gradient(40% 30% at 78% 8%, rgba(236, 230, 218, .07), transparent 70%);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
 .hero h1 { font-size: clamp(48px, 7vw, 104px); font-weight: 700; line-height: .94; letter-spacing: -.035em; max-width: 14ch; }
-.hero h1 span { color: var(--bone-2); font-weight: 500; }
+.hero h1 span { font-weight: 500; }
 .hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-top: 32px; }
 .hero-foot p { font-size: 20px; max-width: 42ch; }
 .actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
 
 /* ---------- product stage: the app window and a floating email preview that overlaps it */
-.stage { position: relative; margin-top: 56px; padding-bottom: 72px; background-image: radial-gradient(52% 64% at 60% 40%, rgba(58, 85, 240, .2), rgba(58, 85, 240, .05) 48%, transparent 74%); }
+.stage { position: relative; margin-top: 56px; padding-bottom: 232px; background-image: radial-gradient(52% 64% at 60% 40%, rgba(58, 85, 240, .2), rgba(58, 85, 240, .05) 48%, transparent 74%); }
 .app { position: relative; display: grid; grid-template-columns: 280px 1fr; min-height: 540px; border-radius: 16px; background: var(--ink-2); border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(255, 255, 255, .05) inset, 0 40px 80px -40px rgba(0, 0, 0, .28); overflow: hidden; }
 .list { border-right: 1px solid var(--line); padding: 16px 12px; background: rgba(12, 15, 23, .35); }
 .list-head { display: flex; justify-content: space-between; padding: 4px 8px 12px; font: 600 15px var(--head); }
@@ -72,9 +73,9 @@ p { margin: 0; text-wrap: pretty; }
 .meta { margin-top: 4px; font-size: 15px; color: var(--bone-2); }
 .state { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--ink-3); border: 1px solid var(--line-2); font: 600 14px var(--head); white-space: nowrap; transition: background-color 240ms var(--in), color 240ms var(--in); }
 .state i { width: 8px; height: 8px; border-radius: 50%; background: var(--bone); }
-.state.paid { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
-.state.paid i { background: #fff; }
-.amount { font: 700 30px var(--head); text-align: right; margin-top: 8px; }
+.state.paid { background: var(--cobalt-lit); border-color: var(--cobalt-lit); color: var(--ink); }
+.state.paid i { background: var(--ink); }
+.amount { font-weight: 700; font-size: 30px; text-align: right; margin-top: 8px; }
 .ruler { position: relative; height: 84px; margin: 8px 8px 0; }
 .track, .fill { position: absolute; left: 0; right: 0; top: 40px; height: 2px; }
 .track { background: var(--line-2); }
@@ -93,6 +94,7 @@ p { margin: 0; text-wrap: pretty; }
 .log li .d { font: 600 15px var(--head); color: var(--bone-2); font-variant-numeric: tabular-nums; }
 .log li .t { font: 500 14px var(--head); color: var(--bone-2); font-variant-numeric: tabular-nums; }
 .log li.paid .w { color: var(--cobalt-lit); font-weight: 700; }
+.log li.reply .w { font-style: italic; }
 
 .mail { position: absolute; right: -8px; bottom: 0; width: 460px; border-radius: 14px; background: var(--ink-3); border: 1px solid var(--line-2); box-shadow: 0 2px 6px rgba(0, 0, 0, .2), 0 40px 70px -24px rgba(0, 0, 0, .28); overflow: hidden; opacity: 0; }
 .mail-top { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); font: 600 14px var(--head); }
@@ -103,7 +105,8 @@ p { margin: 0; text-wrap: pretty; }
 .mail-to { font-size: 15px; color: var(--bone-2); }
 .mail-subject { margin-top: 10px; font: 700 21px/1.25 var(--head); letter-spacing: -.01em; }
 .mail-text { margin-top: 10px; font-size: 16px; line-height: 1.55; }
-.replay { margin-top: 20px; background: none; border: 1px solid var(--line-2); color: var(--bone); padding: 10px 16px; border-radius: 8px; font: 500 15px var(--head); cursor: pointer; transition: border-color 160ms ease-out; }
+.hctl { display: flex; gap: 10px; align-items: center; justify-content: end; }
+.replay { background: none; border: 1px solid var(--line-2); color: var(--bone); padding: 6px 12px; border-radius: 8px; font: 500 15px var(--head); cursor: pointer; transition: border-color 160ms ease-out; }
 .replay:hover { border-color: var(--bone-2); }
 
 /* ---------- letters editor */
@@ -117,9 +120,13 @@ section.band { padding-top: 160px; }
 .tabs, .seg { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--ink); border: 1px solid var(--line); }
 .tabs button, .seg button { border: 0; background: none; color: var(--bone-2); padding: 9px 16px; border-radius: 8px; font: 600 15px var(--head); cursor: pointer; transition: background-color 180ms var(--in), color 180ms var(--in); }
 .tabs button[aria-selected=true], .seg button[aria-pressed=true] { background: var(--bone); color: #151821; }
-.letter { padding: 28px 28px 8px; min-height: 184px; }
-.letter .subject { font: 700 26px/1.2 var(--head); letter-spacing: -.015em; }
-.letter .body { margin-top: 14px; font-size: 18px; max-width: 54ch; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; }
+.pair .letter + .letter { border-left: 1px solid var(--line); }
+.same { font: 600 15px var(--head); color: var(--bone-2); }
+.voice { font: 700 14px var(--head); letter-spacing: .02em; color: var(--cobalt-lit); margin-bottom: 10px; }
+.letter { padding: 24px 24px 8px; min-height: 220px; }
+.letter .subject { font: 700 22px/1.2 var(--head); letter-spacing: -.015em; }
+.letter .body { margin-top: 12px; font-size: 17px; max-width: 46ch; }
 .swap { animation: smear 220ms var(--in) both; }
 @keyframes smear { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } }
 .rules { margin: 16px 0 0; padding: 0 28px 20px; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; font-size: 16px; }
@@ -128,7 +135,7 @@ section.band { padding-top: 160px; }
 
 /* ---------- bank match */
 .matchband .split { grid-template-columns: 7fr 5fr; }
-.matchband { margin-top: 128px; padding: 96px 0; border-block: 1px solid var(--line); background-color: #0f1320; background-image: radial-gradient(45% 70% at 20% 50%, rgba(58, 85, 240, .14), transparent 70%); }
+.matchband { margin-top: 128px; padding: 96px 0; border-block: 1px solid var(--line); background-color: #0f1320; }
 .feed table { width: 100%; border-collapse: collapse; font-size: 16px; }
 .feed th { text-align: left; font: 600 15px var(--head); padding: 16px 20px; border-bottom: 1px solid var(--line); }
 .feed th:last-child, .feed td:last-child { text-align: right; }
@@ -136,7 +143,7 @@ section.band { padding-top: 160px; }
 .feed td:last-child { font-weight: 700; white-space: nowrap; }
 .feed tr:last-child td { border-bottom: 0; }
 .feed tr.hit td { background: rgba(58, 85, 240, .16); }
-.tag { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 10px; border-radius: 999px; background: var(--cobalt); color: #fff; font: 600 13px var(--head); }
+.tag { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 10px; border-radius: 999px; background: var(--cobalt-lit); color: var(--ink); font: 600 13px var(--head); }
 
 /* ---------- questions + close */
 .faq { margin-top: 160px; display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start; }
@@ -147,15 +154,13 @@ summary { cursor: pointer; padding: 20px 0; font: 600 19px var(--head); list-sty
 summary::after { content: "+"; font-size: 22px; line-height: 1; transition: rotate 200ms var(--in); }
 details[open] summary::after { rotate: 45deg; }
 details p { padding: 0 0 20px; max-width: 60ch; }
-.close { margin-top: 160px; padding: 120px 0 104px; position: relative; border-top: 1px solid var(--line); background-image: radial-gradient(40% 70% at 85% 100%, rgba(58, 85, 240, .14), transparent 70%); }
+.close { margin-top: 160px; padding: 120px 0 104px; position: relative; border-top: 1px solid var(--line); }
 .close h2 { font-size: clamp(44px, 5.2vw, 76px); font-weight: 700; line-height: .98; letter-spacing: -.035em; max-width: 21ch; }
 .close .actions { margin-top: 40px; }
-.close svg { position: absolute; right: 0; bottom: 104px; width: 40%; height: auto; }
 footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15px; display: flex; justify-content: space-between; gap: 24px; color: var(--bone-2); }
 
 @media (max-width: 1100px) {
   .split, .faq, .matchband .split { grid-template-columns: 1fr; gap: 40px; }
-  .close svg { display: none; }
 }
 @media (max-width: 760px) {
   .wrap { padding: 0 20px; }
@@ -177,6 +182,9 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
   section.band, .faq, .close { margin-top: 0; padding-top: 96px; }
   .matchband { margin-top: 96px; padding: 72px 0; }
   .rules { grid-template-columns: 1fr; padding: 0 20px 16px; }
+  .pair { grid-template-columns: 1fr; }
+  .pair .letter + .letter { border-left: 0; border-top: 1px solid var(--line); }
+  .same { display: none; }
   .letter { padding: 20px 20px 8px; }
   .tabs button, .seg button { padding: 10px 12px; }
   .feed td:nth-child(2) { display: none; }
@@ -217,7 +225,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
       </div>
 
       <div class="stage">
-        <div class="app" role="img" aria-label="Fluxly app showing invoice INV-0412: a friendly reminder on day 3, a firm reminder on day 7, payment matched on day 9, and the day 14 notice cancelled.">
+        <div class="app" aria-label="Example: Fluxly showing invoice INV-0412. A friendly reminder on day 3, a firm one on day 7, the client replies on day 8, payment is matched on day 9 and the day 14 notice is cancelled.">
           <aside class="list" aria-hidden="true">
             <div class="list-head"><span>Open invoices</span><span class="num">5</span></div>
             <ul>
@@ -228,21 +236,22 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
               <li><b>Fern &amp; Field</b><b class="amt">€3,150</b><span>INV-0422</span><span class="amt">due 3 Nov</span></li>
             </ul>
           </aside>
-          <div class="detail" aria-hidden="true">
+          <div class="detail">
             <div class="dhead">
               <div>
                 <div class="who">North Pier Studio</div>
                 <div class="meta num">INV-0412 · issued 19 Sep · due 3 Oct</div>
               </div>
               <div>
-                <span class="state" id="state"><i></i><span id="statetext" class="num">Due today</span></span>
+                <div class="hctl"><button class="replay" id="replay" type="button" aria-label="Replay the example">Replay</button><span class="state" id="state"><i></i><span id="statetext" class="num">Due today</span></span></div>
                 <div class="amount">€2,400.00</div>
               </div>
             </div>
-            <div class="ruler" id="ruler"><div class="track"></div><div class="fill" id="fill"></div></div>
+            <div class="ruler" id="ruler" aria-hidden="true"><div class="track"></div><div class="fill" id="fill"></div></div>
             <ul class="log" id="log">
               <li><span class="d">Day 3</span><span class="w">Friendly reminder sent to accounts@northpier.example</span><span class="t">6 Oct 09:00</span></li>
               <li><span class="d">Day 7</span><span class="w">Firm reminder sent with bank details</span><span class="t">10 Oct 09:00</span></li>
+              <li class="reply"><span class="d">Day 8</span><span class="w">Sam replied: &ldquo;Sorry, it slipped through. Paying tomorrow.&rdquo;</span><span class="t">11 Oct 16:40</span></li>
               <li class="paid"><span class="d">Day 9</span><span class="w">€2,400.00 received and matched to INV-0412</span><span class="t">12 Oct 14:12</span></li>
               <li><span class="d">Day 14</span><span class="w">Final notice cancelled, nothing else will be sent</span><span class="t">12 Oct 14:12</span></li>
             </ul>
@@ -256,7 +265,6 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
             <div class="mail-text" id="mtext">Hi Sam, a small reminder that invoice 0412 for €2,400 was due on 3 October. The PDF is attached again in case it got buried. Thanks, Ana</div>
           </div>
         </article>
-        <button class="replay" id="replay" type="button">Replay</button>
       </div>
     </section>
 
@@ -264,7 +272,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
       <div class="split">
         <div>
           <h2 id="letters-title">Three letters, in your voice</h2>
-          <p>Approve the wording one time. Fluxly fills in the client, the amount and the dates, and sends each letter from your own address on a weekday morning.</p>
+          <p>Write each letter once, warm or firm, and approve it. Fluxly fills in the client, the amount and the dates, and sends it from your own address on a weekday morning.</p>
         </div>
         <div class="panel">
           <div class="bar">
@@ -273,15 +281,11 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
               <button type="button" role="tab" aria-selected="false" data-step="1">Day 7</button>
               <button type="button" role="tab" aria-selected="false" data-step="2">Day 14</button>
             </div>
-            <div class="seg" role="group" aria-label="Tone">
-              <button type="button" aria-pressed="false" data-tone="0">Warm</button>
-              <button type="button" aria-pressed="true" data-tone="1">Plain</button>
-              <button type="button" aria-pressed="false" data-tone="2">Firm</button>
-            </div>
+            <span class="same">Same letter, two voices</span>
           </div>
-          <div class="letter" id="letter" role="tabpanel" aria-live="polite">
-            <div class="subject" id="lsubj">Quick nudge on invoice 0412</div>
-            <div class="body" id="lbody">A small reminder that invoice 0412 for €2,400 was due on 3 October. The PDF is attached again in case it got buried.</div>
+          <div class="pair" id="letter" role="tabpanel" aria-live="polite">
+            <div class="letter"><div class="voice">Warm</div><div class="subject" id="wsubj">Just checking in on invoice 0412</div><div class="body" id="wbody">Hope your week is going well. Invoice 0412 for €2,400 was due on 3 October; could you take a look when you have a moment?</div></div>
+            <div class="letter"><div class="voice">Firm</div><div class="subject" id="fsubj">Invoice 0412 is overdue</div><div class="body" id="fbody">Invoice 0412 for €2,400 was due on 3 October and is still open. Please pay it this week or tell me what is holding it up.</div></div>
           </div>
           <ul class="rules">
             <li><span>Sends between</span><b>09:00 and 17:00</b></li>
@@ -330,12 +334,10 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
   <section class="close" id="start" aria-labelledby="close-title">
     <h2 id="close-title">Send the invoice. Fluxly does the chasing.</h2>
     <div class="actions"><a class="btn" href="#start">Connect your invoices</a><a class="quiet" href="#letters">See the letters first</a></div>
-    <svg viewBox="0 0 560 120" aria-hidden="true"><path d="M8 60H552" stroke="rgba(236,230,218,.25)" stroke-width="2"/><path d="M8 60H330" stroke="#9cacff" stroke-width="2"/><circle cx="96" cy="60" r="9" fill="#9cacff"/><circle cx="224" cy="60" r="9" fill="#9cacff"/><circle cx="330" cy="60" r="14" fill="#3a55f0"/><circle cx="552" cy="60" r="9" fill="none" stroke="rgba(236,230,218,.45)" stroke-width="2" stroke-dasharray="4 4"/></svg>
   </section>
 
   <footer>
     <span>Fluxly is a made-up product for the unslopslop example. All names and amounts are samples.</span>
-    <span>Type: Schibsted Grotesk and Atkinson Hyperlegible Next (SIL Open Font License).</span>
   </footer>
 </div>
 
@@ -363,7 +365,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
   const seg = [[0, 400, 0, 0], [400, 1500, 0, 3], [1500, 2900, 3, 3], [2900, 4100, 3, 7], [4100, 5300, 7, 7], [5300, 6100, 7, 9]];
   const dayAt = (t) => { for (const [a, b, d0, d1] of seg) if (t < b) return d0 + (d1 - d0) * ease((t - a) / (b - a)); return 9; };
   const local = (t, a, dur) => ease((t - a) / dur);
-  const ROW_AT = [1500, 4100, 6100, 6700];
+  const ROW_AT = [1500, 4100, 5200, 6100, 6700];
   let shown = -1;
   function render(t) {
     const day = dayAt(t), paid = t >= 6100;
@@ -405,11 +407,14 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
      ['Final notice for invoice 0412', 'This is the last reminder before I follow up by phone. Please settle invoice 0412 for €2,400 this week.'],
      ['Final notice: invoice 0412', 'Invoice 0412 for €2,400 is fourteen days overdue. If it is not paid by Friday I will call to agree the next step.']],
   ];
-  let step = 0, tone = 1;
+  let step = 0;
   const letter = $('letter');
-  const show = () => { $('lsubj').textContent = L[step][tone][0]; $('lbody').textContent = L[step][tone][1]; letter.classList.remove('swap'); void letter.offsetWidth; letter.classList.add('swap'); };
+  const show = () => {
+    $('wsubj').textContent = L[step][0][0]; $('wbody').textContent = L[step][0][1];
+    $('fsubj').textContent = L[step][2][0]; $('fbody').textContent = L[step][2][1];
+    letter.classList.remove('swap'); void letter.offsetWidth; letter.classList.add('swap');
+  };
   document.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => { step = +b.dataset.step; document.querySelectorAll('[data-step]').forEach((x) => x.setAttribute('aria-selected', x === b)); show(); }));
-  document.querySelectorAll('[data-tone]').forEach((b) => b.addEventListener('click', () => { tone = +b.dataset.tone; document.querySelectorAll('[data-tone]').forEach((x) => x.setAttribute('aria-pressed', x === b)); show(); }));
 })();
 </script>
 </body>
