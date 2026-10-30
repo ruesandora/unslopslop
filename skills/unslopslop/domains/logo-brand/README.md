@@ -23,3 +23,9 @@ A clear idea you can say in one sentence, legible at 16 px, distinctive silhouet
 
 ## Checks the detector runs
 Not automated yet. Manual checks: path count, one-colour render, 16 px render.
+
+## Recipes
+- **Palette as pairs.** Deliver colours as roles (recognition, contrast, accent, ink, ground) plus the allowed text-on-ground pairs with their contrast ratios, and the pairs forbidden for small text. A row of swatches is not a palette.
+- **One signature device.** One shape used whole, cropped, as a pattern and as a counter; show its scale and crop rules on their own page.
+- **Exact fonts.** Name families with roles (display, headline, body, caption), two or three at most; flag any render that drifts from the spec.
+- **Consistency audit before scaling.** Check every applied piece against the system before making more.

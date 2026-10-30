@@ -25,3 +25,6 @@ The screen (HTML or components), example dataset clearly marked, PNGs, reports.
 
 ## Checks the detector runs
 All web checks; app screens are recognised automatically (table on the first screen or side navigation) and judged on density.
+
+## Recipes
+- Module or report cards can use the book card in a documentation skin (flat off-white or graphite, a small line diagram, section number over a hairline); timing in `../motion/README.md`.

@@ -24,3 +24,6 @@ Screens as HTML at 390 px (or the app's components), a flow strip PNG, reports. 
 
 ## Checks the detector runs
 Web checks at 390 px. Native screens: screenshot review only (not automated yet).
+
+## Recipes
+- **Radial picker on canvas tools.** Where the user draws or arranges things, a ring of tool chips around the touch point beats a vertical list (spatial reach). Timing in `../motion/README.md`.

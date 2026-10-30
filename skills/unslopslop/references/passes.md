@@ -50,6 +50,14 @@ Removing slop leaves a bare page. These passes put the craft in. Exit check: cra
 - **One idea per beat.** In promos and explainers: one idea per beat, about 1 s each, 0.6 s transitions, real content in frame.
 - **Tabular figures.** Every number that changes or lines up in a column gets `font-variant-numeric: tabular-nums`.
 
+## Direction rules
+
+- **A bad direction is not patched; restart.** Classify feedback: local (spacing, one value, one detail) means refine; foundational (mood, type system, colour logic, material, hierarchy, price level), or a second refine that creates new drift, means restart. On restart keep only an explicit KEEP list of abstract decisions; never reuse the rejected board as a reference.
+- **Split every reference** into (a) transferable principles (composition family, hierarchy, light, material, pacing, white space), (b) things that must not be copied (marks, packaging, proprietary type, characters, patterns, claims), (c) how (a) maps to this brief. The brand system controls identity; the reference never does.
+- **Exact fonts.** Name families, not categories ("a bold grotesk" is not a spec).
+- **Monochrome needs a drawn layer.** A one-hue page needs grid lines, tint steps or line illustration, or it goes flat.
+- **Ornaments carry content.** A repeated device (badge, marquee, highlight) must say something; otherwise remove it.
+
 ## Image priority
 
 1. The project's own photos, screenshots, product footage.

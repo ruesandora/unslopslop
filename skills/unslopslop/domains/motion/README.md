@@ -24,3 +24,14 @@ The animated component, a frame strip PNG, optional webm/mp4, measured timings.
 
 ## Checks the detector runs
 `motion-*` rules, the craft motion component (does something move inside the visual, is reduced motion handled), `motion-probe.mjs` for timing.
+
+## Recipes
+- **Geometric decay.** Layers move by a ratio, not a constant: layer n angle = A x 0.7^n, delay = 28 ms x n; close runs in reverse (innermost first). Depth reads without decoration.
+- **Book card.** Cover, 2 to 6 leaves and a fixed back board behind an ordinary card. Perspective about 1100 px on the static parent, origin at the hinge. Fan about 42, 29, 21, 14, 10 degrees (A = 24 subtle, 42 default, 60 dramatic), 28 ms stagger. Spring that settles in about 0.3 s, or 420 ms `cubic-bezier(.3, 1.2, .5, 1)`. Transform and opacity only. Rest state looks exactly like the plain card. Reduced motion: lift 2 px plus a shadow crossfade.
+- **Two-pass shadow.** Never animate `box-shadow` or blur radius. Put two pre-blurred shapes behind the element (contact: tight and dark; ambient: wide and faint) for rest and for open, and crossfade their opacity with one progress value. One light source for everything.
+- **One path for clip and edge.** The same path clips the layer and is stroked as its hairline; nested radius = outer radius minus inset. Do not mix a CSS border with a clip-path corner.
+- **Static hit area.** Hover and focus live on the non-moving parent; moving children get `pointer-events: none`. `:focus-visible` opens it like hover.
+- **Radial picker.** 8 to 10 chips on a ring around the trigger. Open: scale up from the centre while the ring rotates from about -90 degrees to 0 with a per-item stagger, about 600 ms with gentle overshoot, then a slow settle of about 0.7 s. Close: about 400 ms back to the centre, reversed stagger. Hover darkens the icon only.
+
+## More slop signs
+Stagger by index only (same distance, constant delay, nothing else changes); shadows that stay on a layer after it lifts away; animated blur or box-shadow; the moving element is also the hover target, so it flickers at the edge.

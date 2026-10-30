@@ -25,3 +25,6 @@ Every pack has the same sections: defining traits, when it fits, palette combina
 | `risograph-print` | early |
 | `playful-kids` | early |
 | `zine-punk` | early |
+| `blueprint-mono` | early |
+| `pantry-bold` | early |
+| `pop-ritual` | early |
