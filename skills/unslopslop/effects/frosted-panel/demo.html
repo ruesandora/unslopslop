@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frosted panel (CSS) · effects library</title>
+<meta name="description" content="One frosted pane over a real scene with backdrop-filter, a lit rim, a fine noise and a solid fallback.">
+<!-- Hand-written. Pure CSS: backdrop-filter plus an SVG noise tile, with an @supports fallback. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a;
+    --blur: 18px; --tint: 0.42; --sat: 1.4; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; display: grid; place-items: center; padding: 24px; }
+  #scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* the effect */
+  .pane { position: relative; width: min(440px, 88%); padding: 28px; border-radius: 20px; color: #fff;
+    background: rgba(14, 16, 28, var(--tint));
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat)); backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 48px -24px rgba(0,0,0,.55); }
+  .pane::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: .18; mix-blend-mode: overlay; background-image: var(--noise); background-size: 180px; }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .pane { background: rgba(28, 30, 44, .92); } }
+  .pane h2 { margin: 0 0 8px; font-size: 22px; font-weight: 600; line-height: 1.2; }
+  .pane p { margin: 0; font-size: 15px; color: #fff; }
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <section class="pane" aria-label="Example frosted pane">
+      <h2>Example pane</h2>
+      <p>Placeholder text on frosted glass. Check this text against the brightest part of the scene behind it before you ship.</p>
+    </section>
+  </main>
+  <aside>
+    <a class="back" href="../index.html">All effects</a>
+    <h1>Frosted panel</h1>
+    <p class="sum">One pane of frosted glass over a real scene, in CSS only: the backdrop is blurred and a little more saturated, a lit top rim and a faint inner line give the edge, and a fine noise keeps the blur from looking like plastic.</p>
+    <div class="ctl"><label for="blur"><span>Blur (px)</span><output id="blur-o">18</output></label><input id="blur" type="range" min="0" max="48" step="1" value="18"></div>
+    <div class="ctl"><label for="tint"><span>Dark tint</span><output id="tint-o">0.42</output></label><input id="tint" type="range" min="0" max="0.8" step="0.01" value="0.42"></div>
+    <div class="ctl"><label for="sat"><span>Saturation boost</span><output id="sat-o">1.40</output></label><input id="sat" type="range" min="1" max="2" step="0.05" value="1.4"></div>
+    <div class="ctl"><label for="bg">Behind the pane</label><select id="bg"><option value="scene">Test scene</option><option value="busy">Busy pattern (contrast check)</option></select></div>
+    <dl class="notes group">
+      <dt>Cost</dt><dd>backdrop-filter repaints the area under the pane whenever anything behind it moves. One pane is fine; a frosted sticky header over a scrolling page costs on every scroll frame on low-end phones. Keep the blur under about 24 px there.</dd>
+      <dt>Fallback</dt><dd>@supports gives a near-opaque tinted fill where backdrop-filter is missing, so the text stays readable.</dd>
+      <dt>Becomes slop when</dt><dd>Every card is frosted, it floats over a purple-to-blue blob, or the text on it drops under 4.5:1 against the brightest spot behind. The detector flags frosted glass as a default move: use it once, where the scene behind is the point.</dd>
+    </dl>
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>";
+  root.style.setProperty('--noise', 'url("data:image/svg+xml,' + svg.replace(/</g, '%3C').replace(/>/g, '%3E') + '")');
+  var c = $('scene');
+  function paint() {
+    var r = c.getBoundingClientRect(), w = Math.round(r.width), h = Math.round(r.height); c.width = w; c.height = h;
+    var x = c.getContext('2d');
+    if ($('bg').value === 'busy') {
+      for (var i = 0; i < 40; i++) for (var j = 0; j < 30; j++) { x.fillStyle = (i + j) % 2 ? '#f2efe6' : '#1a1d2b'; x.fillRect(i * w / 40, j * h / 30, w / 40 + 1, h / 30 + 1); }
+      return;
+    }
+    var g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#1d2b4a'); g.addColorStop(0.6, '#7d93b8'); g.addColorStop(1, '#e9d9c4'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    var s = x.createRadialGradient(w * .74, h * .3, 0, w * .74, h * .3, Math.max(w, h) * .3); s.addColorStop(0, '#fff3dc'); s.addColorStop(.25, 'rgba(255,214,160,.9)'); s.addColorStop(1, 'rgba(255,200,150,0)'); x.fillStyle = s; x.fillRect(0, 0, w, h);
+    var R = Math.min(w, h) * .22, sx = w * .28, sy = h * .5, sp = x.createRadialGradient(sx - R * .4, sy - R * .45, R * .05, sx, sy, R); sp.addColorStop(0, '#f7efe6'); sp.addColorStop(.45, '#c9805f'); sp.addColorStop(1, '#3a1a1a');
+    x.fillStyle = sp; x.beginPath(); x.arc(sx, sy, R, 0, 7); x.fill();
+    x.fillStyle = '#1d2633'; x.beginPath(); x.moveTo(0, h); for (var k = 0; k <= w; k += 6) x.lineTo(k, h * .78 + Math.sin(k / w * 9) * h * .03); x.lineTo(w, h); x.fill();
+  }
+  function update() {
+    root.style.setProperty('--blur', $('blur').value + 'px'); root.style.setProperty('--tint', $('tint').value); root.style.setProperty('--sat', $('sat').value);
+    $('blur-o').textContent = $('blur').value; $('tint-o').textContent = Number($('tint').value).toFixed(2); $('sat-o').textContent = Number($('sat').value).toFixed(2);
+  }
+  ['blur', 'tint', 'sat'].forEach(function (id) { $(id).addEventListener('input', update); });
+  $('bg').addEventListener('change', paint); addEventListener('resize', paint);
+  update(); paint(); window.__fxReady = true;
+})();
+</script>
+</body>
+</html>
