@@ -14,16 +14,16 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 1. `references/project-read.md`: read the project, write the direction brief. No brief, no design.
 2. Pick the **domain pack** from the request: `domains/web`, `domains/dashboard`, `domains/mobile`, `domains/email`, `domains/logo-brand`, `domains/motion`, `domains/social`. Read its README.
 3. If a style is named ("retro pixel", "swiss", "ASCII art") or clearly fits, load `styles/<style>/README.md` and combine it with the domain pack (style decides look, domain decides constraints). Styles marked *early* are thin; say so.
-4. If `../../inspiration/catalog.md` exists, pick 2 or 3 references whose tags match (domain, style, mood, palette, motion). Measure them, never copy them.
+4. **Pick references (required).** Open `../../inspiration/catalog.md` and pick 2 or 3 entries whose tags match the brief (domain, style, mood, palette, motion), at least one `role:gold`. Write their ids in the brief's `References:` line, each with the one thing you take from it (a proportion, a layer order, a timing). Open the matching board in `../../inspiration/boards/`. Read `references/craft-recipes.md`: it holds the measured ranges (hero scale, subject area, colour shares, depth, texture, motion) your page must meet. No ids in the brief, no build. If the catalogue is missing (the skill was copied alone), measure 2 or 3 strong references yourself with `scripts/intake.mjs` first.
 5. Colour: `references/palette-combinations.md`. Sets of two to four with roles and shares, chosen for the mood.
 
 ## Loop
 
 1. **Capture** the current state (if there is one): `node scripts/detect.mjs <file|url> --out .unslop/before`. Open both PNGs.
 2. **Read both numbers.** Slop verdict: `heavy` (35+) rebuild, `light` polish, `clean` keep. Craft: below 70 means the page is missing qualities; the `bland-*` signals say which.
-3. **Build or rebuild** from the brief: first screen first, with real content. Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
+3. **Build or rebuild** from the brief: first screen first, with real content, following recipe 1 of `references/craft-recipes.md` (decide the subject, then the display scale, then the layer order, then corner facts, then colour shares). Heavy slop: rebuild in the order type, colour, layout, states, components (`references/passes.md`).
 4. **Slop passes** (spacing, color, icons, copy, typography, layout, detail, imagery, motion), then **craft passes** (bolder, visual, layers, texture, animate, identity). Re-run the detector after each.
-5. **Reference gate.** Put your first screen next to the strongest reference at the same size (`node scripts/compare.mjs <reference> <yours> --out cmp.png`). Write the differences in light, texture, depth, card anatomy, type, density and motion. Ask honestly: would a picky designer call it bland? Fix, re-run. At most three rounds.
+5. **Reference gate (required).** Put your first screen next to each picked reference board at 1440 (`node scripts/compare.mjs ../../inspiration/boards/<board>.html <yours> --out ref-gate-<id>.png --labels "Reference,Mine" --max-height 900`); if the user gave a live reference, compare against it too. Then fill a table, one row per picked id: the entry's measured number vs yours for display size, cap height share, subject area, overlap (yes/no), colour shares, depth layers, corner labels, motion. Every **Check** line in `references/craft-recipes.md` sections 1 to 4 is answered yes, or the brief says why not. Ask honestly: would a picky designer put yours on the same wall as the reference? Fix, re-run. At most three rounds.
 6. **Independent review (mandatory).** Before anything is shown to the user, a different agent with fresh context reviews it with the fixed checklist in `references/independent-review.md`, using the detector report, screenshots at 1440 and 390, and zoomed crops (`node scripts/review-crops.mjs <page> --out <dir>/crops`). Fix every blocker, let the reviewer re-check; at most three rounds. Report the reviewer's verdict.
 7. **Prove it.** `detect.mjs` after, `compare.mjs` before/after at desktop and `--viewport mobile`, the template test (`references/template-test.md`). Report slop and craft before and after, the PNG paths, and what is still open.
 
@@ -45,5 +45,6 @@ A page passes only with a clean slop verdict **and** craft at 70 or more (`--min
 - `scripts/compare.mjs`: side-by-side PNG (`--wait` lets a one-shot demo finish).
 - `scripts/motion-probe.mjs`: declared and measured timing of one element.
 - `scripts/intake.mjs`: capture a reference URL into `inspiration/` (screenshot, palette, fonts, motion timings).
-- `references/`: project read, palette combinations, passes and recipes, rule catalogue (generated), DESIGN.md template, motion measurement, template test.
+- `references/`: project read, palette combinations, passes and recipes, measured craft recipes (`craft-recipes.md`), rule catalogue (generated), DESIGN.md template, motion measurement, template test.
+- `../../inspiration/catalog.md` and `../../inspiration/boards/`: measured references and composition boards for the reference gate.
 - `domains/`, `styles/`: packs, loaded on demand.

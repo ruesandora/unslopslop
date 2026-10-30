@@ -29,7 +29,7 @@ Purple-blue gradient hero, announcement pill, coloured headline keyword, avatar 
 - **Devices with jobs:** every repeated graphic device carries content (badge = promise, marquee = proof, table highlight = our offer). Remove the ones that carry none.
 
 ## Craft signals
-Display type at 2.5x body or more; product visual on the first screen; overlapping layers; grain or tonal light; tabular figures; real interaction (a control that changes a preview).
+Display type at 2.5x body or more; product visual on the first screen; overlapping layers; grain or tonal light; tabular figures; real interaction (a control that changes a preview). Measured ranges and reviewer checks: `../../references/craft-recipes.md`; references to pick from: `../../../../inspiration/catalog.md`.
 
 ## Deliverables
 `index.html` (or the framework's page), DESIGN.md, before/after PNGs at 1440 and 390, detector reports.

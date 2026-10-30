@@ -1,6 +1,10 @@
 # Inspiration library
 
-References are how the skill grows. Each batch adds tagged observations that the core skill looks up when it starts a new project (`skills/unslopslop/SKILL.md`, step 4).
+References are how the skill grows. Each batch adds tagged, measured observations that the core skill must pick from before it builds (`skills/unslopslop/SKILL.md`, step 4) and compares against after (step 5 of the loop). `catalog.md` holds the entries; `boards/` holds 1440 x 900 composition diagrams re-drawn from the measurements; the repeated patterns become checkable ranges in `skills/unslopslop/references/craft-recipes.md`.
+
+## Entry format
+
+One `### <id> · <short description>` block per reference: tags (with `role:gold`, `role:useful` or `role:counter`), **Measured** (type sizes and weights in px, line height, tracking, colour shares with hex, radii, shadows, grid, motion durations and easing), **Signature**, **Steal as a principle** (our own words), **Do not take**. No source name, link, handle, screenshot or copied text; the private log of sources is kept outside this repo.
 
 ## Add a reference
 

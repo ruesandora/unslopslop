@@ -6,7 +6,7 @@ The builder cannot be the judge: after hours on a page it no longer sees the cap
 1. The page (file path or URL) and the direction brief.
 2. Detector output: `node scripts/detect.mjs <page> --out <dir>` (report.md, desktop.png, mobile.png).
 3. Zoomed crops made with `node scripts/review-crops.mjs <page> --out <dir>/crops` (headings, captions, numbers, cards, badges and stamps, emoji, the lowest-contrast texts, first screen at 1440 and 390).
-4. The strongest reference screenshot, if one was used.
+4. The picked catalogue ids and the reference-gate images (`ref-gate-<id>.png`) with the builder's measured-vs-reference table.
 
 The builder does not explain or defend the design in the handover. Only facts: what the product is, who it is for, which files to look at.
 
@@ -34,6 +34,7 @@ Open every image yourself before writing anything. Then answer, in this order:
    j. Slop patterns from the detector report: list every finding that is still there.
    k. Bland: is anything missing that a strong studio would add here (a real visual, depth, texture, a motion moment, a clear focal point)?
    l. Mobile (390 px): overflow, overlap, tap targets, text that became tiny or grey.
+   m. References: answer every **Check** line in sections 1 to 4 of references/craft-recipes.md from the screenshots. Would this page hang on the same wall as the reference boards it names, or does it look timid next to them?
 3. AI tells found: a numbered list, each with where it is (selector or crop) and why it reads as generated.
 4. Blockers: the items that must change before the user sees this. Be specific ("remove the caption under the chart", not "reduce captions").
 5. Verdict: "A top studio would ship this" or "A top studio would not ship this", and one sentence why.

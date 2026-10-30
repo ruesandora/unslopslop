@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board subject-over-type: one subject crosses a screen-wide display word</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:#0f3a1c"></div>
+     <div style="position:absolute;left:36%;top:6%;width:27%;height:90%;border-radius:48% 48% 12% 12%;background:repeating-linear-gradient(135deg,#2f6b3d 0 10px,#245a33 10px 20px);z-index:2"></div>
+     <div class="note" style="left:64%;top:22%;color:#dfff4a">SUBJECT · behind the word · 27% of width · z 2</div>
+     <div style="position:absolute;left:2.5%;bottom:2%;font:900 440px/0.8 system-ui, -apple-system, 'Segoe UI', sans-serif;letter-spacing:-.05em;color:#dfff4a;z-index:3;white-space:nowrap;transform:scaleX(.78);transform-origin:left bottom">WORDS</div>
+     <div class="cap" style="top:56%"></div><div class="note" style="left:30%;top:51%;color:#dfff4a">cap height 38% of screen · 94% of width · z 3 (in front of subject)</div>
+     <div class="corner" style="top:28px;left:32px;color:#dfff4a;background:transparent;padding:2px 4px">brand · nav</div><div class="corner" style="top:28px;right:32px;color:#dfff4a;background:transparent;padding:2px 4px">one action</div>
+     <div class="corner" style="left:32px;top:47%;color:#dfff4a">small fact · 11 px mono</div><div class="corner" style="right:32px;top:47%;color:#dfff4a">scroll cue</div></div><div class="sw"><span style="flex:63;background:#0f3a1c" title="field 63%"><i>field 63%</i></span><span style="flex:24;background:#dfff4a" title="type+action 24%"><i>type+action 24%</i></span><span style="flex:13;background:#2f6b3d" title="subject 13%"><i>subject 13%</i></span></div>
+<!-- Board subject-over-type. References: C04, C06, C02. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>

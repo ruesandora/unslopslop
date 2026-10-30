@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board pattern-hero: a code-drawn 1-bit pattern is the image</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:#f6f6f6"></div>
+     <div style="position:absolute;left:5%;top:7%;width:45%;height:84%;background:#fff"></div>
+     <div style="position:absolute;left:10%;top:36%;font:500 56px/68px system-ui, -apple-system, 'Segoe UI', sans-serif;letter-spacing:-.01em;color:#000">Grotesk 56 / 68<br>weight 500</div>
+     <div style="position:absolute;left:10%;top:62%;padding:12px 18px;background:#fccb04;font:500 16px/1 system-ui, -apple-system, 'Segoe UI', sans-serif">one action</div>
+     <div style="position:absolute;left:50%;top:7%;width:45%;height:84%;background:#000;
+       background-image:repeating-linear-gradient(0deg,#000 0 22px,transparent 22px 34px),repeating-linear-gradient(90deg,#fff 0 40px,#000 40px 64px);"></div>
+     <div class="note" style="left:52%;top:9%;color:#fccb04;background:#000">PATTERN · 45% width · black on light</div></div><div class="sw"><span style="flex:74;background:#f6f6f6" title="ground 74%"><i>ground 74%</i></span><span style="flex:21;background:#000000" title="pattern+type 21%"><i>pattern+type 21%</i></span><span style="flex:4.6;background:#7a7a7a" title="body 4.6%"><i>body 4.6%</i></span><span style="flex:0.4;background:#fccb04" title="action 0.4%"><i>action 0.4%</i></span></div>
+<!-- Board pattern-hero. References: C12, C16. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>

@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board portrait-corners: full-bleed image, display bottom left, facts in four corners</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:linear-gradient(170deg,#e2ebf5,#c3cddb 60%,#9aa6b6)"></div>
+     <div style="position:absolute;left:52%;top:0;width:34%;height:100%;border-radius:45% 45% 0 0;background:repeating-linear-gradient(120deg,#b9c3d1 0 14px,#aeb8c6 14px 28px)"></div>
+     <div class="note" style="left:53%;top:40%;color:#0b0d12">IMAGE · full bleed · subject right of centre</div>
+     <div style="position:absolute;left:2%;bottom:90px;font:800 220px/0.8 system-ui, -apple-system, 'Segoe UI', sans-serif;letter-spacing:-.06em;color:#0b0d12">Wordmark</div>
+     <div class="cap" style="top:63%"></div><div class="note" style="left:2%;top:57%;color:#0b0d12">cap 25% · letters touch</div>
+     <div class="corner" style="top:28px;left:32px;color:#0b0d12;background:transparent;padding:2px 4px">name</div><div class="corner" style="top:28px;right:32px;color:#0b0d12;background:transparent;padding:2px 4px">cart (0)</div><div class="corner" style="bottom:56px;left:32px;color:#0b0d12;background:transparent;padding:2px 4px">model · fact</div><div class="corner" style="bottom:56px;right:32px;color:#0b0d12;background:transparent;padding:2px 4px">drop · season</div></div><div class="sw"><span style="flex:53;background:#e2ebf5" title="image light 53%"><i>image light 53%</i></span><span style="flex:30;background:#c3cddb" title="image mid 30%"><i>image mid 30%</i></span><span style="flex:12;background:#0b0d12" title="type 12%"><i>type 12%</i></span><span style="flex:5;background:#7b4fd0" title="product colour 5%"><i>product colour 5%</i></span></div>
+<!-- Board portrait-corners. References: C05, C23. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>
