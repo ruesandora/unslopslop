@@ -25,7 +25,7 @@ export const BLAND = [
     check: (h) => {
       const blocks = h.all().filter((e) => {
         const r = h.rect(e);
-        if (r.width < 200 || r.height < 60) return false;
+        if (r.width < 200 || r.height < 40) return false;
         return h.own(e).length > 0 || ['IMG', 'VIDEO', 'CANVAS', 'SVG', 'PICTURE'].includes(e.tagName.toUpperCase()) || [...e.children].some((k) => h.own(k).length > 0);
       });
       const rs = blocks.map((e) => h.rect(e));
