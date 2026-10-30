@@ -62,7 +62,7 @@ test('--out writes report.json, report.md and both screenshots', async () => {
   const out = join(dir, 'out');
   assert.equal(run('detect.mjs', [slop, '--out', out]).status, 0);
   for (const f of ['report.json', 'report.md', 'desktop.png', 'mobile.png']) assert.ok((await stat(join(out, f))).size > 0, f);
-  assert.match(await readFile(join(out, 'report.md'), 'utf8'), /Verdict: \*\*HEAVY\*\*/);
+  assert.match(await readFile(join(out, 'report.md'), 'utf8'), /Slop verdict: \*\*HEAVY\*\*/);
 });
 test('compare.mjs writes a PNG', async () => {
   const out = join(dir, 'cmp.png');

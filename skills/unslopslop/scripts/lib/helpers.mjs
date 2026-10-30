@@ -3,7 +3,7 @@
 export function makeHelpers(vp) {
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'META', 'LINK', 'HEAD', 'TITLE', 'BR', 'TEMPLATE', 'HTML']);
   const cs = (el) => getComputedStyle(el);
-  const cache = { all: null, textEls: null, canvas: null, colors: new Map() };
+  const cache = { all: null, textEls: null, canvas: null, colors: new Map(), visuals: null };
 
   const visible = (el) => {
     const s = cs(el);
@@ -119,8 +119,83 @@ export function makeHelpers(vp) {
     return border || shadow || tinted;
   };
 
+  // ---- craft helpers (used by the bland rules and the craft probe) ----
+  const surfaceOf = (el) => {
+    const s = cs(el);
+    const sides = ['Top', 'Right', 'Bottom', 'Left'].filter((d) => px(s['border' + d + 'Width']) >= 1 && s['border' + d + 'Style'] !== 'none').length;
+    const shadow = s.boxShadow && s.boxShadow !== 'none';
+    const img = s.backgroundImage && s.backgroundImage !== 'none';
+    let tint = false;
+    const bg = rgba(s.backgroundColor);
+    if (bg && bg.a > 0.05 && el.parentElement) {
+      const pb = bgOf(el.parentElement), me = bgOf(el);
+      tint = !!(pb && me && Math.abs(pb.r - me.r) + Math.abs(pb.g - me.g) + Math.abs(pb.b - me.b) > 9);
+    }
+    return sides >= 3 || shadow || tint || img;
+  };
+  // First-screen visuals: media (img, video, canvas), drawings (a real SVG, not an icon) and product
+  // surfaces (a framed block holding a built UI). Outermost only. frac = share of the first screen.
+  const visuals = () => {
+    if (cache.visuals) return cache.visuals;
+    const vpA = vp.w * vp.h;
+    const found = [];
+    for (const e of all()) {
+      const r = rect(e);
+      const t = Math.max(0, r.top), b = Math.min(vp.h, r.bottom), l = Math.max(0, r.left), rr = Math.min(vp.w, r.right);
+      if (b <= t || rr <= l) continue;
+      const a = (b - t) * (rr - l);
+      const tag = e.tagName.toUpperCase();
+      let kind = null;
+      if (['IMG', 'VIDEO', 'CANVAS', 'PICTURE'].includes(tag) && r.width >= 120 && r.height >= 80) kind = 'media';
+      else if (tag === 'SVG' && r.width >= 160 && r.height >= 100 && e.querySelectorAll('*').length >= 6) kind = 'drawing';
+      else if (a >= 0.06 * vpA && r.width < vp.w * 0.95 && !['BODY', 'MAIN', 'HEADER', 'NAV', 'FOOTER'].includes(tag) && e.querySelectorAll('*').length >= 12 && surfaceOf(e)) kind = 'surface';
+      if (kind) found.push({ el: e, kind, area: a, frac: a / vpA });
+    }
+    cache.visuals = found.filter((v) => !found.some((o) => o !== v && o.el.contains(v.el)));
+    return cache.visuals;
+  };
+  // Share of the first screen (32x20 grid) covered by text or visuals.
+  const coverage = () => {
+    const boxes = [...textEls().map((e) => rect(e)), ...visuals().map((v) => rect(v.el))];
+    let hit = 0;
+    const C = 32, R = 20;
+    for (let i = 0; i < C; i++) for (let j = 0; j < R; j++) {
+      const x = (i + 0.5) * vp.w / C, y = (j + 0.5) * vp.h / R;
+      if (boxes.some((b) => x >= b.left && x <= b.right && y >= b.top && y <= b.bottom)) hit++;
+    }
+    return hit / (C * R);
+  };
+  // Most used font size by characters (the body size).
+  const bodySize = () => {
+    const w = new Map();
+    for (const el of textEls()) { const f = Math.round(px(cs(el).fontSize)); w.set(f, (w.get(f) || 0) + own(el).length); }
+    return w.size ? [...w].sort((a, b) => b[1] - a[1])[0][0] : 16;
+  };
+  const saturated = (c) => { if (!c || c.a < 0.5) return false; const k = hsl(c); return k.s >= 0.4 && k.l >= 0.2 && k.l <= 0.8; };
+  // App screen: a data table with 5+ rows, or a tall side navigation on the left.
+  const isApp = () => {
+    const rows = [...document.querySelectorAll('table tr, [role=row]')].filter(visible).length;
+    const side = [...document.querySelectorAll('aside, nav')].some((e) => { const r = rect(e); return visible(e) && r.height >= 0.6 * vp.h && r.width < 0.3 * vp.w && r.left < 40; });
+    return rows >= 5 || side;
+  };
+  // Texture and tone: large areas painted with an image, a pattern, grain or a tonal gradient.
+  const textures = () => {
+    const vpA = vp.w * vp.h;
+    const out = [];
+    for (const e of [document.documentElement, document.body, ...all()]) {
+      const s = cs(e), r = rect(e);
+      const bi = s.backgroundImage;
+      if (r.width * r.height < 0.04 * vpA) continue;
+      if ((bi && bi !== 'none' && /url\(|gradient\(/.test(bi)) || (s.maskImage && s.maskImage !== 'none')) out.push({ el: e, kind: /url\(/.test(bi) ? 'image' : 'gradient' });
+    }
+    for (const f of document.querySelectorAll('svg feTurbulence')) out.push({ el: f.closest('svg'), kind: 'noise' });
+    return out;
+  };
+  const motion = () => window.__unslopMotion || { raf: 0, mut: 0, nodes: [], mq: [] };
+
   return {
     vw: vp.w, vh: vp.h, mobile: vp.w < 600,
     cs, all, own, textEls, sel, snip, px, rect, rgba, lum, contrast, hsl, hex, bgOf, colorTokens, heading, isCard, visible,
+    surfaceOf, visuals, coverage, bodySize, saturated, motion, isApp, textures,
   };
 }

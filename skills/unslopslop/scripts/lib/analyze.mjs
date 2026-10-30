@@ -5,6 +5,8 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { RULES } from './rules.mjs';
 import { makeHelpers } from './helpers.mjs';
 import { score, verdict, rulePoints } from './score.mjs';
+import { BLAND } from './rules-bland.mjs';
+import { craftProbe, craftScore, MOTION_INIT } from './craft.mjs';
 
 export const VIEWPORTS = { desktop: { w: 1440, h: 900 }, mobile: { w: 390, h: 844 } };
 // Extra pass: desktop size with the reduced-motion preference on (screenshots are never taken here).
@@ -23,7 +25,7 @@ export function disabledSet(extra = []) {
 }
 
 // Build the in-page script as one expression string (works even under a page CSP).
-function pageScript(rules, vp) {
+function pageScript(rules, vp, withCraft = false) {
   const defs = rules.map((r) => `{id:${JSON.stringify(r.id)},check:${r.check.toString()}}`).join(',');
   return `(() => {
     const h = (${makeHelpers.toString()})(${JSON.stringify(vp)});
@@ -31,6 +33,7 @@ function pageScript(rules, vp) {
     for (const r of [${defs}]) {
       try { out[r.id] = r.check(h); } catch (e) { out[r.id] = { error: String(e && e.message || e) }; }
     }
+    if (${withCraft}) { try { out.__craft = (${craftProbe.toString()})(h); } catch (e) { out.__craft = { error: String(e && e.message || e) }; } }
     return out;
   })()`;
 }
@@ -67,31 +70,39 @@ async function collectCss(page, url) {
  * Render `target` at 1440 and 390 and run every enabled rule.
  * Returns {target, score, verdict, findings, errors, screenshots?}.
  */
-export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null } = {}) {
+export async function analyze(browser, target, { disable = [], only = null, fast = false, screenshotDir = null, craft = !only } = {}) {
   const url = toUrl(target);
   const off = disabledSet(disable);
-  const rules = RULES.filter((r) => !off.has(r.id) && (!only || only.includes(r.id)));
+  const pick = (r) => !off.has(r.id) && (!only || only.includes(r.id));
+  const slopRules = RULES.filter(pick);
+  const blandRules = BLAND.filter(pick);
+  const rules = [...slopRules, ...blandRules];
+  const blandIds = new Set(blandRules.map((r) => r.id));
   const merged = new Map();
+  const blandMerged = new Map();
+  let signals = null;
   const errors = [];
   let css = '';
   const shots = {};
 
   for (const [name, vp] of Object.entries(PASSES_VP)) {
-    const needed = (screenshotDir && name !== 'reduced') || rules.some((r) => (r.scope === 'page' && r.viewports.includes(name)) || (name === 'desktop' && r.scope === 'css'));
+    const needed = (screenshotDir && name !== 'reduced') || (craft && name === 'desktop') || rules.some((r) => (r.scope === 'page' && r.viewports.includes(name)) || (name === 'desktop' && r.scope === 'css'));
     if (!needed) continue;
     const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, reducedMotion: vp.reducedMotion || 'no-preference', deviceScaleFactor: 1 });
+    await ctx.addInitScript(MOTION_INIT);
     const page = await ctx.newPage();
     try {
       await page.goto(url, { waitUntil: 'load', timeout: 20000 });
       await settle(page, fast);
       if (name === 'desktop') css = await collectCss(page, url);
       const pageRules = rules.filter((r) => r.scope === 'page' && r.viewports.includes(name));
-      const res = await page.evaluate(pageScript(pageRules, vp));
+      const res = await page.evaluate(pageScript(pageRules, vp, craft && name === 'desktop'));
       for (const r of pageRules) {
         const v = res[r.id];
         if (v && v.error) { errors.push(`${r.id}: ${v.error}`); continue; }
-        record(merged, r, v || [], name);
+        record(blandIds.has(r.id) ? blandMerged : merged, r, v || [], name);
       }
+      if (res.__craft) { if (res.__craft.error) errors.push(`craft: ${res.__craft.error}`); else signals = res.__craft; }
       if (screenshotDir && name !== 'reduced') {
         const file = `${screenshotDir}/${name}.png`;
         await page.screenshot({ path: file, fullPage: true });
@@ -108,7 +119,11 @@ export async function analyze(browser, target, { disable = [], only = null, fast
   }
   const findings = [...merged.values()].map((f) => ({ ...f, points: +rulePoints(f.severity, f.count).toFixed(1) })).sort((a, b) => b.points - a.points);
   const points = score(findings);
-  return { target, score: points, verdict: verdict(points, findings), findings, errors, screenshots: shots };
+  const v = verdict(points, findings);
+  const bland = [...blandMerged.values()].map((f) => ({ ...f, points: 0 }));
+  const craftRes = signals ? { ...craftScore(signals, css), signals, findings: bland } : { score: null, pass: null, components: {}, findings: bland };
+  const overall = craftRes.score === null ? null : v === 'clean' && craftRes.pass ? 'pass' : 'fail';
+  return { target, score: points, verdict: v, findings, errors, screenshots: shots, craft: craftRes, overall };
 }
 
 function record(map, rule, hits, vpName) {
