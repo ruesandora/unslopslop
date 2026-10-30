@@ -18,7 +18,7 @@ before(async () => {
   clean = join(dir, 'clean.html');
   anim = join(dir, 'anim.html');
   consent = join(dir, 'consent.html');
-  await writeFile(consent, page({ body: '<div id="onetrust-banner-sdk"><p>We use cookies to unleash seamless experiences</p></div>' }));
+  await writeFile(consent, page({ body: '<div id="onetrust-banner-sdk"><h2>Unleash seamless cookies</h2></div>' }));
   await writeFile(slop, page({ body: '<h2>Unleash seamless power</h2><p>Lorem ipsum dolor sit amet</p><h2 style="background:linear-gradient(90deg,#6d28d9,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent">Go</h2><div style="width:2000px;height:10px"></div>' }));
   await writeFile(clean, page({ body: '' }));
   await writeFile(anim, page({
