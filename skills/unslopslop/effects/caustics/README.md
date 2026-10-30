@@ -1,6 +1,6 @@
 # Caustics
 
-The bright web of light on the floor of a pool. Built from moving cell edges: wherever two cells meet the light gathers into a thin line. Two layers at different scales give depth.
+The bright web of light on the floor of a pool. Two warped noise fields are drawn as thin bright contour lines and the light pools where they cross. A second pattern builds the web from moving cell edges instead.
 
 ![Caustics](screenshot.jpg)
 
@@ -21,7 +21,7 @@ Curved mode: two noise fields, both warped by a third, are turned into thin brig
 | Parameter | Range | Default |
 |---|---|---|
 | Cell scale | 2 to 20 | 6 |
-| Line width | 0.02 to 0.4 | 0.2 |
+| Line width | 0.02 to 0.4 | 0.32 |
 | Brightness | 0 to 2 | 1.1 |
 | Second layer | 0 to 1 | 0.55 |
 | Pattern | Curved webs / Cell edges | Curved webs |

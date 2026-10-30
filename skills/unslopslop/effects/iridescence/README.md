@@ -20,7 +20,7 @@ A warped noise field is treated as film thickness. A cosine rainbow of that thic
 
 | Parameter | Range | Default |
 |---|---|---|
-| Band frequency | 0.5 to 8 | 5.5 |
+| Band frequency | 0.5 to 16 | 5 |
 | Warp | 0 to 3 | 0.9 |
 | Scale | 0.3 to 5 | 1.5 |
 | Sheen over palette | 0 to 1 | 0.6 |

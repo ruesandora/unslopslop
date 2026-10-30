@@ -20,10 +20,10 @@ Square cells in aspect-correct space. Each cell offsets its sample towards its o
 
 | Parameter | Range | Default |
 |---|---|---|
-| Tiles across | 3 to 40 | 9 |
+| Tiles across | 3 to 40 | 16 |
 | Refraction | 0 to 1 | 0.6 |
 | Softness | 0 to 1 | 0.35 |
-| Seam shadow | 0 to 1 | 0.4 |
+| Seam shadow | 0 to 1 | 0.3 |
 | Edge light | 0 to 1 | 0.3 |
 | Grain | 0 to 0.3 | 0.05 |
 

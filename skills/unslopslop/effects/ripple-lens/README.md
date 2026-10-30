@@ -21,7 +21,7 @@ Distance from an origin drives a sine wave that travels outward over time and fa
 | Parameter | Range | Default |
 |---|---|---|
 | Displacement | 0 to 1 | 0.45 |
-| Rings | 2 to 60 | 18 |
+| Rings | 2 to 60 | 9 |
 | Falloff | 0 to 1 | 0.55 |
 | Speed | 0 to 2 | 0.4 |
 | Origin X | 0 to 1 | 0.5 |

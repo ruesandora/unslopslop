@@ -21,7 +21,7 @@
       { id: 'style', label: 'Mark', options: [['Characters', 0], ['Blocks', 1], ['Dots', 2], ['Strokes', 3]], value: 0 },
       { id: 'colour', label: 'Colour', options: [['Source colours', 1], ['Palette ink', 0]], value: 1 },
       { id: 'gain', label: 'Exposure', min: 0.5, max: 3, step: 0.05, value: 1.5 },
-      { id: 'back', label: 'Background show-through', min: 0, max: 1, step: 0.01, value: 0.08 }
+      { id: 'back', label: 'Picture under the glyphs', min: 0, max: 1, step: 0.01, value: 0.45 }
     ],
     frag: [
       'void main() {',
@@ -36,8 +36,8 @@
       '  else if (u_style < 2.5) { vec2 g = (f - 0.5) * vec2(1.0, u_ratio); m = smoothstep(0.06, 0.0, length(g) - sqrt(l) * 0.48); }',
       '  else { m = step(abs(f.x - 0.5), l * 0.45) * step(0.08, f.y) * step(f.y, 0.92); }',
       '  vec3 ink = u_colour > 0.5 ? mix(s, vec3(1.0), 0.15) * 1.5 : u_c3;',
-      '  vec3 bg = mix(u_c0, s, u_back);',
-      '  gl_FragColor = vec4(mix(bg, ink, m), 1.0);',
+      '  vec3 bg = mix(u_c0, src(v_uv), u_back);',
+      '  gl_FragColor = vec4(bg + ink * m * (1.0 - u_back * 0.5), 1.0);',
       '}'
     ].join('\n')
   });

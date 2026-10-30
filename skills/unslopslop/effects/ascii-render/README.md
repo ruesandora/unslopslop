@@ -25,7 +25,7 @@ A glyph sheet of 12 characters ordered from light to heavy is drawn once into a 
 | Mark | Characters / Blocks / Dots / Strokes | Characters |
 | Colour | Source colours / Palette ink | Source colours |
 | Exposure | 0.5 to 3 | 1.5 |
-| Background show-through | 0 to 1 | 0.08 |
+| Picture under the glyphs | 0 to 1 | 0.45 |
 
 ## Performance
 

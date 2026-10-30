@@ -28,6 +28,7 @@ const shell = ({ slug, title, summary, cost, fallback, slop, effect }) => `<!doc
 <style>
   :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
   .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
   #stage { position: relative; overflow: hidden; background: #000; }

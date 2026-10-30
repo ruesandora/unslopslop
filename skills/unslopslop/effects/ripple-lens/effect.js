@@ -7,7 +7,7 @@ FX.mount({
   source: 'scene', palette: 'seaglass', animated: true, fps: 30,
   params: [
     { id: 'amount', label: 'Displacement', min: 0, max: 1, step: 0.01, value: 0.45 },
-    { id: 'freq', label: 'Rings', min: 2, max: 60, step: 1, value: 18 },
+    { id: 'freq', label: 'Rings', min: 2, max: 60, step: 1, value: 9 },
     { id: 'falloff', label: 'Falloff', min: 0, max: 1, step: 0.01, value: 0.55 },
     { id: 'speed', label: 'Speed', min: 0, max: 2, step: 0.01, value: 0.4 },
     { id: 'ox', label: 'Origin X', min: 0, max: 1, step: 0.01, value: 0.5 },

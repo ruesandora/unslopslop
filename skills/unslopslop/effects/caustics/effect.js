@@ -1,13 +1,13 @@
 FX.mount({
   title: 'Caustics',
-  summary: 'The bright web of light on the floor of a pool. Built from moving cell edges: wherever two cells meet the light gathers into a thin line. Two layers at different scales give depth.',
+  summary: 'The bright web of light on the floor of a pool. Two warped noise fields are drawn as thin bright contour lines and the light pools where they cross. A second pattern builds the web from moving cell edges instead.',
   cost: 'Two cell-noise layers, 9 neighbours each, per pixel. Medium. 30 fps cap; on phones one layer and a lower DPR are fine.',
   fallback: 'No WebGL: the CSS gradient. Reduced motion: one still frame, which still reads as water.',
   slop: 'Bright white lines at full strength behind content, or caustics on a brand with no water, light or glass story.',
   source: 'none', palette: 'seaglass', animated: true, fps: 30,
   params: [
     { id: 'scale', label: 'Cell scale', min: 2, max: 20, step: 0.1, value: 6 },
-    { id: 'width', label: 'Line width', min: 0.02, max: 0.4, step: 0.005, value: 0.2 },
+    { id: 'width', label: 'Line width', min: 0.02, max: 0.4, step: 0.005, value: 0.32 },
     { id: 'bright', label: 'Brightness', min: 0, max: 2, step: 0.01, value: 1.1 },
     { id: 'depth', label: 'Second layer', min: 0, max: 1, step: 0.01, value: 0.55 },
     { id: 'mode', label: 'Pattern', options: [['Curved webs', 0], ['Cell edges', 1]], value: 0 },

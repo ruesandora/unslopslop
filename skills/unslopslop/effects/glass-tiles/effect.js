@@ -6,10 +6,10 @@ FX.mount({
   slop: 'Tiles under about 24 px (it turns into a screen-door), or used behind text.',
   source: 'gradient', palette: 'seaglass', animated: false,
   params: [
-    { id: 'cells', label: 'Tiles across', min: 3, max: 40, step: 1, value: 9 },
+    { id: 'cells', label: 'Tiles across', min: 3, max: 40, step: 1, value: 16 },
     { id: 'amount', label: 'Refraction', min: 0, max: 1, step: 0.01, value: 0.6 },
     { id: 'blur', label: 'Softness', min: 0, max: 1, step: 0.01, value: 0.35 },
-    { id: 'shadow', label: 'Seam shadow', min: 0, max: 1, step: 0.01, value: 0.4 },
+    { id: 'shadow', label: 'Seam shadow', min: 0, max: 1, step: 0.01, value: 0.3 },
     { id: 'highlight', label: 'Edge light', min: 0, max: 1, step: 0.01, value: 0.3 },
     { id: 'grain', label: 'Grain', min: 0, max: 0.3, step: 0.01, value: 0.05 }
   ],
