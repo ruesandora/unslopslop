@@ -35,7 +35,7 @@ Removing slop leaves a bare page. These passes put the craft in. Exit check: cra
 | A | bolder | Take the strongest move the direction already has and use it at full strength: a display headline at 2.5x body or more, the product view large and early. Quiet everything around it. |
 | B | visual | Put the product (or its subject) on the first screen at 20 to 40% of the area: a built UI with real-looking states, a real photo, a meaningful drawing. |
 | C | layers | Stack surfaces: one raised panel with a soft layered shadow, one element overlapping its edge, a second and third tone. Not cards inside cards. |
-| D | texture | Add one material that suits the project: fine grain, a pattern or watermark in one zone, a directional light behind the subject. Under 10% opacity. |
+| D | texture | Add one material that suits the project: fine grain, a pattern or watermark in one zone, a directional light behind the subject. Under 10% opacity. Pick one from `skills/unslopslop/effects/` (gallery: `effects/index.html`) instead of improvising one. |
 | E | animate | Write one moment that explains the product, as a pure function of time, then stop. Everything else stays still. Reduced motion shows the final frame. |
 | F | identity | Check the type pairing, the colour combination and the signature move against the brief. Run the template test. |
 
