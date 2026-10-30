@@ -3,16 +3,17 @@
   "version": 1,
   "target": "examples/dashboard/before.html",
   "score": 100,
+  "rawPoints": 156.5,
   "verdict": "heavy",
-  "rulesChecked": 45,
+  "rulesChecked": 72,
   "byPass": {
     "spacing": 4,
     "color": 69,
     "icons": 12,
-    "copy": 17,
-    "typography": 12.5,
+    "copy": 11,
+    "typography": 16.5,
     "layout": 19.5,
-    "detail": 18,
+    "detail": 20.5,
     "imagery": 0,
     "motion": 4
   },
@@ -51,31 +52,6 @@
         }
       ],
       "points": 24
-    },
-    {
-      "rule": "copy-placeholder",
-      "pass": "copy",
-      "severity": "critical",
-      "title": "Placeholder or filler text left in",
-      "why": "Lorem ipsum, \"Acme\", \"John Doe\" and [bracketed] gaps show the page was never finished.",
-      "fix": "Write the real text, or remove the block. Never ship a stand-in name.",
-      "count": 2,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "td",
-          "detail": "Acme Inc.",
-          "viewport": "desktop"
-        },
-        {
-          "el": "td",
-          "detail": "John Doe",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 15
     },
     {
       "rule": "color-low-contrast",
@@ -252,6 +228,36 @@
         }
       ],
       "points": 10.5
+    },
+    {
+      "rule": "copy-fake-data",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Stock fake names and data",
+      "why": "Acme, Globex, John Doe and \"User 1\" are the placeholder cast of generated demos.",
+      "fix": "Use plausible, specific sample entries, and label them as sample data.",
+      "count": 3,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "td",
+          "detail": "Acme Inc.",
+          "viewport": "desktop"
+        },
+        {
+          "el": "td",
+          "detail": "John Doe",
+          "viewport": "desktop"
+        },
+        {
+          "el": "td",
+          "detail": "Globex Corp",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 9
     },
     {
       "rule": "layout-side-stripe",
@@ -484,6 +490,42 @@
       "points": 4
     },
     {
+      "rule": "type-small-text",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Several text elements under 13 px",
+      "why": "Three or more small text elements make a page tiring to read, especially on phones.",
+      "fix": "Raise captions and labels to at least 13 px (body 16 px).",
+      "count": 14,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "div.live",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.eyebrow",
+          "detail": "11px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "12px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
       "rule": "type-reflex-font",
       "pass": "typography",
       "severity": "minor",
@@ -503,6 +545,31 @@
         {
           "el": "h1",
           "detail": "inter",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2.5
+    },
+    {
+      "rule": "detail-heavy-shadow",
+      "pass": "detail",
+      "severity": "minor",
+      "title": "Heavy resting shadows",
+      "why": "Large dark shadows on elements at rest make the page look puffy and dated.",
+      "fix": "Keep shadows only on floating layers (menus, dialogs) and make them subtle: low alpha, small blur.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.panel",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.panel",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 8px 30px 0px",
           "viewport": "desktop"
         }
       ],

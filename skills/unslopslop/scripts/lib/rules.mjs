@@ -8,7 +8,9 @@ export const PASSES = ['spacing', 'color', 'icons', 'copy', 'typography', 'layou
 export const WEIGHTS = { critical: 12, major: 6, minor: 2 };
 const BOTH = ['desktop', 'mobile'];
 
-export const RULES = [
+import { EXTRA } from './rules-extra.mjs';
+
+const BASE = [
   // ---------------------------------------------------------------- spacing
   {
     id: 'spacing-off-grid', pass: 'spacing', severity: 'minor', scope: 'page', viewports: ['desktop'],
@@ -271,7 +273,7 @@ export const RULES = [
     why: 'Lorem ipsum, "Acme", "John Doe" and [bracketed] gaps show the page was never finished.',
     fix: 'Write the real text, or remove the block. Never ship a stand-in name.',
     check: (h) => {
-      const re = /lorem ipsum|dolor sit amet|\b(john|jane) (doe|smith)\b|\bacme\b|\bnexus (ai|labs)\b|your company|company name|\[[A-Za-z][^\]]{2,30}\]|user@example\.com|\b(sarah|alex) johnson\b/i;
+      const re = /lorem ipsum|dolor sit amet|\bnexus (ai|labs)\b|your company|company name|\[[A-Za-z][^\]]{2,30}\]|user@example\.com/i;
       return h.textEls().filter((el) => re.test(h.own(el))).map((el) => ({ el: h.sel(el), detail: h.snip(h.own(el), 50) }));
     },
   },
@@ -767,4 +769,5 @@ export const RULES = [
   },
 ];
 
+export const RULES = [...BASE, ...EXTRA];
 export const RULE_IDS = RULES.map((r) => r.id);

@@ -3,16 +3,17 @@
   "version": 1,
   "target": "examples/saas-landing/before.html",
   "score": 100,
+  "rawPoints": 247,
   "verdict": "heavy",
-  "rulesChecked": 45,
+  "rulesChecked": 72,
   "byPass": {
     "spacing": 6,
     "color": 57,
     "icons": 19.5,
-    "copy": 37.5,
-    "typography": 18,
-    "layout": 39,
-    "detail": 33.5,
+    "copy": 31.5,
+    "typography": 22,
+    "layout": 48,
+    "detail": 37,
     "imagery": 12,
     "motion": 14
   },
@@ -194,26 +195,6 @@
       "points": 12
     },
     {
-      "rule": "copy-placeholder",
-      "pass": "copy",
-      "severity": "critical",
-      "title": "Placeholder or filler text left in",
-      "why": "Lorem ipsum, \"Acme\", \"John Doe\" and [bracketed] gaps show the page was never finished.",
-      "fix": "Write the real text, or remove the block. Never ship a stand-in name.",
-      "count": 1,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "div.quote",
-          "detail": "\"Fluxly changed how we work.\" — Jane Doe, CEO at …",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 12
-    },
-    {
       "rule": "icon-emoji-ui",
       "pass": "icons",
       "severity": "major",
@@ -334,6 +315,36 @@
           "el": "div.step",
           "detail": "4px left border",
           "viewport": "desktop"
+        }
+      ],
+      "points": 9
+    },
+    {
+      "rule": "layout-text-at-edge",
+      "pass": "layout",
+      "severity": "major",
+      "title": "Text glued to the screen edge",
+      "why": "Copy that starts within 8 px of the viewport edge has no page margin.",
+      "fix": "Give the page container a side padding of at least 16 px on phones and 24 px on desktop.",
+      "count": 3,
+      "viewports": [
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "h3",
+          "detail": "left 368 right gap -68px",
+          "viewport": "mobile"
+        },
+        {
+          "el": "p",
+          "detail": "left 368 right gap -68px",
+          "viewport": "mobile"
+        },
+        {
+          "el": "a.more",
+          "detail": "left 368 right gap -68px",
+          "viewport": "mobile"
         }
       ],
       "points": 9
@@ -544,6 +555,26 @@
       "points": 6
     },
     {
+      "rule": "copy-fake-data",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Stock fake names and data",
+      "why": "Acme, Globex, John Doe and \"User 1\" are the placeholder cast of generated demos.",
+      "fix": "Use plausible, specific sample entries, and label them as sample data.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.quote",
+          "detail": "\"Fluxly changed how we work.\" — Jane Do…",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
       "rule": "detail-focus-ring",
       "pass": "detail",
       "severity": "major",
@@ -704,6 +735,42 @@
       "points": 4
     },
     {
+      "rule": "type-small-text",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Several text elements under 13 px",
+      "why": "Three or more small text elements make a page tiring to read, especially on phones.",
+      "fix": "Raise captions and labels to at least 13 px (body 16 px).",
+      "count": 7,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "div.eyebrow",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "12px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
       "rule": "detail-glass",
       "pass": "detail",
       "severity": "minor",
@@ -733,6 +800,41 @@
         {
           "el": "div.stat",
           "detail": "backdrop-filter",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 3.5
+    },
+    {
+      "rule": "detail-heavy-shadow",
+      "pass": "detail",
+      "severity": "minor",
+      "title": "Heavy resting shadows",
+      "why": "Large dark shadows on elements at rest make the page look puffy and dated.",
+      "fix": "Keep shadows only on floating layers (menus, dialogs) and make them subtle: low alpha, small blur.",
+      "count": 4,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.btn",
+          "detail": "rgba(139, 92, 246, 0.55) 0px 0px 40px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.card",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 10px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.card",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 10px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.card",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 10px 30px 0px",
           "viewport": "desktop"
         }
       ],

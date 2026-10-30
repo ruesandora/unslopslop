@@ -7,6 +7,8 @@ import { makeHelpers } from './helpers.mjs';
 import { score, verdict, rulePoints } from './score.mjs';
 
 export const VIEWPORTS = { desktop: { w: 1440, h: 900 }, mobile: { w: 390, h: 844 } };
+// Extra pass: desktop size with the reduced-motion preference on (screenshots are never taken here).
+const PASSES_VP = { ...VIEWPORTS, reduced: { w: 1440, h: 900, reducedMotion: 'reduce' } };
 
 export function toUrl(target) {
   if (/^https?:\/\//.test(target) || target.startsWith('file://')) return target;
@@ -74,10 +76,10 @@ export async function analyze(browser, target, { disable = [], only = null, fast
   let css = '';
   const shots = {};
 
-  for (const [name, vp] of Object.entries(VIEWPORTS)) {
-    const needed = screenshotDir || rules.some((r) => (r.scope === 'page' && r.viewports.includes(name)) || (name === 'desktop' && r.scope === 'css'));
+  for (const [name, vp] of Object.entries(PASSES_VP)) {
+    const needed = (screenshotDir && name !== 'reduced') || rules.some((r) => (r.scope === 'page' && r.viewports.includes(name)) || (name === 'desktop' && r.scope === 'css'));
     if (!needed) continue;
-    const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, reducedMotion: 'no-preference', deviceScaleFactor: 1 });
+    const ctx = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, reducedMotion: vp.reducedMotion || 'no-preference', deviceScaleFactor: 1 });
     const page = await ctx.newPage();
     try {
       await page.goto(url, { waitUntil: 'load', timeout: 20000 });
@@ -90,7 +92,7 @@ export async function analyze(browser, target, { disable = [], only = null, fast
         if (v && v.error) { errors.push(`${r.id}: ${v.error}`); continue; }
         record(merged, r, v || [], name);
       }
-      if (screenshotDir) {
+      if (screenshotDir && name !== 'reduced') {
         const file = `${screenshotDir}/${name}.png`;
         await page.screenshot({ path: file, fullPage: true });
         shots[name] = file;

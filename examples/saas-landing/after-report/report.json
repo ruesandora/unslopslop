@@ -3,8 +3,9 @@
   "version": 1,
   "target": "examples/saas-landing/after.html",
   "score": 0,
+  "rawPoints": 0,
   "verdict": "clean",
-  "rulesChecked": 45,
+  "rulesChecked": 72,
   "byPass": {
     "spacing": 0,
     "color": 0,

@@ -9,7 +9,7 @@ const NEXT = {
 export function toJson(result) {
   const byPass = Object.fromEntries(PASSES.map((p) => [p, result.findings.filter((f) => f.pass === p).reduce((a, f) => a + f.points, 0)]));
   return {
-    tool: 'unslopslop', version: 1, target: result.target, score: result.score, verdict: result.verdict,
+    tool: 'unslopslop', version: 1, target: result.target, score: result.score, rawPoints: +result.findings.reduce((a, f) => a + f.points, 0).toFixed(1), verdict: result.verdict,
     rulesChecked: RULES.length - (result.disabled || 0), byPass, findings: result.findings, errors: result.errors,
   };
 }
@@ -19,7 +19,7 @@ export function toMarkdown(result) {
   const L = [];
   L.push(`# unslopslop report`, '');
   L.push(`- Target: \`${result.target}\``);
-  L.push(`- Slop score: **${j.score}/100** (0 = clean)`);
+  L.push(`- Slop score: **${j.score}/100** (0 = clean; raw points before the 100 cap: ${j.rawPoints})`);
   L.push(`- Verdict: **${j.verdict.toUpperCase()}**. ${NEXT[j.verdict]}`);
   L.push(`- Rules checked: ${j.rulesChecked}; findings: ${j.findings.length}`, '');
   L.push('## Points by fix pass', '', '| Pass | Points |', '|---|---|');

@@ -1,9 +1,9 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/after.html`
-- Slop score: **0/100** (0 = clean)
+- Slop score: **0/100** (0 = clean; raw points before the 100 cap: 0)
 - Verdict: **CLEAN**. Clean: do not touch it. Run the template test (swap the brand name; if it still fits, add one signature move).
-- Rules checked: 45; findings: 0
+- Rules checked: 72; findings: 0
 
 ## Points by fix pass
 

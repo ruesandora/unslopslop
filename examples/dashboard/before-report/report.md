@@ -1,9 +1,9 @@
 # unslopslop report
 
 - Target: `examples/dashboard/before.html`
-- Slop score: **100/100** (0 = clean)
+- Slop score: **100/100** (0 = clean; raw points before the 100 cap: 156.5)
 - Verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 45; findings: 21
+- Rules checked: 72; findings: 23
 
 ## Points by fix pass
 
@@ -12,10 +12,10 @@
 | spacing | 4 |
 | color | 69 |
 | icons | 12 |
-| copy | 17 |
-| typography | 12.5 |
+| copy | 11 |
+| typography | 16.5 |
 | layout | 19.5 |
-| detail | 18 |
+| detail | 20.5 |
 | imagery | 0 |
 | motion | 4 |
 
@@ -83,11 +83,12 @@ Fix: Use one consistent line-icon set (one size, one stroke width) or remove the
 
 ## copy
 
-### copy-placeholder (critical, 15 pts, x2, desktop)
-Placeholder or filler text left in. Lorem ipsum, "Acme", "John Doe" and [bracketed] gaps show the page was never finished.
-Fix: Write the real text, or remove the block. Never ship a stand-in name.
+### copy-fake-data (major, 9 pts, x3, desktop)
+Stock fake names and data. Acme, Globex, John Doe and "User 1" are the placeholder cast of generated demos.
+Fix: Use plausible, specific sample entries, and label them as sample data.
 - `td`: Acme Inc. [desktop]
 - `td`: John Doe [desktop]
+- `td`: Globex Corp [desktop]
 
 ### copy-greeting (minor, 2 pts, x1, desktop)
 Greeting as a page heading. "Welcome back, Sam" names no context; the heading should say what this screen is.
@@ -108,6 +109,14 @@ Fix: Use 400 and 500 (600 sparingly). Let size and tone do the ranking.
 - `h1`: weight 800 [desktop]
 - `b`: weight 900 [desktop]
 - `b`: weight 900 [desktop]
+
+### type-small-text (minor, 4 pts, x14, desktop+mobile)
+Several text elements under 13 px. Three or more small text elements make a page tiring to read, especially on phones.
+Fix: Raise captions and labels to at least 13 px (body 16 px).
+- `div.live`: 12px [desktop]
+- `div.eyebrow`: 11px [desktop]
+- `small`: 12px [desktop]
+- `span`: 12px [desktop]
 
 ### type-reflex-font (minor, 2.5 pts, x2, desktop)
 Reflex font family. Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.
@@ -152,6 +161,12 @@ Fix: Pick one separator per surface: a border, or a tint, or (for floating layer
 - `div.kpi`: border + shadow + tint [desktop]
 - `div.kpi`: border + shadow + tint [desktop]
 - `div.kpi`: border + shadow + tint [desktop]
+
+### detail-heavy-shadow (minor, 2.5 pts, x2, desktop)
+Heavy resting shadows. Large dark shadows on elements at rest make the page look puffy and dated.
+Fix: Keep shadows only on floating layers (menus, dialogs) and make them subtle: low alpha, small blur.
+- `div.panel`: rgba(0, 0, 0, 0.35) 0px 8px 30px 0px [desktop]
+- `div.panel`: rgba(0, 0, 0, 0.35) 0px 8px 30px 0px [desktop]
 
 ### detail-hover-lift (minor, 2 pts, x1, desktop)
 Cards lift or grow on hover. translateY(-4px) and scale(1.05) on hover is a stock micro-interaction.

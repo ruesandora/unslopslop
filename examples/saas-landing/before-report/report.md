@@ -1,9 +1,9 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/before.html`
-- Slop score: **100/100** (0 = clean)
+- Slop score: **100/100** (0 = clean; raw points before the 100 cap: 247)
 - Verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 45; findings: 35
+- Rules checked: 72; findings: 38
 
 ## Points by fix pass
 
@@ -12,10 +12,10 @@
 | spacing | 6 |
 | color | 57 |
 | icons | 19.5 |
-| copy | 37.5 |
-| typography | 18 |
-| layout | 39 |
-| detail | 33.5 |
+| copy | 31.5 |
+| typography | 22 |
+| layout | 48 |
+| detail | 37 |
 | imagery | 12 |
 | motion | 14 |
 
@@ -98,11 +98,6 @@ Fix: Say the concrete thing: what the product does, for whom, with what number o
 - `p.sub`: "empowers" [desktop]
 - `p`: "all-in-one" [desktop]
 
-### copy-placeholder (critical, 12 pts, x1, desktop)
-Placeholder or filler text left in. Lorem ipsum, "Acme", "John Doe" and [bracketed] gaps show the page was never finished.
-Fix: Write the real text, or remove the block. Never ship a stand-in name.
-- `div.quote`: "Fluxly changed how we work." — Jane Doe, CEO at … [desktop]
-
 ### copy-unverified-proof (major, 7.5 pts, x2, desktop)
 Social proof with no source. Round user counts, star scores and "trusted by" lines that cannot be checked read as invented.
 Fix: Cite the source and date, link to the real logo or review, or delete the claim.
@@ -113,6 +108,11 @@ Fix: Cite the source and date, link to the real logo or review, or delete the cl
 "Not X, but Y" headline formula. Defining the product by what it is not ("not just a tool, it's a partner") is a reflex of generated copy.
 Fix: State the claim directly: say what it is and what the reader gets.
 - `h1`: Unleash . Not just a tool, it's a partner. [desktop]
+
+### copy-fake-data (major, 6 pts, x1, desktop)
+Stock fake names and data. Acme, Globex, John Doe and "User 1" are the placeholder cast of generated demos.
+Fix: Use plausible, specific sample entries, and label them as sample data.
+- `div.quote`: "Fluxly changed how we work." — Jane Do… [desktop]
 
 ## typography
 
@@ -130,6 +130,14 @@ Fix: Use 400 and 500 (600 sparingly). Let size and tone do the ranking.
 - `h1`: weight 900 [desktop]
 - `span`: weight 900 [desktop]
 - `b`: weight 900 [desktop]
+
+### type-small-text (minor, 4 pts, x7, desktop+mobile)
+Several text elements under 13 px. Three or more small text elements make a page tiring to read, especially on phones.
+Fix: Raise captions and labels to at least 13 px (body 16 px).
+- `div.eyebrow`: 12px [desktop]
+- `small`: 12px [desktop]
+- `small`: 12px [desktop]
+- `small`: 12px [desktop]
 
 ### type-reflex-font (minor, 2.5 pts, x2, desktop)
 Reflex font family. Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.
@@ -161,6 +169,13 @@ Fix: Emphasise with a tinted surface, a heading or an icon. Do not use a one-sid
 - `div.step`: 4px left border [desktop]
 - `div.step`: 4px left border [desktop]
 - `div.step`: 4px left border [desktop]
+
+### layout-text-at-edge (major, 9 pts, x3, mobile)
+Text glued to the screen edge. Copy that starts within 8 px of the viewport edge has no page margin.
+Fix: Give the page container a side padding of at least 16 px on phones and 24 px on desktop.
+- `h3`: left 368 right gap -68px [mobile]
+- `p`: left 368 right gap -68px [mobile]
+- `a.more`: left 368 right gap -68px [mobile]
 
 ### layout-identical-cards (major, 6 pts, x1, desktop)
 Row of identical icon + title + text cards. Three or four same-size feature cards in a row say nothing about which point matters.
@@ -206,6 +221,14 @@ Fix: Use solid surfaces. Keep blur for at most one overlay that really sits over
 - `div.stat`: backdrop-filter [desktop]
 - `div.stat`: backdrop-filter [desktop]
 - `div.stat`: backdrop-filter [desktop]
+
+### detail-heavy-shadow (minor, 3.5 pts, x4, desktop)
+Heavy resting shadows. Large dark shadows on elements at rest make the page look puffy and dated.
+Fix: Keep shadows only on floating layers (menus, dialogs) and make them subtle: low alpha, small blur.
+- `a.btn`: rgba(139, 92, 246, 0.55) 0px 0px 40px 0px [desktop]
+- `div.card`: rgba(0, 0, 0, 0.35) 0px 10px 30px 0px [desktop]
+- `div.card`: rgba(0, 0, 0, 0.35) 0px 10px 30px 0px [desktop]
+- `div.card`: rgba(0, 0, 0, 0.35) 0px 10px 30px 0px [desktop]
 
 ### detail-numbered (minor, 3 pts, x3, desktop)
 Decorative section numbers. "01 / 02 / 03" on content that has no sequence is ornament.
