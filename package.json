@@ -1,0 +1,14 @@
+{
+  "name": "unslopslop",
+  "version": "0.1.0",
+  "description": "Claude Code skill that detects and fixes AI-generated-looking (slop) UI, with a scored, repeatable detector.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "detect": "node skills/unslopslop/scripts/detect.mjs",
+    "catalogue": "node skills/unslopslop/scripts/lib/gen-catalogue.mjs"
+  }
+}

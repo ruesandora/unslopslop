@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dot texture, pure render(t)</title>
+<style>
+  body { margin: 0; background: #f6f3ec; color: #1d1b17; font: 16px/1.6 system-ui, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 16px; }
+  h1 { font: 500 32px/1.2 Georgia, serif; margin: 0 0 16px; }
+  canvas { display: block; width: 100%; height: auto; border: 1px solid #d9d3c5; border-radius: 10px; background: #fffdf8; }
+  p { margin: 16px 0 0; color: #5a554b; }
+</style></head>
+<body><main>
+<h1>One texture, one pure function</h1>
+<canvas id="c" width="640" height="360" aria-label="Animated dot grid that swells under the pointer" role="img"></canvas>
+<p>Move the pointer over the canvas. With reduced motion on, you get a single still frame.</p>
+</main>
+<script type="module">
+  import { render } from './render.mjs';
+  const c = document.getElementById('c'), g = c.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pointer = null;
+  c.addEventListener('pointermove', (e) => { const r = c.getBoundingClientRect(); pointer = { x: (e.clientX - r.left) * c.width / r.width, y: (e.clientY - r.top) * c.height / r.height }; });
+  c.addEventListener('pointerleave', () => { pointer = null; });
+  const draw = (t) => {
+    g.clearRect(0, 0, c.width, c.height);
+    g.fillStyle = '#1f6f5c';
+    for (const d of render(t, { w: c.width, h: c.height, pointer })) { g.beginPath(); g.arc(d.x, d.y, d.r, 0, 6.2832); g.fill(); }
+  };
+  if (still) draw(0);
+  else { const t0 = performance.now(); (function loop(now) { draw((now - t0) / 1000); requestAnimationFrame(loop); })(t0); }
+</script></body></html>

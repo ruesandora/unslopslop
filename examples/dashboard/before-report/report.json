@@ -1,0 +1,660 @@
+{
+  "tool": "unslopslop",
+  "version": 1,
+  "target": "examples/dashboard/before.html",
+  "score": 100,
+  "rawPoints": 156.5,
+  "verdict": "heavy",
+  "rulesChecked": 72,
+  "byPass": {
+    "spacing": 4,
+    "color": 69,
+    "icons": 12,
+    "copy": 11,
+    "typography": 16.5,
+    "layout": 19.5,
+    "detail": 20.5,
+    "imagery": 0,
+    "motion": 4
+  },
+  "findings": [
+    {
+      "rule": "color-purple-gradient",
+      "pass": "color",
+      "severity": "critical",
+      "title": "Violet / indigo gradient",
+      "why": "The purple-to-blue gradient is the most recognisable AI-product colour move.",
+      "fix": "Replace with one flat brand colour. If depth is needed, use a surface step and a 1 px line, not a gradient.",
+      "count": 11,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "b",
+          "detail": "linear-gradient(90deg, rgb(129, 140, 248), rgb(192, 132, 252))",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "linear-gradient(90deg, rgb(129, 140, 248), rgb(192, 132, 252))",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "linear-gradient(90deg, rgb(129, 140, 248), rgb(192, 132, 252))",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "linear-gradient(90deg, rgb(129, 140, 248), rgb(192, 132, 252))",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 24
+    },
+    {
+      "rule": "color-low-contrast",
+      "pass": "color",
+      "severity": "major",
+      "title": "Text below WCAG contrast",
+      "why": "Grey-on-tint and pale-on-white text fails readers and audits alike.",
+      "fix": "Darken the text (or lighten the surface) until body text reaches 4.5:1 and large text 3:1.",
+      "count": 14,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "p.sub",
+          "detail": "2.36:1 \"Here's what's happening with …\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "1.93:1 \"Total revenue\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "1.93:1 \"Overdue\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "1.93:1 \"Paid invoices\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "color-framework-default",
+      "pass": "color",
+      "severity": "major",
+      "title": "Stock framework palette",
+      "why": "Untouched indigo/violet/slate swatches from popular utility palettes make unrelated products look alike.",
+      "fix": "Derive the palette from the brand: one accent chosen on purpose, neutrals tinted toward it.",
+      "count": 6,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.more",
+          "detail": "#a78bfa",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.panel",
+          "detail": "#1e293b",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "#818cf8",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "#6366f1",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "icon-emoji-ui",
+      "pass": "icons",
+      "severity": "major",
+      "title": "Emoji used as interface icons",
+      "why": "Emoji in headings, buttons and list items render differently per platform and signal a quick draft.",
+      "fix": "Use one consistent line-icon set (one size, one stroke width) or remove the glyph.",
+      "count": 6,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.on",
+          "detail": "📊 Dashboard",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "🧾 Invoices",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "👥 Clients",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "💬 Reminders",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "color-gradient-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Gradient-filled text",
+      "why": "Headings or numbers clipped to a colour ramp are a stock \"AI landing\" signature.",
+      "fix": "Set the text in one solid colour; emphasise with size, weight or position instead.",
+      "count": 4,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "b",
+          "detail": "$48,920",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "$4,820",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "128",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "11.4",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 10.5
+    },
+    {
+      "rule": "color-glow",
+      "pass": "color",
+      "severity": "major",
+      "title": "Coloured glow shadow",
+      "why": "Large zero-offset shadows in a saturated colour fake \"energy\" and hurt legibility.",
+      "fix": "Use a neutral, low-alpha shadow with a real offset, or no shadow and a 1 px border.",
+      "count": 4,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.kpi",
+          "detail": "boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 10.5
+    },
+    {
+      "rule": "copy-fake-data",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Stock fake names and data",
+      "why": "Acme, Globex, John Doe and \"User 1\" are the placeholder cast of generated demos.",
+      "fix": "Use plausible, specific sample entries, and label them as sample data.",
+      "count": 3,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "td",
+          "detail": "Acme Inc.",
+          "viewport": "desktop"
+        },
+        {
+          "el": "td",
+          "detail": "John Doe",
+          "viewport": "desktop"
+        },
+        {
+          "el": "td",
+          "detail": "Globex Corp",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 9
+    },
+    {
+      "rule": "layout-side-stripe",
+      "pass": "layout",
+      "severity": "major",
+      "title": "Coloured stripe down one side of a box",
+      "why": "A thick left border on a card, alert or quote is a common AI shortcut for emphasis.",
+      "fix": "Emphasise with a tinted surface, a heading or an icon. Do not use a one-sided accent border.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.on",
+          "detail": "3px left border",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.alert",
+          "detail": "4px left border",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 7.5
+    },
+    {
+      "rule": "type-eyebrow",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Eyebrow label above the heading",
+      "why": "A small, spaced, uppercase tag above every heading is a template habit.",
+      "fix": "Delete it, or fold the information into the heading. Keep at most one, and only if it carries a fact.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.eyebrow",
+          "detail": "Overview",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "layout-nested-cards",
+      "pass": "layout",
+      "severity": "major",
+      "title": "Card inside a card",
+      "why": "Boxes within boxes add borders and shadows but no information.",
+      "fix": "Keep one container. Group inside it with spacing, a divider or a heading.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.panel > div.inner",
+          "detail": "nested card",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "layout-stat-strip",
+      "pass": "layout",
+      "severity": "major",
+      "title": "Row of big numbers with small labels",
+      "why": "A strip of three or four headline metrics without a comparison is the standard hero-metric template.",
+      "fix": "Show one number that matters most, with its comparison base and date; move the rest into a table or chart.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.kpis",
+          "detail": "4 stat blocks, 0 with a comparison",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "detail-pulse-dot",
+      "pass": "detail",
+      "severity": "major",
+      "title": "Pulsing status dot",
+      "why": "A blinking \"live\" dot on a status that never changes pretends the product is alive.",
+      "fix": "Show status only when it comes from data, as text plus colour, without animation.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "i",
+          "detail": "animation pulse",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "detail-focus-ring",
+      "pass": "detail",
+      "severity": "major",
+      "title": "Focus outline removed without a replacement",
+      "why": "Keyboard users cannot see where they are.",
+      "fix": "Add :focus-visible with a 2 px outline (or ring) in an accent colour; never leave outline: none alone.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "stylesheet",
+          "detail": "outline: none with no :focus-visible style",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "spacing-off-grid",
+      "pass": "spacing",
+      "severity": "minor",
+      "title": "Padding and gaps ignore a 4 px rhythm",
+      "why": "Values like 13, 18 or 22 px show that spacing was typed, not chosen from a scale.",
+      "fix": "Pick a 4 px scale (4, 8, 12, 16, 24, 32, 48, 64) and snap every padding and gap to the nearest step.",
+      "count": 8,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "aside",
+          "detail": "paddingTop 22px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "aside",
+          "detail": "paddingRight 14px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "aside",
+          "detail": "paddingBottom 22px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "aside",
+          "detail": "paddingLeft 14px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "type-heavy-weight",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Heavy weights carry the hierarchy",
+      "why": "Weights of 800 to 900, or bold on most text, flatten emphasis. Hierarchy should come from size and colour.",
+      "fix": "Use 400 and 500 (600 sparingly). Let size and tone do the ranking.",
+      "count": 8,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.logo",
+          "detail": "weight 800",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h1",
+          "detail": "weight 800",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "weight 900",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "weight 900",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "detail-card-triple",
+      "pass": "detail",
+      "severity": "minor",
+      "title": "Border, soft shadow and tint on every card",
+      "why": "Stacking a border, a diffuse shadow and a different fill on the same surface is three signals for one idea.",
+      "fix": "Pick one separator per surface: a border, or a tint, or (for floating layers only) a shadow.",
+      "count": 7,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.kpi",
+          "detail": "border + shadow + tint",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "border + shadow + tint",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "border + shadow + tint",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.kpi",
+          "detail": "border + shadow + tint",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "type-small-text",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Several text elements under 13 px",
+      "why": "Three or more small text elements make a page tiring to read, especially on phones.",
+      "fix": "Raise captions and labels to at least 13 px (body 16 px).",
+      "count": 14,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "div.live",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.eyebrow",
+          "detail": "11px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "12px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "12px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "type-reflex-font",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Reflex font family",
+      "why": "Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.",
+      "fix": "Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "body",
+          "detail": "inter",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h1",
+          "detail": "inter",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2.5
+    },
+    {
+      "rule": "detail-heavy-shadow",
+      "pass": "detail",
+      "severity": "minor",
+      "title": "Heavy resting shadows",
+      "why": "Large dark shadows on elements at rest make the page look puffy and dated.",
+      "fix": "Keep shadows only on floating layers (menus, dialogs) and make them subtle: low alpha, small blur.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.panel",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.panel",
+          "detail": "rgba(0, 0, 0, 0.35) 0px 8px 30px 0px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2.5
+    },
+    {
+      "rule": "copy-greeting",
+      "pass": "copy",
+      "severity": "minor",
+      "title": "Greeting as a page heading",
+      "why": "\"Welcome back, Sam\" names no context; the heading should say what this screen is.",
+      "fix": "Name the content (\"This month's scans\"), not the visitor.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1",
+          "detail": "Welcome back, Alex 👋",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2
+    },
+    {
+      "rule": "detail-hover-lift",
+      "pass": "detail",
+      "severity": "minor",
+      "title": "Cards lift or grow on hover",
+      "why": "translateY(-4px) and scale(1.05) on hover is a stock micro-interaction.",
+      "fix": "Change tone or border colour on hover, only inside @media (hover: hover).",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "stylesheet",
+          "detail": ":hover { transform: translateY(-5px)",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2
+    },
+    {
+      "rule": "motion-no-reduced",
+      "pass": "motion",
+      "severity": "minor",
+      "title": "No prefers-reduced-motion handling",
+      "why": "People who ask the system for less motion still get all of it.",
+      "fix": "Add @media (prefers-reduced-motion: reduce) that removes or shortens animations and transitions.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "stylesheet",
+          "detail": "animations present, no reduced-motion query",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2
+    },
+    {
+      "rule": "motion-transition-all",
+      "pass": "motion",
+      "severity": "minor",
+      "title": "transition: all",
+      "why": "Animating every property triggers layout work and surprising effects.",
+      "fix": "List the properties you mean (opacity, transform, background-color) with a duration and easing.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "stylesheet",
+          "detail": "transition: all .3s",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2
+    }
+  ],
+  "errors": []
+}
