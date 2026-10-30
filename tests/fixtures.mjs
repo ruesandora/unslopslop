@@ -226,7 +226,7 @@ export const FIXTURES = {
   },
 };
 
-// ---- batch #1 rules ----
+// ---- page frame, app screens, visual poverty, accessibility ----
 const LONG = 'Long enough text to count as real content on the page. '.repeat(3);
 Object.assign(FIXTURES, {
   'page-no-heading': {

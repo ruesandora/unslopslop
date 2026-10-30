@@ -1,29 +1,5 @@
 unslopslop
 Copyright (c) 2026 Rueseo. Licensed under the MIT License (see LICENSE).
 
-This project builds on ideas from the works below. No code or verbatim text was copied from any of them; methods and rules are re-expressed in this project's own words and code.
-
-1. heydamir/unslop, https://github.com/heydamir/unslop
-   Copyright Damir Sokolovsky. Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
-   Used: the idea of a nine-step fix order and several checklist items (short text without trailing full stops, restrained font weights, icon consistency, 4 px spacing rhythm, nested radius, one primary action, "change amount" verdict, a final "does it still look like a template" look).
-   Changes: all text and code here are newly written; the checks are implemented as measurable rules and fixtures. This is an adaptation and is not endorsed by the original author. The name "unslop" belongs to its author.
-
-2. Leonxlnx/taste-skill, https://github.com/Leonxlnx/taste-skill
-   MIT License. Copyright (c) 2026 Leonxlnx
-   Used: rule ideas for page-frame issues, app screens, visual poverty and accessibility (see docs/SOURCES.md).
-
-3. Emil Kowalski's skills (emilkowalski/skills)
-   MIT License. Copyright (c) 2026 Emil Kowalski
-   Used: general motion ranges (press, reveal and dialog durations; easing guidance), re-stated as starting points.
-
-4. NiazMorshed2007/reanimate, https://github.com/NiazMorshed2007/reanimate
-   MIT License. Copyright (c) NiazMorshed2007 (copyright year not verified by this project).
-   Used: the method of measuring a reference animation as numbers (same conditions, spec table, compare timing and not pixels). No code taken.
-
-5. pbakaus/impeccable, https://github.com/pbakaus/impeccable
-   Apache License 2.0. Copyright Paul Bakaus.
-   Used: inspiration for naming recurring AI patterns (side stripes, skipped heading levels, small touch targets). No code or text taken.
-
-6. Google design.md specification (section order Overview, Colors, Typography, Layout, Elevation, Shapes, Components, Do/Don't). Used as a layout convention for the DESIGN.md template; this project adds a Motion section.
-
-MIT licence text for items 2 to 4 is the same as in LICENSE with the respective copyright holder.
+Bundled font files in examples/assets/fonts/ are licensed under the SIL Open Font License 1.1;
+each font's licence and copyright notice is in the OFL-*.txt file next to it.

@@ -1,5 +1,5 @@
-// Rules added from research batch #1 (page frame, app screens, visual poverty, accessibility).
-// Same contract as rules.mjs. Ideas and thresholds are written in our own words (see docs/SOURCES.md).
+// More rules: page frame, app screens, visual poverty, accessibility, and later additions.
+// Same contract as rules.mjs.
 const BOTH = ['desktop', 'mobile'];
 
 export const EXTRA = [
@@ -104,7 +104,7 @@ export const EXTRA = [
     id: 'layout-side-nav-mobile', pass: 'layout', severity: 'major', scope: 'page', viewports: ['mobile'],
     title: 'Desktop side navigation on a phone',
     why: 'A fixed-width sidebar leaves a narrow strip for content on a 390 px screen.',
-    fix: 'Collapse the sidebar below 760 px: top bar with a menu button, or a bottom tab bar.',
+    fix: 'Below 760 px, fold the sidebar away: show a header row with a menu toggle, or tabs pinned to the bottom of the screen.',
     check: (h) => {
       const out = [];
       for (const el of h.all()) {
@@ -368,7 +368,7 @@ export const EXTRA = [
     },
   },
 
-  // ------------------------------------------------------- batch 2 (observation notes, 30 Oct 2026)
+  // ------------------------------------------------------- headline accents, live numbers, overlap, accent use
   {
     id: 'type-accent-keyword', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
     title: 'One word of the headline in the accent colour',
