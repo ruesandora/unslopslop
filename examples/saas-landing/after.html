@@ -8,8 +8,8 @@
 <link rel="preload" href="../assets/fonts/schibsted-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* Type: Schibsted Grotesk for headlines and every number (firm, newsy, tabular figures);
-   Atkinson Hyperlegible Next for reading text, chosen because invoice ids and amounts must never be misread (0/O, 1/l/I). */
+/* Type: Schibsted Grotesk for headlines and labels; Atkinson Hyperlegible Next for reading text and every number,
+   chosen because invoice ids and amounts must never be misread (slashed 0, distinct 1/l/I). */
 @font-face { font-family: "Schibsted Grotesk"; src: url("../assets/fonts/schibsted-grotesk-latin-var.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
 @font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
 
@@ -32,7 +32,7 @@ a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; 
 :focus-visible { outline: 2px solid var(--cobalt-lit); outline-offset: 3px; border-radius: 6px; }
 h1, h2, h3 { font-family: var(--head); margin: 0; text-wrap: balance; }
 p { margin: 0; text-wrap: pretty; }
-.num { font-family: var(--head); font-variant-numeric: tabular-nums; }
+.num { font-variant-numeric: tabular-nums; }
 .wrap { max-width: 1312px; margin: 0 auto; padding: 0 32px; }
 .btn { white-space: nowrap; display: inline-flex; align-items: center; padding: 14px 22px; border-radius: 10px; background: var(--cobalt-lit); color: var(--ink); font: 600 17px var(--head); text-decoration: none; border: 0; cursor: pointer; transition: background-color 160ms ease-out; }
 .btn:hover { background: #b6c2ff; }
@@ -80,7 +80,7 @@ p { margin: 0; text-wrap: pretty; }
 .track, .fill { position: absolute; left: 0; right: 0; top: 40px; height: 2px; }
 .track { background: var(--line-2); }
 .fill { background: var(--cobalt-lit); transform-origin: left; transform: scaleX(0); }
-.tick { position: absolute; top: 58px; width: 32px; margin-left: -16px; text-align: center; font: 500 14px var(--head); color: var(--bone-2); font-variant-numeric: tabular-nums; }
+.tick { position: absolute; top: 58px; width: 32px; margin-left: -16px; text-align: center; font-size: 14px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
 .node { position: absolute; top: 32px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: var(--ink-2); border: 2px solid var(--bone-2); transition: background-color 240ms var(--in), border-color 240ms var(--in), opacity 240ms var(--in); }
 .node.on { background: var(--cobalt-lit); border-color: var(--cobalt-lit); }
 .node.off { border-style: dashed; opacity: .55; }
@@ -88,11 +88,11 @@ p { margin: 0; text-wrap: pretty; }
 .node-label.on { color: var(--bone); }
 .node-label.off { text-decoration: line-through; }
 .node-label.last { transform: translateX(-100%); margin-left: 12px; }
-.head { position: absolute; top: 24px; width: 2px; height: 56px; margin-left: -1px; background: var(--bone); border-radius: 2px; }
+.head { position: absolute; top: 26px; width: 2px; height: 28px; margin-left: -1px; background: var(--bone); border-radius: 2px; }
 .log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .log li { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 16px; opacity: 0; transform: translateY(10px); }
-.log li .d { font: 600 15px var(--head); color: var(--bone-2); font-variant-numeric: tabular-nums; }
-.log li .t { font: 500 14px var(--head); color: var(--bone-2); font-variant-numeric: tabular-nums; }
+.log li .d { font-weight: 700; font-size: 15px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
+.log li .t { font-size: 14px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
 .log li.paid .w { color: var(--cobalt-lit); font-weight: 700; }
 .log li.reply .w { font-style: italic; }
 
@@ -164,7 +164,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
 }
 @media (max-width: 760px) {
   .wrap { padding: 0 20px; }
-  .top nav { display: none; }
+  .top nav a:not(:last-child) { display: none; }
   .hero { padding-top: 24px; }
   .hero::before { inset: -120px -20px 0 -20px; }
   .hero-foot { flex-direction: column; align-items: start; }
@@ -174,7 +174,8 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
   .dhead { flex-direction: column; gap: 12px; }
   .amount { text-align: left; }
   .tick:nth-child(even) { visibility: hidden; }
-  .node-label { display: none; }
+  .node-label { font-size: 13px; }
+  .replay { min-height: 44px; padding: 10px 14px; }
   .log li { grid-template-columns: 56px 1fr; }
   .log li .t { display: none; }
   .mail { position: relative; right: auto; width: auto; margin: -24px 12px 0; }
@@ -327,7 +328,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
       <details><summary>Can I edit a reminder before it goes out?</summary><p>Yes. Every message waits in your queue for 24 hours. Change the text, move the date or cancel it there.</p></details>
       <details><summary>Does it write to my client on weekends?</summary><p>No. Letters go out on weekdays between 9:00 and 17:00 in your client's time zone.</p></details>
       <details><summary>What if a client disputes the invoice?</summary><p>Pause the schedule from the invoice page. Nothing else is sent until you resume it.</p></details>
-      <details><summary>Which accounting tools does it read?</summary><p>This is an example page; a real product page would list the tools that are actually supported.</p></details>
+      <details><summary>Can Fluxly move money from my account?</summary><p>No. It reads your bank feed with read-only access, only to match incoming payments to invoice numbers. Disconnect the bank in Settings at any time and Fluxly stops reading at once.</p></details>
     </div>
   </section>
 
