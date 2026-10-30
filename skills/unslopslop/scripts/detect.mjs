@@ -7,16 +7,19 @@
 //   --out dir        write report.json, report.md, desktop.png, mobile.png into dir
 //   --json           print JSON instead of markdown
 //   --disable ids    skip rules (comma separated); UNSLOP_DISABLE does the same
-//   --fail-on level  exit 1 when the verdict is at least that bad (default: always exit 0)
+//   --fail-on level  exit 1 when the slop verdict is at least that bad (default: always exit 0)
+//   --min-craft n    exit 1 when the craft score is below n (70 is the pass mark)
+//   --keep-consent   do not hide cookie / consent banners (hidden by default, never accepted)
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { launch } from './lib/browser.mjs';
 import { analyze } from './lib/analyze.mjs';
 import { toJson, toMarkdown } from './lib/report.mjs';
 import { RULE_IDS } from './lib/rules.mjs';
+import { BLAND_IDS } from './lib/rules-bland.mjs';
 
 const args = process.argv.slice(2);
-const o = { out: null, json: false, disable: [], failOn: null };
+const o = { out: null, json: false, disable: [], failOn: null, minCraft: null, keepConsent: false };
 let target = null;
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -24,21 +27,23 @@ for (let i = 0; i < args.length; i++) {
   else if (a === '--json') o.json = true;
   else if (a === '--disable') o.disable = (args[++i] || '').split(',').map((s) => s.trim()).filter(Boolean);
   else if (a === '--fail-on') o.failOn = args[++i];
+  else if (a === '--min-craft') o.minCraft = +args[++i];
+  else if (a === '--keep-consent') o.keepConsent = true;
   else if (a === '-h' || a === '--help') { console.log(readFileHelp()); process.exit(0); }
   else target = a;
 }
 function readFileHelp() {
-  return 'Usage: node detect.mjs <file.html | url> [--out dir] [--json] [--disable rule,rule] [--fail-on light|heavy]';
+  return 'Usage: node detect.mjs <file.html | url> [--out dir] [--json] [--disable rule,rule] [--fail-on light|heavy] [--min-craft 70]';
 }
 if (!target) { console.error(readFileHelp()); process.exit(2); }
-for (const d of o.disable) if (!RULE_IDS.includes(d)) { console.error(`Unknown rule: ${d}`); process.exit(2); }
+for (const d of o.disable) if (!RULE_IDS.includes(d) && !BLAND_IDS.includes(d)) { console.error(`Unknown rule: ${d}`); process.exit(2); }
 
 let outDir = null;
 if (o.out) { outDir = resolve(o.out); await mkdir(outDir, { recursive: true }); }
 const browser = await launch();
 let result;
 try {
-  result = await analyze(browser, target, { disable: o.disable, screenshotDir: outDir });
+  result = await analyze(browser, target, { disable: o.disable, screenshotDir: outDir, keepConsent: o.keepConsent });
 } catch (e) {
   console.error(`detect failed: ${e.message}`);
   await browser.close();
@@ -55,3 +60,4 @@ if (outDir) {
 console.log(o.json ? JSON.stringify(json, null, 2) : md);
 const order = { clean: 0, light: 1, heavy: 2 };
 if (o.failOn && order[result.verdict] >= order[o.failOn]) process.exit(1);
+if (o.minCraft !== null && !(result.craft.score >= o.minCraft)) process.exit(1);

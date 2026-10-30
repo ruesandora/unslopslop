@@ -367,4 +367,115 @@ export const EXTRA = [
       return out;
     },
   },
+
+  // ------------------------------------------------------- batch 2 (observation notes, 30 Oct 2026)
+  {
+    id: 'type-accent-keyword', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
+    title: 'One word of the headline in the accent colour',
+    why: 'Colouring or gradient-filling one keyword of the headline is the most common template tell, even on design-tool sites.',
+    fix: 'Let the whole headline speak in one colour. If a second tone is wanted, make it a quieter grey for a whole line, not a bright keyword.',
+    check: (h) => {
+      const out = [];
+      for (const hd of document.querySelectorAll('h1, h2')) {
+        if (!h.visible(hd)) continue;
+        const base = h.rgba(h.cs(hd).color);
+        const total = hd.textContent.trim().length;
+        for (const k of hd.querySelectorAll('span, em, strong, b, i, mark')) {
+          if (k.closest('a') || !h.visible(k)) continue;
+          const t = k.textContent.trim();
+          if (!t || t.split(/\s+/).length > 4 || t.length > total * 0.6) continue;
+          const s = h.cs(k);
+          const c = h.rgba(s.color);
+          const bgc = h.rgba(s.backgroundColor);
+          const filled = /gradient\(/.test(s.backgroundImage) || (bgc && bgc.a > 0.2 && h.saturated(bgc));
+          if (filled || (h.saturated(c) && !h.saturated(base))) out.push({ el: h.sel(hd), detail: `"${h.snip(t, 30)}" coloured inside "${h.snip(hd.textContent.trim(), 40)}"` });
+        }
+      }
+      return out;
+    },
+  },
+  {
+    id: 'type-live-number-proportional', pass: 'typography', severity: 'minor', scope: 'page', viewports: ['desktop'],
+    title: 'Changing numbers in proportional figures',
+    why: 'Timers, prices and counters that update while set in proportional figures jitter sideways on every change.',
+    fix: 'Set font-variant-numeric: tabular-nums on every number that changes (and on table columns of numbers).',
+    check: (h) => {
+      const seen = new Set();
+      const out = [];
+      for (const n of h.motion().nodes || []) {
+        if (!n || seen.has(n) || !h.visible(n)) continue;
+        seen.add(n);
+        const t = h.own(n);
+        if (!/\d/.test(t) || t.length > 24) continue;
+        if (!/tabular-nums/.test(h.cs(n).fontVariantNumeric)) out.push({ el: h.sel(n), detail: `"${t}" changes without tabular-nums` });
+      }
+      return out;
+    },
+  },
+  {
+    id: 'layout-text-overlap', pass: 'layout', severity: 'major', scope: 'page', viewports: BOTH,
+    title: 'Text drawn on top of other text',
+    why: 'Two pieces of text sharing the same spot cannot be read. It is usually an absolutely positioned label or a fixed height that broke on a narrow screen.',
+    fix: 'Give the elements their own space (grid, gap, wrapping), or put an opaque surface under the top layer if the overlap is intended.',
+    check: (h) => {
+      const boxOf = (e) => {
+        const r = document.createRange();
+        let box = null;
+        for (const n of e.childNodes) {
+          if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+          r.selectNodeContents(n);
+          const b = r.getBoundingClientRect();
+          if (!b.width || !b.height) continue;
+          box = box ? { left: Math.min(box.left, b.left), top: Math.min(box.top, b.top), right: Math.max(box.right, b.right), bottom: Math.max(box.bottom, b.bottom) } : { left: b.left, top: b.top, right: b.right, bottom: b.bottom };
+        }
+        return box;
+      };
+      const els = h.textEls().filter((e) => h.own(e).length >= 2 && !(e.closest('details:not([open])') && !e.closest('summary'))).slice(0, 500).map((e) => ({ e, b: boxOf(e) })).filter((x) => x.b);
+      const opaqueBetween = (top, common) => {
+        for (let x = top; x && x !== common; x = x.parentElement) { const c = h.rgba(h.cs(x).backgroundColor); if (c && c.a >= 0.9) return true; }
+        return false;
+      };
+      const out = [];
+      for (let i = 0; i < els.length; i++) for (let j = i + 1; j < els.length; j++) {
+        const A = els[i], B = els[j];
+        if (A.e.contains(B.e) || B.e.contains(A.e)) continue;
+        const w = Math.min(A.b.right, B.b.right) - Math.max(A.b.left, B.b.left);
+        const hh = Math.min(A.b.bottom, B.b.bottom) - Math.max(A.b.top, B.b.top);
+        if (w <= 0 || hh <= 0) continue;
+        const small = Math.min((A.b.right - A.b.left) * (A.b.bottom - A.b.top), (B.b.right - B.b.left) * (B.b.bottom - B.b.top));
+        if (w * hh < 0.2 * small) continue;
+        const top = document.elementFromPoint(Math.max(A.b.left, B.b.left) + w / 2, Math.max(A.b.top, B.b.top) + hh / 2);
+        let common = A.e.parentElement;
+        while (common && !common.contains(B.e)) common = common.parentElement;
+        const upper = top && A.e.contains(top) ? A.e : top && B.e.contains(top) ? B.e : null;
+        if (upper && opaqueBetween(upper, common)) continue;
+        out.push({ el: `${h.sel(A.e)} / ${h.sel(B.e)}`, detail: `"${h.snip(h.own(A.e), 20)}" over "${h.snip(h.own(B.e), 20)}"` });
+        if (out.length >= 6) return out;
+      }
+      return out;
+    },
+  },
+  {
+    id: 'color-accent-decorative', pass: 'color', severity: 'minor', scope: 'page', viewports: ['desktop'],
+    title: 'Accent colour spent on decoration',
+    why: 'When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.',
+    fix: 'Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.',
+    check: (h) => {
+      const STATE = /\b(paid|overdue|late|due|sent|error|failed|success|active|live|running|done|new|matched|selected|current|warning)\b/i;
+      const out = [];
+      for (const e of h.all()) {
+        if (e.closest('a, button, input, select, label, summary, svg, canvas, img, video, picture, [role=img], [role=button], [role=tab], [role=status], [role=switch], [aria-current], [aria-selected=true], [aria-pressed=true], [data-state]')) continue;
+        const r = h.rect(e);
+        if (r.width <= 12 && r.height <= 12) continue;
+        const s = h.cs(e);
+        const paint = [s.backgroundColor, s.borderTopColor, s.borderLeftColor, ...h.colorTokens(s.backgroundImage)].map((t) => h.rgba(t));
+        const textPaint = h.own(e) ? h.rgba(s.color) : null;
+        const used = paint.some((c) => h.saturated(c)) || h.saturated(textPaint);
+        if (!used) continue;
+        if (STATE.test(e.textContent || '') && (e.textContent || '').length < 60) continue;
+        out.push({ el: h.sel(e), detail: 'accent on a non-interactive, non-state element' });
+      }
+      return out.length >= 4 ? out : [];
+    },
+  },
 ];
