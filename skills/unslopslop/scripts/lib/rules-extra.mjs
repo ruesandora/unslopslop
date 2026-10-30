@@ -478,4 +478,35 @@ export const EXTRA = [
       return out.length >= 4 ? out : [];
     },
   },
+  {
+    id: 'layout-stock-dark-launch', pass: 'layout', severity: 'major', scope: 'page', viewports: ['desktop'],
+    title: 'Stock dark launch hero',
+    why: 'Black hero, centred headline, one hot pill button and an install-command chip is the default component-library launch page; on a product that is not a developer tool it says nothing about the product.',
+    fix: 'Start from the project read: show the product, pick a combination for this audience, drop the install chip unless people really install it.',
+    check: (h) => {
+      const h1 = document.querySelector('h1');
+      if (!h1 || !h.visible(h1) || h.rect(h1).top > h.vh) return [];
+      const bg = h.bgOf(h1) || { r: 0, g: 0, b: 0 };
+      const dark = h.lum(bg) < 0.03;
+      const centred = h.cs(h1).textAlign === 'center';
+      const pill = [...document.querySelectorAll('a, button')].some((e) => {
+        if (!h.visible(e) || h.rect(e).top > h.vh) return false;
+        const s = h.cs(e), c = h.rgba(s.backgroundColor), k = c ? h.hsl(c) : null;
+        return c && c.a > 0.8 && k.s > 0.5 && (k.h < 40 || k.h > 340) && h.px(s.borderTopLeftRadius) >= h.rect(e).height / 2 - 1;
+      });
+      const chip = [...document.querySelectorAll('code, pre, kbd')].some((e) => h.visible(e) && h.rect(e).top < h.vh && /\b(npm|npx|pnpm|yarn|bun|brew|pip|curl)\b/.test(e.textContent));
+      return dark && centred && pill && chip ? [{ el: h.sel(h1), detail: 'dark centred hero, hot pill button and install chip' }] : [];
+    },
+  },
+  {
+    id: 'detail-showcase-ornament', pass: 'detail', severity: 'minor', scope: 'page', viewports: ['desktop'],
+    title: 'Showcase effect with no job',
+    why: 'Glow orbs, beams, spotlights, shimmer borders and particle fields dropped in as decoration: delete them and the message loses nothing.',
+    fix: 'Remove the effect, or tie it to content (light behind the product, a beam that follows a real data flow).',
+    check: (h) => {
+      const re = /(^|[\s_-])(orb|beam|beams|spotlight|shimmer|particles?|sparkles?|meteors?|aurora|glow-?border|border-?beam)([\s_-]|$)/i;
+      return h.all().filter((e) => re.test(typeof e.className === 'string' ? e.className : '') && !h.own(e) && h.rect(e).width * h.rect(e).height >= 4000)
+        .map((e) => ({ el: h.sel(e), detail: 'decorative showcase effect without content' }));
+    },
+  },
 ];

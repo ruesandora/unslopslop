@@ -50,7 +50,7 @@ The detector runs fully on web pages, app screens, mobile web and email HTML. Lo
 
 ## Styles
 
-Name a style and the skill loads it on top of the domain pack: `styles/retro-pixel` and `styles/ascii-text-art` (with a dependency-free demo) are complete; swiss-international, editorial-serif, brutalist, neo-brutalism, y2k-chrome, glass-aurora, bento, terminal-dev, memphis, japanese-minimal, organic-earthy, luxury-fashion, data-dense, claymorphism, risograph-print, playful-kids and zine-punk are early stubs. Each pack lists its slop versions, so "retro pixel" done lazily is caught too.
+Name a style and the skill loads it on top of the domain pack: `styles/retro-pixel` and `styles/ascii-text-art` (with a dependency-free demo) are complete; swiss-international, editorial-serif, brutalist, neo-brutalism, y2k-chrome, glass-aurora, bento, terminal-dev, memphis, japanese-minimal, organic-earthy, luxury-fashion, data-dense, claymorphism, risograph-print, playful-kids and zine-punk, blueprint-mono, pantry-bold and pop-ritual are early packs. Each pack lists its slop versions, so "retro pixel" done lazily is caught too.
 
 ## How it thinks
 

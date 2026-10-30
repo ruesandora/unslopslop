@@ -224,6 +224,18 @@ export const FIXTURES = {
     bad: { body: '<p style="border-top:3px solid #2a5bd7;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part four of the story.</p>' },
     good: { body: '<p style="border-top:3px solid #ccc;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Paid on 12 Oct.</p>' },
   },
+  'layout-stock-dark-launch': {
+    bad: { css: 'body{background:#050505;color:#eee}h1{text-align:center}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+    good: { css: 'body{background:#050505;color:#eee}h1{text-align:left}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+  },
+  'detail-showcase-ornament': {
+    bad: { body: '<div class="glow orb" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+    good: { body: '<div class="photo" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+  },
+  'motion-shadow-animated': {
+    bad: { css: '.c{transition:box-shadow 200ms ease-out}.c:hover{box-shadow:0 8px 16px rgba(0,0,0,.2)}', body: '<div class="c">Card</div>' },
+    good: { css: '.c{transition:opacity 200ms ease-out}.c:hover{opacity:.9}', body: '<div class="c">Card</div>' },
+  },
 };
 
 // ---- page frame, app screens, visual poverty, accessibility ----

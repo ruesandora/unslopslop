@@ -765,6 +765,18 @@ const BASE = [
     },
   },
   {
+    id: 'motion-shadow-animated', pass: 'motion', severity: 'minor', scope: 'css', viewports: ['desktop'],
+    title: 'Shadow animated frame by frame',
+    why: 'Animating box-shadow repaints every frame and smears; on a layer that moves away from its base the shadow also ends up in the wrong place.',
+    fix: 'Put two pre-blurred shadow shapes behind the element (rest and raised) and crossfade their opacity; animate transform and opacity only.',
+    check: (css) => {
+      const kf = [...css.matchAll(/@keyframes\s+[\w-]+\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)].find((m) => /box-shadow\s*:/.test(m[1]));
+      const tr = css.match(/transition(-property)?\s*:[^;}]*\bbox-shadow\b[^;}]*/i);
+      const hit = kf ? `keyframes animate box-shadow` : tr ? tr[0].replace(/\s+/g, ' ').slice(0, 60) : null;
+      return hit ? [{ el: 'stylesheet', detail: hit }] : [];
+    },
+  },
+  {
     id: 'motion-transition-all', pass: 'motion', severity: 'minor', scope: 'css', viewports: ['desktop'],
     title: 'transition: all',
     why: 'Animating every property triggers layout work and surprising effects.',
