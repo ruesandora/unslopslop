@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluxly: Open invoices</title>
+<style>
+  :root { --paper: #f6f3ec; --surface: #fffdf8; --ink: #1d1b17; --muted: #5a554b; --line: #d9d3c5; --accent: #1f6f5c; --late: #9a3412; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--paper); color: var(--ink); display: flex; min-height: 100vh; }
+  h1, h2 { font-family: Charter, "Iowan Old Style", Georgia, serif; font-weight: 500; margin: 0; }
+  a { color: var(--accent); transition: color 120ms ease-out; }
+  a:hover { color: var(--ink); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  aside { width: 240px; flex: none; padding: 24px 16px; border-right: 1px solid var(--line); }
+  aside .logo { font: 500 24px Charter, "Iowan Old Style", Georgia, serif; margin: 0 8px 24px; }
+  aside a { display: block; padding: 8px; color: var(--muted); text-decoration: none; border-radius: 6px; }
+  aside a:hover { background: #ece7da; color: var(--ink); }
+  aside a[aria-current] { background: #ece7da; color: var(--ink); font-weight: 500; }
+  main { flex: 1; min-width: 0; padding: 32px; max-width: 1200px; }
+  h1 { font-size: 32px; line-height: 1.2; margin-bottom: 8px; }
+  .lead { margin: 0 0 32px; color: var(--muted); }
+  .lead b { color: var(--ink); font-weight: 500; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: start; }
+  .chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; }
+  .chart h2 { font-size: 20px; margin-bottom: 4px; }
+  .chart .meta { margin: 0 0 24px; font-size: 14px; color: var(--muted); }
+  .bars { display: flex; align-items: flex-end; gap: 16px; height: 200px; border-bottom: 1px solid var(--line); }
+  .bars div { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; }
+  .bars i { display: block; background: var(--accent); border-radius: 4px 4px 0 0; }
+  .bars div.now i { background: var(--late); }
+  .labels { display: flex; gap: 16px; margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .labels span { flex: 1; text-align: center; }
+  .side h2 { font-size: 20px; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; font-weight: 500; font-size: 14px; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  td:last-child, th:last-child { text-align: right; }
+  .late { color: var(--late); font-weight: 500; }
+  .note { font-size: 14px; color: var(--muted); margin: 16px 0 0; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { aside { display: none; } main { padding: 24px 16px; } h1 { font-size: 28px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<aside>
+  <div class="logo">Fluxly</div>
+  <a href="#" aria-current="page">Open invoices</a><a href="#">Paid</a><a href="#">Clients</a><a href="#">Reminder templates</a>
+</aside>
+<main>
+  <h1>Open invoices</h1>
+  <p class="lead"><b>$4,820 overdue</b> across 3 invoices, against $6,110 on 2 Oct. Sample data.</p>
+  <div class="grid">
+    <section class="chart" aria-label="Overdue amount by week">
+      <h2>Overdue amount, last 6 weeks</h2>
+      <p class="meta">Dollars at the end of each week. The current week is in rust.</p>
+      <div class="bars" role="img" aria-label="Bars: 6110, 5400, 5900, 4300, 3900, 4820">
+        <div><i style="height:100%"></i></div><div><i style="height:88%"></i></div><div><i style="height:97%"></i></div><div><i style="height:70%"></i></div><div><i style="height:64%"></i></div><div class="now"><i style="height:79%"></i></div>
+      </div>
+      <div class="labels"><span>2 Oct</span><span>9 Oct</span><span>16 Oct</span><span>23 Oct</span><span>30 Oct</span><span>Now</span></div>
+    </section>
+    <section class="side">
+      <h2>Overdue now</h2>
+      <table>
+        <thead><tr><th>Client</th><th>Days late</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Linden Print Works</td><td class="late">19</td><td>$2,400</td></tr>
+          <tr><td>Harbour Street Dental</td><td class="late">16</td><td>$1,200</td></tr>
+          <tr><td>Marlow &amp; Finch</td><td class="late">6</td><td>$1,220</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Next reminders go out tomorrow at 9:00. <a href="#">Review the queue</a></p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

@@ -34,19 +34,20 @@ export const RULES = [
     id: 'spacing-cramped', pass: 'spacing', severity: 'minor', scope: 'page', viewports: BOTH,
     title: 'Text sits against the edge of its box',
     why: 'Buttons and cards with almost no inner padding read as unfinished.',
-    fix: 'Give buttons at least 12 px horizontal and 8 px vertical padding, cards at least 16 px.',
+    fix: 'Give buttons at least 12 px horizontal and 8 px vertical padding (anything under 8 px horizontal is flagged), cards at least 16 px.',
     check: (h) => {
       const out = [];
       for (const el of h.textEls()) {
         const s = h.cs(el);
         const bg = h.rgba(s.backgroundColor);
-        const hasBox = (bg && bg.a > 0.05) || (h.px(s.borderTopWidth) >= 1 && s.borderTopStyle !== 'none');
+        const sides = ['Top', 'Right', 'Bottom', 'Left'].filter((d) => h.px(s['border' + d + 'Width']) >= 1 && s['border' + d + 'Style'] !== 'none').length;
+        const hasBox = (bg && bg.a > 0.05) || sides >= 3;
         if (!hasBox || s.display === 'inline') continue;
         const pl = h.px(s.paddingLeft), pr = h.px(s.paddingRight), pt = h.px(s.paddingTop), pb = h.px(s.paddingBottom);
         const isCtl = ['BUTTON', 'A', 'INPUT'].includes(el.tagName) || el.getAttribute('role') === 'button';
         const long = h.own(el).length >= 12;
         if (!isCtl && !long) continue;
-        const bad = isCtl ? pl < 10 || pr < 10 || pt < 4 || pb < 4 : Math.min(pl, pr, pt, pb) < 8;
+        const bad = isCtl ? pl < 8 || pr < 8 || pt < 4 || pb < 4 : Math.min(pl, pr, pt, pb) < 8;
         if (bad) out.push({ el: h.sel(el), detail: `padding ${pt}/${pr}/${pb}/${pl}px` });
       }
       return out;
@@ -328,7 +329,7 @@ export const RULES = [
       const body = [...weight].sort((a, b) => b[1] - a[1])[0][0];
       const out = [];
       if (max / body < 2) out.push({ el: h.sel(maxEl), detail: `largest ${max}px vs body ${body}px (ratio ${(max / body).toFixed(2)})` });
-      const hs = ['H1', 'H2', 'H3'].map((t) => document.querySelector(t.toLowerCase())).filter(Boolean).map((e) => h.px(h.cs(e).fontSize));
+      const hs = ['h1', 'h2', 'h3'].map((t) => Math.max(0, ...[...document.querySelectorAll(t)].filter(h.visible).map((e) => h.px(h.cs(e).fontSize)))).filter((v) => v > 0);
       for (let i = 1; i < hs.length; i++) if (hs[i - 1] / hs[i] < 1.15) out.push({ el: `h${i}->h${i + 1}`, detail: `${hs[i - 1]}px to ${hs[i]}px` });
       return out;
     },

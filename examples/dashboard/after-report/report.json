@@ -1,0 +1,21 @@
+{
+  "tool": "unslopslop",
+  "version": 1,
+  "target": "examples/dashboard/after.html",
+  "score": 0,
+  "verdict": "clean",
+  "rulesChecked": 45,
+  "byPass": {
+    "spacing": 0,
+    "color": 0,
+    "icons": 0,
+    "copy": 0,
+    "typography": 0,
+    "layout": 0,
+    "detail": 0,
+    "imagery": 0,
+    "motion": 0
+  },
+  "findings": [],
+  "errors": []
+}
