@@ -1,0 +1,45 @@
+FX.mount({
+  title: 'Caustics',
+  summary: 'The bright web of light on the floor of a pool. Two warped noise fields are drawn as thin bright contour lines and the light pools where they cross. A second pattern builds the web from moving cell edges instead.',
+  cost: 'Two cell-noise layers, 9 neighbours each, per pixel. Medium. 30 fps cap; on phones one layer and a lower DPR are fine.',
+  fallback: 'No WebGL: the CSS gradient. Reduced motion: one still frame, which still reads as water.',
+  slop: 'Bright white lines at full strength behind content, or caustics on a brand with no water, light or glass story.',
+  source: 'none', palette: 'seaglass', animated: true, fps: 30,
+  params: [
+    { id: 'scale', label: 'Cell scale', min: 2, max: 20, step: 0.1, value: 6 },
+    { id: 'width', label: 'Line width', min: 0.02, max: 0.4, step: 0.005, value: 0.32 },
+    { id: 'bright', label: 'Brightness', min: 0, max: 2, step: 0.01, value: 1.1 },
+    { id: 'depth', label: 'Second layer', min: 0, max: 1, step: 0.01, value: 0.55 },
+    { id: 'mode', label: 'Pattern', options: [['Curved webs', 0], ['Cell edges', 1]], value: 0 },
+    { id: 'speed', label: 'Speed', min: 0, max: 2, step: 0.01, value: 0.5 },
+    { id: 'grain', label: 'Grain', min: 0, max: 0.3, step: 0.01, value: 0.05 }
+  ],
+  frag: [
+    'float edges(vec2 p, float t) {',
+    '  vec2 i = floor(p), f = fract(p); float d1 = 8.0, d2 = 8.0;',
+    '  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) {',
+    '    vec2 g = vec2(float(x), float(y)); vec2 o = hash2(i + g); o = 0.5 + 0.42 * sin(t + 6.2831 * o);',
+    '    float d = length(g + o - f); if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) { d2 = d; } }',
+    '  return d2 - d1;',
+    '}',
+    'void main() {',
+    '  float asp = u_res.x / u_res.y; vec2 p = v_uv * vec2(asp, 1.0) * u_scale; float t = u_time * u_speed;',
+    '  p += 1.1 * vec2(fbm(p * 0.35 + t * 0.12, 3.0), fbm(p * 0.35 + 3.0 - t * 0.12, 3.0)) - 0.55;',
+    '  float light;',
+    '  if (u_mode > 0.5) {',
+    '    float a = 1.0 - smoothstep(0.0, u_width, edges(p, t));',
+    '    float b = 1.0 - smoothstep(0.0, u_width * 1.4, edges(p * 0.6 + 4.0, t * 0.8));',
+    '    light = pow(a, 2.2) + u_depth * 0.5 * pow(b, 2.0) + 0.9 * a * b;',
+    '  } else {',                                                             /* iso-lines of two warped fields: curved, uneven webs */
+    '    vec2 q = p * 0.35; vec2 w = vec2(fbm(q + t * 0.15, 4.0), fbm(q + 5.1 - t * 0.12, 4.0));',
+    '    float f1 = fbm(q * 1.3 + w * 2.2 + t * 0.05, 4.0), f2 = fbm(q * 1.9 + w.yx * 1.8 - t * 0.07 + 9.0, 4.0);',
+    '    float l1 = exp(-abs(sin(f1 * u_scale * PI)) / (u_width * 0.35));',
+    '    float l2 = exp(-abs(sin(f2 * u_scale * 1.3 * PI)) / (u_width * 0.45));',
+    '    light = l1 + u_depth * l2 + 1.5 * l1 * l2;',
+    '  }',
+    '  vec3 water = mix(u_c0, u_c1, v_uv.y * 0.8 + 0.2 * fbm(p * 0.3, 2.0));',
+    '  vec3 c = water + mix(u_c2, u_c3, 0.6) * light * u_bright;',
+    '  gl_FragColor = vec4(finish(c), 1.0);',
+    '}'
+  ].join('\n')
+});

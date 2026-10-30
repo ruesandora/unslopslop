@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grain overlay (CSS + SVG) · effects library</title>
+<meta name="description" content="Film grain with no canvas: an SVG turbulence filter rendered once as a tile, laid over any section with a blend mode.">
+<!-- Hand-written. No canvas, no WebGL: an SVG feTurbulence tile used as a CSS background. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a;
+    --amount: 0.3; --scale: 0.85; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  /* the subject: a plain CSS gradient that bands without grain */
+  #stage { position: relative; overflow: hidden; isolation: isolate;
+    background: radial-gradient(120% 90% at 78% 18%, #f6ecff 0%, #c08be6 28%, #4a3aa8 62%, #120c2a 100%); }
+  /* the effect: one absolutely positioned layer, pointer-events off, never above text contrast */
+  #stage::after { content: ""; position: absolute; inset: -50%; pointer-events: none; z-index: 1;
+    background-image: var(--tile); background-size: calc(240px * var(--scale));
+    opacity: var(--amount); mix-blend-mode: overlay; }
+  .moving #stage::after { animation: jitter 0.5s steps(4) infinite; }
+  @keyframes jitter { 0% { transform: translate(0, 0); } 25% { transform: translate(-7%, 4%); } 50% { transform: translate(5%, -6%); } 75% { transform: translate(-3%, -2%); } 100% { transform: translate(0, 0); } }
+  @media (prefers-reduced-motion: reduce) { .moving #stage::after { animation: none; } }
+  .half #stage::after { inset: -50% -50% -50% 50%; }
+  .label { position: absolute; z-index: 2; left: 24px; bottom: 20px; margin: 0; color: #fff; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  pre { white-space: pre-wrap; font: 12px/1.5 ui-monospace, Menlo, monospace; background: #101012; border: 1px solid var(--line); border-radius: 8px; padding: 12px; color: var(--ink); }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside, .shot .label { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage" role="img" aria-label="A violet gradient with film grain over it"><p class="label">Left half: plain CSS gradient. Right half: the same with grain.</p></main>
+  <aside>
+    <a class="back" href="../index.html">All effects</a>
+    <h1>Grain overlay</h1>
+    <p class="sum">Film grain with no canvas. An SVG turbulence filter is drawn once into a small tile, then laid over any section as a CSS background with a blend mode. It removes banding from CSS gradients and gives flat colour a material.</p>
+    <div class="ctl"><label for="amount"><span>Amount (opacity)</span><output id="amount-o">0.30</output></label><input id="amount" type="range" min="0" max="0.6" step="0.01" value="0.3"></div>
+    <div class="ctl"><label for="freq"><span>Grain fineness</span><output id="freq-o">0.90</output></label><input id="freq" type="range" min="0.3" max="1.6" step="0.05" value="0.9"></div>
+    <div class="ctl"><label for="scale"><span>Tile scale</span><output id="scale-o">0.85</output></label><input id="scale" type="range" min="0.4" max="2" step="0.05" value="0.85"></div>
+    <div class="ctl"><label for="blend">Blend mode</label><select id="blend"><option>overlay</option><option>soft-light</option><option>multiply</option><option>screen</option></select></div>
+    <div class="ctl"><label for="half">Compare</label><select id="half"><option value="1">Grain on the right half only</option><option value="0">Grain everywhere</option></select></div>
+    <div class="ctl"><button id="play" type="button" aria-pressed="false">Play flicker</button></div>
+    <div class="group"><p class="sum" style="margin:0 0 8px">The whole effect, ready to paste:</p><pre id="code"></pre></div>
+    <dl class="notes group">
+      <dt>Cost</dt><dd>Close to free. The tile is a few hundred bytes of SVG; the browser rasterises it once. The flicker is a transform on a composited layer (steps, 8 fps), not a repaint.</dd>
+      <dt>Fallback</dt><dd>Nothing to fall back from: every browser in use supports SVG filters in a data URI. Reduced motion: the flicker is off and the grain stays.</dd>
+      <dt>Becomes slop when</dt><dd>Opacity is high enough that text looks dirty (keep it under about 0.35 with overlay), it flickers on every section, or it sits on top of photos that are already grainy.</dd>
+    </dl>
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function tile(freq) {
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='" + freq + "' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='3' intercept='-1'/><feFuncG type='linear' slope='3' intercept='-1'/><feFuncB type='linear' slope='3' intercept='-1'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>";
+    return 'url("data:image/svg+xml,' + svg.replace(/"/g, "'").replace(/</g, '%3C').replace(/>/g, '%3E') + '")';
+  }
+  var st = document.getElementById('stage');
+  function $(id) { return document.getElementById(id); }
+  function update() {
+    var a = $('amount').value, f = $('freq').value, s = $('scale').value, b = $('blend').value;
+    $('amount-o').textContent = Number(a).toFixed(2); $('freq-o').textContent = Number(f).toFixed(2); $('scale-o').textContent = Number(s).toFixed(2);
+    root.style.setProperty('--tile', tile(f)); root.style.setProperty('--amount', a); root.style.setProperty('--scale', s);
+    var sheet = document.getElementById('blend-rule') || document.head.appendChild(Object.assign(document.createElement('style'), { id: 'blend-rule' }));
+    sheet.textContent = '#stage::after { mix-blend-mode: ' + b + '; }';
+    root.classList.toggle('half', $('half').value === '1' && !q.has('shot'));
+    $('code').textContent = '.grain { position: relative; isolation: isolate; }\n.grain::after {\n  content: ""; position: absolute; inset: 0; pointer-events: none;\n  background-image: ' + tile(f).slice(0, 60) + '...");\n  background-size: ' + Math.round(240 * s) + 'px;\n  opacity: ' + a + '; mix-blend-mode: ' + b + ';\n}';
+  }
+  ['amount', 'freq', 'scale', 'blend', 'half'].forEach(function (id) { $(id).addEventListener('input', update); });
+  $('play').addEventListener('click', function () { var on = !root.classList.contains('moving'); root.classList.toggle('moving', on); this.setAttribute('aria-pressed', String(on)); this.textContent = on ? 'Stop flicker' : 'Play flicker'; });
+  update(); window.__fxReady = true;
+})();
+</script>
+</body>
+</html>
