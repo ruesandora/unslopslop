@@ -3,15 +3,15 @@
   "version": 1,
   "target": "examples/saas-landing/before.html",
   "score": 100,
-  "rawPoints": 257,
+  "rawPoints": 295,
   "verdict": "heavy",
-  "rulesChecked": 85,
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 6,
-    "color": 61,
+    "color": 73,
     "icons": 19.5,
-    "copy": 31.5,
-    "typography": 28,
+    "copy": 43.5,
+    "typography": 42,
     "layout": 48,
     "detail": 37,
     "imagery": 12,
@@ -195,6 +195,77 @@
       "points": 12
     },
     {
+      "rule": "copy-emoji",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Emoji in the page",
+      "why": "Emoji in headings, buttons, labels or body copy are the most visible AI tell.",
+      "fix": "Remove them. Use words, or one icon set drawn for the product. Keep emoji only if the brief says the user asked for them (<meta name=\"unslop-brief\" content=\"emoji: reason\">).",
+      "count": 5,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "span.pill",
+          "detail": "✨ Introducing Fluxly 2.0 — no…",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "4.9★",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.ico",
+          "detail": "⚡",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.ico",
+          "detail": "🔒",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 12,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "div.eyebrow",
+          "detail": "6.56:1 \"Workflow automation\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.sub",
+          "detail": "3.75:1 \"Fluxly empowers modern teams …\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "6.96:1 \"Trusted by 10,000+ teams worl…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.quote",
+          "detail": "6.96:1 \"\"Fluxly changed how we work.\"…\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
       "rule": "icon-emoji-ui",
       "pass": "icons",
       "severity": "major",
@@ -224,6 +295,41 @@
         {
           "el": "div.ico",
           "detail": "🚀",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 10.5
+    },
+    {
+      "rule": "type-heading-muted-subtitle",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Heading plus grey subtitle, section after section",
+      "why": "A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.",
+      "fix": "Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.",
+      "count": 4,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1 + p.sub",
+          "detail": "\"Unleash seamless workflows. N…\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Lightning fast\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Secure by design\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Effortless setup\" with a greyed subtitle",
           "viewport": "desktop"
         }
       ],
@@ -589,6 +695,26 @@
         {
           "el": "h1",
           "detail": "\"seamless workflows\" coloured inside \"Unleash seamless workflows. Not just a …\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "type-ai-default-font",
+      "pass": "typography",
+      "severity": "major",
+      "title": "AI-default font",
+      "why": "Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.",
+      "fix": "Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name=\"unslop-brief\" content=\"font: Family, reason\">.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "body",
+          "detail": "inter",
           "viewport": "desktop"
         }
       ],
@@ -984,31 +1110,6 @@
         }
       ],
       "points": 3
-    },
-    {
-      "rule": "type-reflex-font",
-      "pass": "typography",
-      "severity": "minor",
-      "title": "Reflex font family",
-      "why": "Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.",
-      "fix": "Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.",
-      "count": 2,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "body",
-          "detail": "inter",
-          "viewport": "desktop"
-        },
-        {
-          "el": "h1",
-          "detail": "inter",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 2.5
     },
     {
       "rule": "type-tight-leading",

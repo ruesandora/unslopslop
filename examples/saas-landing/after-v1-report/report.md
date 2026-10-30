@@ -1,21 +1,21 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/after-v1.html`
-- Slop score: **0/100** (lower is better; raw points before the 100 cap: 0)
+- Slop score: **21/100** (lower is better; raw points before the 100 cap: 21)
 - Craft score: **64/100** (higher is better; pass mark 70)
 - Overall: **FAIL** (needs a clean slop verdict and craft >= 70)
-- Slop verdict: **CLEAN**. Clean: do not touch it. Run the template test (swap the brand name; if it still fits, add one signature move).
-- Rules checked: 85; findings: 0
+- Slop verdict: **LIGHT**. Polish: fix the findings below pass by pass; no need to redo the layout.
+- Rules checked: 97; findings: 2
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
 | spacing | 0 |
-| color | 0 |
+| color | 12 |
 | icons | 0 |
 | copy | 0 |
-| typography | 0 |
+| typography | 9 |
 | layout | 0 |
 | detail | 0 |
 | imagery | 0 |
@@ -44,5 +44,22 @@
   - `h1`: Charter, "Iowan Old Style", Georgia, serif
   - `h2`: Charter, "Iowan Old Style", Georgia, serif
 
-No slop findings.
+## color
+
+### color-faded-text (major, 12 pts, x7, desktop+mobile)
+Faded support text. Light grey support text that passes the bare minimum still reads as faded; it is the "muted subtitle" look of generated pages and tires the eye.
+Fix: Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.
+- `p.lead`: 6.68:1 "Fluxly sends the polite remin…" [desktop]
+- `p`: 6.68:1 "You approve the three templat…" [desktop]
+- `p`: 6.68:1 "Bank transactions are matched…" [desktop]
+- `p`: 6.68:1 "Yes. Every message waits in a…" [desktop]
+
+## typography
+
+### type-heading-muted-subtitle (major, 9 pts, x3, desktop)
+Heading plus grey subtitle, section after section. A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.
+Fix: Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.
+- `h1 + p.lead`: "Late invoices, chased for you" with a greyed subtitle [desktop]
+- `h3 + p`: "It writes in your voice" with a greyed subtitle [desktop]
+- `h3 + p`: "It stops when paid" with a greyed subtitle [desktop]
 

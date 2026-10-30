@@ -5,7 +5,7 @@
   "score": 0,
   "rawPoints": 0,
   "verdict": "clean",
-  "rulesChecked": 85,
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 0,
     "color": 0,
@@ -19,19 +19,19 @@
   },
   "findings": [],
   "craft": {
-    "score": 100,
+    "score": 97,
     "passMark": 70,
     "pass": true,
     "components": {
       "hierarchy": {
         "points": 15,
         "max": 15,
-        "why": "display 107px / body 15px = 7.10x, 16 sizes"
+        "why": "display 101px / body 16px = 6.30x, 16 sizes"
       },
       "focal": {
         "points": 15,
         "max": 15,
-        "why": "headline 7.1x, largest visual 40% of the screen"
+        "why": "headline 6.3x, largest visual 40% of the screen"
       },
       "visual": {
         "points": 20,
@@ -41,49 +41,49 @@
       "motion": {
         "points": 15,
         "max": 15,
-        "why": "moves inside the visual, 15 moving elements, reduced motion handled"
+        "why": "moves inside the visual, 19 moving elements, reduced motion handled"
       },
       "identity": {
-        "points": 20,
+        "points": 17,
         "max": 20,
-        "why": "web font, display face differs from text, accent used 12x in 1 hue band(s), 10 shadows, 8 layers, 5 textured areas (image, gradient)"
+        "why": "web font, display face differs from text, accent used 1x in 1 hue band(s), 5 shadows, 1 layers, 2 textured areas (image, gradient)"
       },
       "density": {
         "points": 15,
         "max": 15,
-        "why": "landing, 62% of the first screen holds content"
+        "why": "landing, 61% of the first screen holds content"
       }
     },
     "findings": [],
     "signals": {
-      "body": 15,
-      "display": 106.56,
+      "body": 16,
+      "display": 100.8,
       "steps": 16,
-      "visFrac": 0.4015856481481481,
-      "bestVis": 0.4015856481481481,
+      "visFrac": 0.39764351851851854,
+      "bestVis": 0.39764351851851854,
       "visKinds": [
         "surface"
       ],
       "raf": 95,
-      "mut": 1010,
-      "movers": 15,
-      "inVisual": 14,
+      "mut": 1029,
+      "movers": 19,
+      "inVisual": 18,
       "canvasLive": false,
       "mq": 1,
       "webfont": true,
       "distinctFaces": true,
-      "accentUses": 12,
+      "accentUses": 1,
       "accentHues": 1,
-      "shadows": 10,
-      "layered": 8,
-      "textures": 5,
+      "shadows": 5,
+      "layered": 1,
+      "textures": 2,
       "textureKinds": [
         "image",
         "gradient"
       ],
       "app": false,
-      "firstTexts": 54,
-      "coverage": 0.615625
+      "firstTexts": 64,
+      "coverage": 0.6078125
     }
   },
   "overall": "pass",
