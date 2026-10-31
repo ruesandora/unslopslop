@@ -11,7 +11,7 @@ export default {
   },
   colours: { ground: '#f4eee2', ink: '#1a1a1a', accent: '#e4502a', line: '#d6cbb7' },
   ladder: [
-    ['Masked word', 200, 92, 0.9, -0.02, 400, 'display', 'SUN'],
+    ['Masked word', 220, 62, 0.9, -0.02, 400, 'display', 'SUN'],
     ['Heading', 34, 26, 1.1, -0.01, 800, 'text', 'Open-air cinema, every Friday'],
     ['Body', 18, 17, 1.55, 0, 400, 'text', 'The word is the picture; the text beside it does the explaining.'],
     ['Label', 14, 13, 1.2, 0.04, 700, 'text', 'Season · placeholder'],
@@ -33,7 +33,7 @@ export default {
   @media (forced-colors: active) { .mk h1 { -webkit-text-fill-color: CanvasText; background: none; } }
   @media (max-width: 760px) {
     .mk { padding: 24px 18px 40px; }
-    .mk h1 { font-size: 92px; }
+    .mk h1 { font-size: 16vw; }
     .mk .row { grid-template-columns: 1fr; gap: 12px; }
     .mk h2 { font-size: 26px; }
   }`,

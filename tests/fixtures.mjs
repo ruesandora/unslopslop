@@ -236,6 +236,10 @@ export const FIXTURES = {
     bad: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '' },
     good: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '<meta name="unslop-brief" content="font: Fraunces, the client owns a licence and it is their house face for every printed menu">' },
   },
+  'type-house-pairing': {
+    bad: { css: "body{font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif}h1{font-family:'Schibsted Grotesk',sans-serif}", body: '' },
+    good: { css: "body{font-family:'IBM Plex Sans',system-ui,sans-serif}h1{font-family:'Spectral',Georgia,serif}", body: '' },
+  },
   'type-hero-number': {
     bad: { body: '<div style="font-size:64px">€18,460</div>' },
     good: { body: '<p style="font-size:24px">€18,460 outstanding, down from €21,300 on 1 Oct</p>' },

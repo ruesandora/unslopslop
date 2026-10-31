@@ -3,7 +3,7 @@ export default {
   name: 'Diner script, one word',
   group: 'retro',
   domains: ['web', 'social', 'logo-brand', 'email'],
-  moves: ['script accent', 'warm display'],
+  moves: ['script or hand-drawn accent', 'warm display'],
   mood: ['cheerful', 'generous', 'retro', 'hungry'],
   fonts: {
     display: { family: 'Shrikhand', q: 'Shrikhand', licence: 'OFL', fallback: '"Cooper Black", Georgia, serif', role: 'one word or a name, never a sentence' },

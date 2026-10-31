@@ -3,6 +3,7 @@
 // heading-plus-grey-subtitle pattern, rainbow tiles, floating chat pills). Same contract as rules.mjs.
 // Page checks are serialised: keep them self-contained; the font list is injected as a literal below.
 import { AI_DEFAULT_LIST } from './ai-default-fonts.mjs';
+import { USED_PAIRINGS } from './used-type.mjs';
 
 const BOTH = ['desktop', 'mobile'];
 const FONT_LIST = JSON.stringify(AI_DEFAULT_LIST);
@@ -24,6 +25,21 @@ const fontCheck = new Function('h', `
   return out;
 `);
 
+const pairCheck = new Function('h', `
+  const used = ${JSON.stringify(USED_PAIRINGS)};
+  const brief = (document.querySelector('meta[name="unslop-brief"]') || {}).content || '';
+  const justified = (fam) => brief.split(/;\\s*/).some((p) => { const m = p.match(/^font:\\s*([^,]+),\\s*(.{20,})$/i); return m && m[1].trim().toLowerCase() === fam; });
+  const first = (el) => h.cs(el).fontFamily.split(',')[0].replace(/["']/g, '').trim().toLowerCase();
+  const texts = h.textEls();
+  const biggest = texts.reduce((a, e) => (h.px(h.cs(e).fontSize) > (a ? h.px(h.cs(a).fontSize) : 0) ? e : a), null);
+  const head = document.querySelector('h1') || biggest;
+  if (!head) return [];
+  const d = first(head), t = first(document.body);
+  const hit = used.find((u) => u.display === d && u.text === t);
+  if (!hit || justified(d)) return [];
+  return [{ el: h.sel(head), detail: d + ' + ' + t + ' (already used: ' + hit.where + ')' }];
+`);
+
 export const HARD = [
   {
     id: 'type-ai-default-font', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
@@ -31,6 +47,13 @@ export const HARD = [
     why: 'Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.',
     fix: 'Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name="unslop-brief" content="font: Family, reason">.',
     check: fontCheck,
+  },
+  {
+    id: 'type-house-pairing', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
+    title: 'Same type pairing as a previous project',
+    why: 'Reusing the display and text pairing of the repo examples (or of your previous project) is a house style: every page starts to look like the last one, whatever the mood.',
+    fix: 'Pick a recipe from type/ that matches the brief\'s mood words and is not in scripts/lib/used-type.mjs; write its id and reason in the brief. To keep the pairing for a real project reason, add <meta name="unslop-brief" content="font: Family, reason">.',
+    check: pairCheck,
   },
   {
     id: 'type-hero-number', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],

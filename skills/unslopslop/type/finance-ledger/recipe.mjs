@@ -19,7 +19,7 @@ export default {
     ['Label', 13, 13, 1.3, 0.04, 500, 'text', 'Due date'],
   ],
   case: 'Sentence case throughout; no capitals except currency codes.',
-  features: { css: 'font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "zero" 1', off: 'font-variant-numeric: proportional-nums oldstyle-nums', sample: '1 240.00 · 18 460.50 · 307.10', face: 'mono', note: 'Amounts right-aligned with tabular figures; the serif statement uses proportional old-style figures inside sentences.' },
+  features: { css: 'font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "zero" 1', off: 'font-variant-numeric: proportional-nums oldstyle-nums', sample: '1 240.00 · 18 460.50 · 307.10', face: 'display', note: 'Amounts right-aligned with tabular figures; the serif statement uses proportional old-style figures inside sentences.' },
   signature: 'The headline is a 44 px light serif sentence with one phrase in semibold; the largest thing on screen is a statement, not a figure. Weight replaces size and colour.',
   use: 'Invoicing, accounting, banking, payroll, any money screen where calm accuracy beats excitement.',
   slop: 'When the figure is pulled out and set at 96 px (the hero-number tell), when green and red colour every amount, or when the light serif is used under 20 px.',

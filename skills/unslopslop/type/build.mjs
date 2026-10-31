@@ -28,6 +28,10 @@ export const GROUPS = [
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const ROLES = ['display', 'text', 'mono', 'accent'];
+// Move families shown as gallery filters (a recipe may list other, finer moves too).
+export const FAMILIES = ['serif display', 'condensed', 'mono-led', 'script or hand-drawn accent', 'variable-font axis motion', 'outline or inline',
+  'mixed-case editorial', 'small-caps system', 'kinetic type', 'text as image or mask', 'tight setting', 'airy setting',
+  'type-only hero, no giant size', 'width as hierarchy', 'hierarchy by weight', 'hierarchy by colour', 'hierarchy by position'];
 
 export async function loadRecipes() {
   const out = [];
@@ -166,12 +170,12 @@ function md(recipes) {
 
 function gallery(recipes) {
   const link = `https://fonts.googleapis.com/css2?${[...new Set(recipes.map((r) => r.fonts.display.q))].map((q) => 'family=' + q).join('&')}&display=swap`;
-  const moves = [...new Set(recipes.flatMap((r) => r.moves))].sort();
+  const moves = FAMILIES.filter((m) => recipes.some((r) => r.moves.includes(m)));
   const sections = GROUPS.map(([g, name, blurb]) => {
     const list = recipes.filter((r) => r.group === g);
     if (!list.length) return '';
     return `  <section class="grp" id="${g}">
-    <h2>${esc(name)}</h2><p class="blurb">${esc(blurb)}</p>
+    <div class="gh"><h2>${esc(name)}</h2><p class="blurb">${esc(blurb)}</p></div>
     <ol>
 ${list.map((r) => `      <li data-moves="${esc(r.moves.join('|'))}"><a href="${r.id}/specimen.html">
         <img src="${r.id}/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -211,8 +215,8 @@ ${list.map((r) => `      <li data-moves="${esc(r.moves.join('|'))}"><a href="${r
   .grp { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding: 28px 40px; border-top: 1px solid var(--ink); }
   .grp h2 { margin: 0 0 6px; font: 700 20px/1.2 ui-sans-serif, system-ui, sans-serif; }
   .blurb { margin: 0; font-size: 15px; }
-  .grp > h2, .grp > .blurb { grid-column: 1; }
-  .grp ol { grid-column: 2; grid-row: 1 / span 2; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; }
+  .gh { align-self: start; position: sticky; top: 16px; }
+  .grp ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; }
   .grp li a { display: grid; gap: 6px; }
   .grp img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; border: 1px solid var(--line); background: #ddd; }
   .grp li a:hover img { outline: 2px solid var(--ink); }
@@ -226,13 +230,16 @@ ${list.map((r) => `      <li data-moves="${esc(r.moves.join('|'))}"><a href="${r
     h1 { font-size: 40px; }
     .filters { padding: 0 18px 20px; }
     .grp { grid-template-columns: 1fr; gap: 12px; padding: 22px 18px; }
-    .grp ol { grid-column: 1; grid-row: auto; grid-template-columns: 1fr; }
+    .gh { position: static; }
+    .grp ol { grid-template-columns: 1fr; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; }
+    .filters button { flex: none; }
   }
 </style>
 </head>
 <body>
 <header>
-  <h1>Type, <i>by mood</i><em>${recipes.length}</em></h1>
+  <h1>Type <i>by mood</i><em>${recipes.length}</em></h1>
   <div>
     <p>One recipe per project, picked from the brief's three mood words. Each recipe gives the faces (all open licence), the ladder at 1440 and 390, settings, a signature treatment and the point where it turns into slop.</p>
     <p>Procedure and the no-reuse rule: <a href="README.md"><u>README.md</u></a>. All recipes as text: <a href="recipes.md"><u>recipes.md</u></a>.</p>
@@ -260,7 +267,7 @@ ${sections}
 `;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const recipes = await loadRecipes();
   for (const r of recipes) writeFileSync(join(root, r.id, 'specimen.html'), specimen(r));
   writeFileSync(join(root, 'index.html'), gallery(recipes));

@@ -27,8 +27,8 @@
   .grp { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding: 28px 40px; border-top: 1px solid var(--ink); }
   .grp h2 { margin: 0 0 6px; font: 700 20px/1.2 ui-sans-serif, system-ui, sans-serif; }
   .blurb { margin: 0; font-size: 15px; }
-  .grp > h2, .grp > .blurb { grid-column: 1; }
-  .grp ol { grid-column: 2; grid-row: 1 / span 2; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; }
+  .gh { align-self: start; position: sticky; top: 16px; }
+  .grp ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; }
   .grp li a { display: grid; gap: 6px; }
   .grp img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; border: 1px solid var(--line); background: #ddd; }
   .grp li a:hover img { outline: 2px solid var(--ink); }
@@ -42,13 +42,16 @@
     h1 { font-size: 40px; }
     .filters { padding: 0 18px 20px; }
     .grp { grid-template-columns: 1fr; gap: 12px; padding: 22px 18px; }
-    .grp ol { grid-column: 1; grid-row: auto; grid-template-columns: 1fr; }
+    .gh { position: static; }
+    .grp ol { grid-template-columns: 1fr; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; }
+    .filters button { flex: none; }
   }
 </style>
 </head>
 <body>
 <header>
-  <h1>Type, <i>by mood</i><em>27</em></h1>
+  <h1>Type <i>by mood</i><em>27</em></h1>
   <div>
     <p>One recipe per project, picked from the brief's three mood words. Each recipe gives the faces (all open licence), the ladder at 1440 and 390, settings, a signature treatment and the point where it turns into slop.</p>
     <p>Procedure and the no-reuse rule: <a href="README.md"><u>README.md</u></a>. All recipes as text: <a href="recipes.md"><u>recipes.md</u></a>.</p>
@@ -56,47 +59,27 @@
 </header>
 <div class="filters" role="group" aria-label="Filter by move">
   <button type="button" aria-pressed="true" data-move="">all moves</button>
-  <button type="button" aria-pressed="false" data-move="airy setting">airy setting</button>
-  <button type="button" aria-pressed="false" data-move="bitmap display">bitmap display</button>
-  <button type="button" aria-pressed="false" data-move="blackletter accent">blackletter accent</button>
-  <button type="button" aria-pressed="false" data-move="condensed">condensed</button>
-  <button type="button" aria-pressed="false" data-move="cut-out blocks">cut-out blocks</button>
-  <button type="button" aria-pressed="false" data-move="grid">grid</button>
-  <button type="button" aria-pressed="false" data-move="heavy display">heavy display</button>
-  <button type="button" aria-pressed="false" data-move="hierarchy by colour">hierarchy by colour</button>
-  <button type="button" aria-pressed="false" data-move="hierarchy by position">hierarchy by position</button>
-  <button type="button" aria-pressed="false" data-move="hierarchy by weight">hierarchy by weight</button>
-  <button type="button" aria-pressed="false" data-move="kinetic type">kinetic type</button>
-  <button type="button" aria-pressed="false" data-move="layered type">layered type</button>
-  <button type="button" aria-pressed="false" data-move="mixed families">mixed families</button>
-  <button type="button" aria-pressed="false" data-move="mixed widths in one line">mixed widths in one line</button>
-  <button type="button" aria-pressed="false" data-move="mixed-case editorial">mixed-case editorial</button>
-  <button type="button" aria-pressed="false" data-move="mono-led">mono-led</button>
-  <button type="button" aria-pressed="false" data-move="old-style figures">old-style figures</button>
-  <button type="button" aria-pressed="false" data-move="outline or inline">outline or inline</button>
-  <button type="button" aria-pressed="false" data-move="plain sans system">plain sans system</button>
-  <button type="button" aria-pressed="false" data-move="reading-first text face">reading-first text face</button>
-  <button type="button" aria-pressed="false" data-move="rounded display">rounded display</button>
-  <button type="button" aria-pressed="false" data-move="script accent">script accent</button>
-  <button type="button" aria-pressed="false" data-move="script or hand-drawn accent">script or hand-drawn accent</button>
   <button type="button" aria-pressed="false" data-move="serif display">serif display</button>
+  <button type="button" aria-pressed="false" data-move="condensed">condensed</button>
+  <button type="button" aria-pressed="false" data-move="mono-led">mono-led</button>
+  <button type="button" aria-pressed="false" data-move="script or hand-drawn accent">script or hand-drawn accent</button>
+  <button type="button" aria-pressed="false" data-move="variable-font axis motion">variable-font axis motion</button>
+  <button type="button" aria-pressed="false" data-move="outline or inline">outline or inline</button>
+  <button type="button" aria-pressed="false" data-move="mixed-case editorial">mixed-case editorial</button>
   <button type="button" aria-pressed="false" data-move="small-caps system">small-caps system</button>
-  <button type="button" aria-pressed="false" data-move="superfamily pair">superfamily pair</button>
-  <button type="button" aria-pressed="false" data-move="tabular figures">tabular figures</button>
+  <button type="button" aria-pressed="false" data-move="kinetic type">kinetic type</button>
   <button type="button" aria-pressed="false" data-move="text as image or mask">text as image or mask</button>
   <button type="button" aria-pressed="false" data-move="tight setting">tight setting</button>
-  <button type="button" aria-pressed="false" data-move="tracked capitals">tracked capitals</button>
-  <button type="button" aria-pressed="false" data-move="true italic">true italic</button>
+  <button type="button" aria-pressed="false" data-move="airy setting">airy setting</button>
   <button type="button" aria-pressed="false" data-move="type-only hero, no giant size">type-only hero, no giant size</button>
-  <button type="button" aria-pressed="false" data-move="variable-font axis motion">variable-font axis motion</button>
-  <button type="button" aria-pressed="false" data-move="vertical type">vertical type</button>
-  <button type="button" aria-pressed="false" data-move="visible structure">visible structure</button>
-  <button type="button" aria-pressed="false" data-move="warm display">warm display</button>
   <button type="button" aria-pressed="false" data-move="width as hierarchy">width as hierarchy</button>
+  <button type="button" aria-pressed="false" data-move="hierarchy by weight">hierarchy by weight</button>
+  <button type="button" aria-pressed="false" data-move="hierarchy by colour">hierarchy by colour</button>
+  <button type="button" aria-pressed="false" data-move="hierarchy by position">hierarchy by position</button>
 </div>
 <main>
   <section class="grp" id="editorial">
-    <h2>Editorial</h2><p class="blurb">Magazines, essays, long reads, publishers.</p>
+    <div class="gh"><h2>Editorial</h2><p class="blurb">Magazines, essays, long reads, publishers.</p></div>
     <ol>
       <li data-moves="serif display|mixed-case editorial"><a href="editorial-caslon-mixed/specimen.html">
         <img src="editorial-caslon-mixed/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -113,7 +96,7 @@
     </ol>
   </section>
   <section class="grp" id="technical">
-    <h2>Technical</h2><p class="blurb">Developer tools, research, infrastructure.</p>
+    <div class="gh"><h2>Technical</h2><p class="blurb">Developer tools, research, infrastructure.</p></div>
     <ol>
       <li data-moves="width as hierarchy|mixed widths in one line"><a href="product-width-pair/specimen.html">
         <img src="product-width-pair/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -136,7 +119,7 @@
     </ol>
   </section>
   <section class="grp" id="data-dense">
-    <h2>Data-dense</h2><p class="blurb">Dashboards, tables, operations screens.</p>
+    <div class="gh"><h2>Data-dense</h2><p class="blurb">Dashboards, tables, operations screens.</p></div>
     <ol>
       <li data-moves="condensed|tight setting|width as hierarchy"><a href="data-dense-sofia/specimen.html">
         <img src="data-dense-sofia/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -147,7 +130,7 @@
     </ol>
   </section>
   <section class="grp" id="finance">
-    <h2>Finance</h2><p class="blurb">Money, invoices, banking, ledgers.</p>
+    <div class="gh"><h2>Finance</h2><p class="blurb">Money, invoices, banking, ledgers.</p></div>
     <ol>
       <li data-moves="type-only hero, no giant size|hierarchy by weight|serif display|tabular figures"><a href="finance-ledger/specimen.html">
         <img src="finance-ledger/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -158,7 +141,7 @@
     </ol>
   </section>
   <section class="grp" id="civic">
-    <h2>Civic and institutional</h2><p class="blurb">Public services, museums, universities, archives.</p>
+    <div class="gh"><h2>Civic and institutional</h2><p class="blurb">Public services, museums, universities, archives.</p></div>
     <ol>
       <li data-moves="plain sans system|tight setting"><a href="civic-signage/specimen.html">
         <img src="civic-signage/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -175,7 +158,7 @@
     </ol>
   </section>
   <section class="grp" id="health">
-    <h2>Health</h2><p class="blurb">Clinics, care, wellbeing, medical forms.</p>
+    <div class="gh"><h2>Health</h2><p class="blurb">Clinics, care, wellbeing, medical forms.</p></div>
     <ol>
       <li data-moves="type-only hero, no giant size|hierarchy by colour|airy setting"><a href="health-calm/specimen.html">
         <img src="health-calm/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -186,7 +169,7 @@
     </ol>
   </section>
   <section class="grp" id="children">
-    <h2>Children</h2><p class="blurb">Reading, learning and play for young users.</p>
+    <div class="gh"><h2>Children</h2><p class="blurb">Reading, learning and play for young users.</p></div>
     <ol>
       <li data-moves="airy setting|reading-first text face|rounded display"><a href="children-reading/specimen.html">
         <img src="children-reading/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -197,7 +180,7 @@
     </ol>
   </section>
   <section class="grp" id="playful">
-    <h2>Playful</h2><p class="blurb">Toys, games, consumer apps with a grin.</p>
+    <div class="gh"><h2>Playful</h2><p class="blurb">Toys, games, consumer apps with a grin.</p></div>
     <ol>
       <li data-moves="variable-font axis motion|kinetic type"><a href="playful-casual-axis/specimen.html">
         <img src="playful-casual-axis/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -214,7 +197,7 @@
     </ol>
   </section>
   <section class="grp" id="luxury">
-    <h2>Luxury</h2><p class="blurb">Fashion, jewellery, hotels, fragrance.</p>
+    <div class="gh"><h2>Luxury</h2><p class="blurb">Fashion, jewellery, hotels, fragrance.</p></div>
     <ol>
       <li data-moves="serif display|airy setting|tracked capitals"><a href="luxury-didone-airy/specimen.html">
         <img src="luxury-didone-airy/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -231,7 +214,7 @@
     </ol>
   </section>
   <section class="grp" id="warm-craft">
-    <h2>Warm craft</h2><p class="blurb">Bakeries, makers, small producers, food.</p>
+    <div class="gh"><h2>Warm craft</h2><p class="blurb">Bakeries, makers, small producers, food.</p></div>
     <ol>
       <li data-moves="serif display|script or hand-drawn accent"><a href="warmcraft-hand/specimen.html">
         <img src="warmcraft-hand/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -242,7 +225,7 @@
     </ol>
   </section>
   <section class="grp" id="retro">
-    <h2>Retro</h2><p class="blurb">Arcade, diner, heritage and revival.</p>
+    <div class="gh"><h2>Retro</h2><p class="blurb">Arcade, diner, heritage and revival.</p></div>
     <ol>
       <li data-moves="blackletter accent|superfamily pair"><a href="heritage-gothic/specimen.html">
         <img src="heritage-gothic/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -256,16 +239,16 @@
         <span class="fc">Silkscreen + Rubik + Pixelify Sans</span>
         <span class="mv">retro-arcade · bitmap display, tight setting</span>
       </a></li>
-      <li data-moves="script accent|warm display"><a href="retro-diner/specimen.html">
+      <li data-moves="script or hand-drawn accent|warm display"><a href="retro-diner/specimen.html">
         <img src="retro-diner/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
         <span class="nm" style="font-family:&quot;Shrikhand&quot;, &quot;Cooper Black&quot;, Georgia, serif;">Diner script, one word</span>
         <span class="fc">Shrikhand + Karla</span>
-        <span class="mv">retro-diner · script accent, warm display</span>
+        <span class="mv">retro-diner · script or hand-drawn accent, warm display</span>
       </a></li>
     </ol>
   </section>
   <section class="grp" id="brutalist">
-    <h2>Brutalist and zine</h2><p class="blurb">Raw structure, punk, protest, artist sites.</p>
+    <div class="gh"><h2>Brutalist and zine</h2><p class="blurb">Raw structure, punk, protest, artist sites.</p></div>
     <ol>
       <li data-moves="tight setting|visible structure|type-only hero, no giant size"><a href="brutalist-raw/specimen.html">
         <img src="brutalist-raw/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -282,7 +265,7 @@
     </ol>
   </section>
   <section class="grp" id="culture">
-    <h2>Culture and events</h2><p class="blurb">Music, festivals, sport, posters, social.</p>
+    <div class="gh"><h2>Culture and events</h2><p class="blurb">Music, festivals, sport, posters, social.</p></div>
     <ol>
       <li data-moves="kinetic type|variable-font axis motion|condensed"><a href="kinetic-shoulders/specimen.html">
         <img src="kinetic-shoulders/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
@@ -311,7 +294,7 @@
     </ol>
   </section>
   <section class="grp" id="calm">
-    <h2>Calm and quiet</h2><p class="blurb">Meditation, poetry, slow brands, systems that whisper.</p>
+    <div class="gh"><h2>Calm and quiet</h2><p class="blurb">Meditation, poetry, slow brands, systems that whisper.</p></div>
     <ol>
       <li data-moves="airy setting|vertical type|serif display"><a href="calm-mincho/specimen.html">
         <img src="calm-mincho/screenshot.jpg" alt="" width="360" height="225" loading="lazy">
