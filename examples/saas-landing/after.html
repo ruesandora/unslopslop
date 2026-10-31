@@ -64,10 +64,12 @@ h1, h2, h3 { font-family: var(--display); margin: 0; }
 .corner.left { left: 48px; margin: 0; }
 .corner.right { left: calc(69% + 32px); top: 104px; bottom: auto; margin: 0; color: var(--bone); background: var(--cobalt); }
 
-/* ---------- letters ---------- */
+/* ---------- letters (grain: effects/grain-overlay, 8%, overlay; the only texture on this screen) ---------- */
+.grain { position: absolute; inset: 0; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 204px; opacity: .08; mix-blend-mode: overlay; }
+
 .dark { background: var(--ink); color: var(--bone); }
 .wrap { max-width: 1344px; margin: 0 auto; padding: 0 48px; }
-.letters { padding: 128px 0 136px; }
+.letters { position: relative; isolation: isolate; padding: 128px 0 136px; }
 .letters h2 { font-size: clamp(44px, 6.4vw, 92px); line-height: .94; letter-spacing: -.04em; font-weight: 820; max-width: 11ch; }
 .letters h2 .thin { display: block; font-weight: 380; }
 .letters .grid { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; margin-top: 72px; align-items: start; }
@@ -196,6 +198,7 @@ details p { margin: 0 0 24px; max-width: 56ch; }
   </section>
 
   <section class="dark letters" id="letters" aria-labelledby="letters-title">
+    <div class="grain" aria-hidden="true"></div>
     <div class="wrap">
       <h2 id="letters-title">Three letters <span class="thin">in your voice</span></h2>
       <div class="grid">
