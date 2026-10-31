@@ -385,4 +385,12 @@ Object.assign(FIXTURES, {
     bad: { omit: ['reduced'], css: '@keyframes in{to{opacity:1}}.r{opacity:0;animation:in .5s forwards}@media (prefers-reduced-motion:reduce){.r{animation:none}}', body: '<p class="r">Reveal text</p>' },
     good: { omit: ['reduced'], css: '@keyframes in{to{opacity:1}}.r{opacity:0;animation:in .5s forwards}@media (prefers-reduced-motion:reduce){.r{opacity:1;animation:none}}', body: '<p class="r">Reveal text</p>' },
   },
+  'color-faded-heading-part': {
+    bad: { body: '<h2>The search took hours. <span style="color:#c8c8c4">Now it takes one line.</span></h2>' },
+    good: { body: '<h2>The search took hours. <span style="color:#555">Now it takes one line.</span></h2>' },
+  },
+  'detail-urgency-timer': {
+    bad: { body: '<p>Founding price: <span>10:21:05</span> left. <a href="#c">Claim it</a></p>' },
+    good: { body: '<p>Founding price until 14 November, 18:00 CET. <a href="#c">Read the terms</a></p>' },
+  },
 });

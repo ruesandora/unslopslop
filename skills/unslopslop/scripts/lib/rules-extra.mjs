@@ -510,4 +510,42 @@ export const EXTRA = [
         .map((e) => ({ el: h.sel(e), detail: 'decorative showcase effect without content' }));
     },
   },
+  {
+    id: 'color-faded-heading-part', pass: 'color', severity: 'major', scope: 'page', viewports: BOTH,
+    title: 'Half of the heading greyed out',
+    why: 'A heading whose second clause or last word is set in pale grey at the same size ("Took hours. Now one search.") is a stock template move; the pale half fails contrast and the ranking it implies is not real.',
+    fix: 'Set the whole heading in the text colour. If one part matters less, cut it or move it into the paragraph; if it matters more, change the words, not the grey.',
+    check: (h) => {
+      const out = [];
+      for (const hd of document.querySelectorAll('h1, h2, h3')) {
+        if (!h.visible(hd)) continue;
+        const hs = h.cs(hd), fgH = h.rgba(hs.color), bg = h.bgOf(hd), sizeH = h.px(hs.fontSize);
+        if (!fgH || !bg || h.contrast(fgH, bg) < 4.5) continue;
+        for (const part of hd.querySelectorAll('*')) {
+          const t = h.own(part);
+          if (t.length < 2 || !h.visible(part)) continue;
+          const ps = h.cs(part), fg = h.rgba(ps.color);
+          if (!fg || fg.a < 0.99 || Math.abs(h.px(ps.fontSize) - sizeH) > sizeH * 0.1) continue;
+          if (h.contrast(fg, bg) < 3) { out.push({ el: h.sel(part), detail: `${h.contrast(fg, bg).toFixed(2)}:1 inside heading "${h.snip(hd.textContent.trim(), 40)}"` }); break; }
+        }
+      }
+      return out;
+    },
+  },
+  {
+    id: 'detail-urgency-timer', pass: 'detail', severity: 'major', scope: 'page', viewports: BOTH,
+    title: 'Countdown urgency',
+    why: 'A ticking "10:21:05 left" next to a claim button is manufactured scarcity; on template and launch pages the deadline usually resets on every visit, and visitors know it.',
+    fix: 'Remove the timer. If an offer really ends, state the date and time once ("until 14 November, 18:00 CET") and keep it true.',
+    check: (h) => {
+      const clock = /\b\d{1,2}\s*[:h]\s*\d{2}\s*[:m]\s*\d{2}\s*s?\b|\b\d+\s*d(ays?)?\s+\d+\s*h(ours?)?\b/i;
+      const urge = /\b(left|remaining|ends?|ending|expires?|hurry|last chance|only)\b/i;
+      const hits = h.all().filter((e) => {
+        const t = (e.textContent || '').replace(/\s+/g, ' ').trim();
+        return t.length > 0 && t.length < 160 && clock.test(t) && urge.test(t) && h.visible(e);
+      });
+      const inner = hits.filter((e) => !hits.some((o) => o !== e && e.contains(o)));
+      return inner.map((e) => ({ el: h.sel(e), detail: h.snip(e.textContent.replace(/\s+/g, ' ').trim(), 50) }));
+    },
+  },
 ];

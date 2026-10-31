@@ -124,6 +124,68 @@ const boards = {
      <div style="position:absolute;left:4%;bottom:12%;font:400 64px/1.02 ${SANS};letter-spacing:-.01em;color:#fff">Two-line headline<br>bottom left</div>
      ${corners(['name', 'nav · watch', 'one-line award or fact', 'short paragraph · pause'], '#fff', 'rgba(20,16,12,.55)')}`,
     [['#b79688', 35, 'sky'], ['#885836', 30, 'land'], ['#39352c', 25, 'shadow'], ['#ffffff', 10, 'type+object']], '#fff'),
+  'brand-deck-slide': page('brand-deck-slide', 'one slide skeleton repeated through a brand book', 'C24',
+    `<div style="position:absolute;inset:0;background:#060709"></div>
+     <div style="position:absolute;left:5%;top:7%;width:90%;height:84%;border-radius:4px;background:linear-gradient(180deg,#2c3d68 0%,#1f2638 55%,#111521 100%);z-index:1"></div>
+     <div style="position:absolute;left:8%;top:12%;font:500 52px/1 ${SANS};letter-spacing:-.02em;color:#f3f2ef;z-index:3">Section title</div>
+     <div style="position:absolute;left:8%;right:8%;top:21%;border-top:1px solid rgba(243,242,239,.18);z-index:3"></div>
+     <div style="position:absolute;left:8%;top:25%;width:22%;z-index:3">${'<div style="height:8px;margin:0 0 9px;background:rgba(243,242,239,.55);border-radius:2px"></div>'.repeat(4)}<div style="height:8px;width:60%;background:rgba(243,242,239,.55);border-radius:2px"></div>
+       ${'<div style="height:8px;margin:22px 0 9px;background:rgba(243,242,239,.55);border-radius:2px"></div>'}${'<div style="height:8px;margin:0 0 9px;background:rgba(243,242,239,.55);border-radius:2px"></div>'.repeat(2)}</div>
+     <div class="note" style="left:8%;top:48%;color:#c4d7ff">TEXT COLUMN · 22% · 13 px · 3 to 4 short paragraphs</div>
+     <div style="position:absolute;left:34%;right:8%;top:25%;bottom:22%;border-radius:12px;background:#111521;box-shadow:inset 0 0 0 1px rgba(243,242,239,.08);z-index:2"></div>
+     <div style="position:absolute;left:37%;top:30%;width:16px;height:16px;border-left:1px solid #f3f2ef;border-top:1px solid #f3f2ef;z-index:3"></div><div style="position:absolute;right:11%;top:30%;width:16px;height:16px;border-right:1px solid #f3f2ef;border-top:1px solid #f3f2ef;z-index:3"></div>
+     <div style="position:absolute;left:37%;top:58%;width:16px;height:16px;border-left:1px solid #f3f2ef;border-bottom:1px solid #f3f2ef;z-index:3"></div><div style="position:absolute;right:11%;top:58%;width:16px;height:16px;border-right:1px solid #f3f2ef;border-bottom:1px solid #f3f2ef;z-index:3"></div>
+     <div style="position:absolute;left:39%;top:36%;font:500 110px/1 ${SANS};letter-spacing:-.03em;color:#f3f2ef;z-index:3">Specimen</div>
+     <div class="note" style="left:39%;top:63%;color:#c4d7ff">SPECIMEN PANEL · 58% · corner brackets · one subject per slide</div>
+     <div style="position:absolute;left:8%;top:68%;font:italic 400 22px/1.2 ${SERIF};color:#f3f2ef;z-index:3">One quiet italic line.</div>
+     <div class="note" style="left:8%;top:73%;color:#c4d7ff">ITALIC SERIF TAGLINE · bottom left · every slide</div>
+     <div style="position:absolute;left:8%;right:8%;top:83%;display:grid;grid-template-columns:repeat(4,1fr);font:500 11px/1 ${SANS};color:#f3f2ef;z-index:3;border-top:1px solid rgba(243,242,239,.12);padding-top:12px"><span>mark</span><span>document</span><span>section</span><span style="text-align:right">07</span></div>
+     <div class="note" style="right:8%;top:88%;color:#c4d7ff">FOOTER · 4 equal columns · 9 to 11 px</div>`,
+    [['#1f2638', 62, 'navy slide'], ['#060709', 18, 'page'], ['#111521', 12, 'panel'], ['#f3f2ef', 6, 'paper type'], ['#285cff', 1.5, 'cobalt'], ['#ff5436', 0.5, 'flare']], '#f3f2ef'),
+
+  'signature-shape-system': page('signature-shape-system', 'one geometric shape carries recognition, appetite and count', 'C25',
+    `<div style="position:absolute;inset:0;background:#4b1acf"></div>
+     <div style="position:absolute;left:4%;top:7%;font:700 40px/1 ${SANS};letter-spacing:-.04em;color:#fff">One shape, three jobs</div>
+     ${[['#4b1acf', 'RECOGNITION · flat shape'], ['#f45dd1', 'APPETITE · photo inside the shape'], ['#baff39', 'COUNT · the product grid']].map(([bg, lab], i) => `<div style="position:absolute;left:${4 + i * 31.5}%;top:20%;width:29%;height:46%;background:${bg};box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)"></div><div class="note" style="left:${4 + i * 31.5}%;top:68%;color:#fff">${lab}</div>`).join('')}
+     <div style="position:absolute;left:10.5%;top:28%;width:16%;aspect-ratio:1;border-radius:50%;background:#fff"></div><div style="position:absolute;left:14.8%;top:36.5%;width:7%;aspect-ratio:1;border-radius:50%;background:#ffd21c"></div>
+     <div class="note" style="left:5%;top:58%;color:#fff">disc 1.00 D · core 0.44 D, off centre</div>
+     <div style="position:absolute;left:42%;top:28%;width:16%;aspect-ratio:1;border-radius:50%;background:repeating-linear-gradient(45deg,#7a5532 0 8px,#b0702a 8px 16px)"></div>
+     <div style="position:absolute;left:69%;top:26%;width:24%;display:grid;grid-template-columns:repeat(3,1fr);gap:14px">${'<div style="aspect-ratio:1;border-radius:50%;background:#fff;display:grid;place-items:center"><i style="width:44%;aspect-ratio:1;border-radius:50%;background:#ffd21c"></i></div>'.repeat(6)}</div>
+     <div style="position:absolute;left:4%;top:77%;width:92%;font:400 15px/1.5 ${SANS};color:#fff">The mark stays fixed. Photograph, scale and crop change. A pattern always repeats the product count (2 x 3). Pairs: white on violet about 8.9:1, ink on lime about 15:1; pink carries no small white text.</div>`,
+    [['#4b1acf', 52, 'violet'], ['#f45dd1', 15, 'pink'], ['#baff39', 15, 'lime'], ['#ffffff', 13, 'white'], ['#ffd21c', 4, 'yolk'], ['#161515', 1, 'ink']], '#fff'),
+
+  'giant-tight-display': page('giant-tight-display', 'two-line display at 11% of the width, mono caps beside it, image offset below', 'C27',
+    `<div style="position:absolute;inset:0;background:#f2f1ee"></div>
+     <div style="position:absolute;left:1.4%;top:7%;font:400 160px/0.9 ${SANS};letter-spacing:-.0375em;color:#191919">Two word<br>display line</div>
+     <div class="note" style="left:2%;top:41%;color:#191919">160 / 144 px · tracking -3.75% · weight 400 · left edge 20 px</div>
+     <div style="position:absolute;left:70%;top:12%;width:22%;font:400 11px/1.6 ${MONO};letter-spacing:.02em;text-transform:uppercase;color:#5f5e5d">twelve years of practice<br><br>a short paragraph in mono capitals sits beside the display line, about one fifth of the width, eight to ten lines long</div>
+     <div class="note" style="left:70%;top:33%;color:#5f5e5d">MONO CAPS COLUMN · 22% · grey 6.0:1</div>
+     <div style="position:absolute;left:3%;top:57%;font:400 14px/1 ${SANS};padding:8px 12px;background:#fff;color:#191919">Small action →</div>
+     <div style="position:absolute;left:40%;top:50%;right:0;bottom:0;background:linear-gradient(160deg,#c9ccd0,#8d9196 60%,#5d6166);z-index:1"></div>
+     <div class="note" style="left:42%;top:53%;color:#fff">IMAGE · starts at 40% · bleeds right and bottom</div>
+     ${corners(['wordmark', 'menu', '', ''], '#191919')}`,
+    [['#f2f1ee', 58, 'putty'], ['#8d9196', 30, 'photo'], ['#191919', 9, 'ink'], ['#ffffff', 3, 'panel']]),
+
+  'inline-image-headline': page('inline-image-headline', 'centred headline with picture tiles set inside the line, a card field around a clear centre', 'C26, W34',
+    `<div style="position:absolute;inset:0;background:#f7f5f3"></div>
+     ${Array.from({ length: 26 }, (_, i) => { const a = (i * 137.5) % 360, r = 34 + (i * 7) % 14, x = 50 + Math.cos(a * Math.PI / 180) * r * 1.25, y = 48 + Math.sin(a * Math.PI / 180) * r, d = [0.5, 0.75, 1][i % 3]; return `<div style="position:absolute;left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${Math.round(80 * d)}px;height:${Math.round(56 * d)}px;border-radius:8px;background:${['#8c7b6a', '#4e5a66', '#b59a7c', '#2f2b27'][i % 4]};opacity:${d === 0.5 ? 0.45 : 1};transform:rotate(${((i * 23) % 50) - 25}deg)"></div>`; }).join('')}
+     <div style="position:absolute;left:0;right:0;top:36%;text-align:center;font:700 72px/1 ${SANS};letter-spacing:-.04em;color:#0a0a0a;z-index:3">Find the next<br>reference <span style="display:inline-block;width:62px;height:62px;border-radius:10px;background:#4e5a66;transform:rotate(-6deg);vertical-align:-6px"></span><span style="display:inline-block;width:62px;height:62px;border-radius:10px;background:#b59a7c;transform:rotate(6deg);vertical-align:-6px;margin-left:-14px"></span></div>
+     <div class="note" style="left:58%;top:57%;color:#0a0a0a">TILES IN THE LINE · 0.95 x cap · ±6° · overlap 20%</div>
+     <div style="position:absolute;left:36%;top:62%;width:28%;height:46px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);z-index:3"></div>
+     <div class="note" style="left:6%;top:12%;color:#0a0a0a">CARD FIELD · 3 depths · clear ellipse 34% · drifting 20 to 30 px/s</div>
+     ${corners(['nav', 'one action', '', 'app code'], '#0a0a0a')}`,
+    [['#f7f5f3', 70, 'warm white'], ['#4e5a66', 10, 'photo cool'], ['#8c7b6a', 9, 'photo warm'], ['#0a0a0a', 8, 'ink'], ['#ffffff', 3, 'field']]),
+
+  'window-and-chip': page('window-and-chip', 'label pill, product window, a command chip on the window edge', 'C30',
+    `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,#fafafa,#e6e6e6)"></div>
+     <div style="position:absolute;left:50%;top:13%;transform:translateX(-50%);height:40px;padding:0 18px;border-radius:999px;background:#fff;font:600 16px/40px ${SANS};color:#16171a;box-shadow:0 8px 20px -12px rgba(0,0,0,.35)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3f63e0;margin-right:8px;vertical-align:1px"></span>Department</div>
+     <div class="note" style="left:58%;top:13%;color:#16171a">LABEL PILL · names the scene · fades in 200 ms before the window</div>
+     <div style="position:absolute;left:21%;top:24%;width:58%;height:58%;border-radius:12px;background:#1d1f24;box-shadow:0 40px 70px -35px rgba(0,0,0,.55);transform:perspective(1200px) rotateY(-6deg);transform-origin:0 50%"><div style="position:absolute;left:2%;top:9%;right:22%;bottom:4%;border-radius:6px;background:#2b2d33"></div><div style="position:absolute;right:2%;top:9%;width:18%;bottom:4%;border-radius:6px;background:#26282e"></div></div>
+     <div class="note" style="left:22%;top:85%;color:#16171a">WINDOW · 58% of width · slides 60 px and turns 10° to 0 in 700 ms</div>
+     <div style="position:absolute;left:50%;top:79%;transform:translateX(-50%);padding:12px 18px;border-radius:8px;background:#0f1013;font:15px/1 ${MONO};color:#f1f2f4;z-index:3;white-space:nowrap"><span style="color:#8fb1ff">&gt;</span> A short real request.<span style="display:inline-block;width:.6em;height:1em;background:#3f63e0;vertical-align:-2px;margin-left:4px"></span></div>
+     <div class="note" style="left:4%;top:72%;color:#16171a">COMMAND CHIP · half over the edge · 40 chars/s</div>`,
+    [['#eeeeee', 52, 'light ground'], ['#1d1f24', 36, 'window'], ['#0f1013', 6, 'chip'], ['#ffffff', 4, 'pill'], ['#3f63e0', 2, 'cursor']]),
+
 };
 
 for (const [name, html] of Object.entries(boards)) writeFileSync(join(here, `${name}.html`), html);

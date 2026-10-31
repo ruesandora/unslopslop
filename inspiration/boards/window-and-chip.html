@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board window-and-chip: label pill, product window, a command chip on the window edge</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,#fafafa,#e6e6e6)"></div>
+     <div style="position:absolute;left:50%;top:13%;transform:translateX(-50%);height:40px;padding:0 18px;border-radius:999px;background:#fff;font:600 16px/40px system-ui, -apple-system, 'Segoe UI', sans-serif;color:#16171a;box-shadow:0 8px 20px -12px rgba(0,0,0,.35)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3f63e0;margin-right:8px;vertical-align:1px"></span>Department</div>
+     <div class="note" style="left:58%;top:13%;color:#16171a">LABEL PILL · names the scene · fades in 200 ms before the window</div>
+     <div style="position:absolute;left:21%;top:24%;width:58%;height:58%;border-radius:12px;background:#1d1f24;box-shadow:0 40px 70px -35px rgba(0,0,0,.55);transform:perspective(1200px) rotateY(-6deg);transform-origin:0 50%"><div style="position:absolute;left:2%;top:9%;right:22%;bottom:4%;border-radius:6px;background:#2b2d33"></div><div style="position:absolute;right:2%;top:9%;width:18%;bottom:4%;border-radius:6px;background:#26282e"></div></div>
+     <div class="note" style="left:22%;top:85%;color:#16171a">WINDOW · 58% of width · slides 60 px and turns 10° to 0 in 700 ms</div>
+     <div style="position:absolute;left:50%;top:79%;transform:translateX(-50%);padding:12px 18px;border-radius:8px;background:#0f1013;font:15px/1 ui-monospace, Menlo, monospace;color:#f1f2f4;z-index:3;white-space:nowrap"><span style="color:#8fb1ff">&gt;</span> A short real request.<span style="display:inline-block;width:.6em;height:1em;background:#3f63e0;vertical-align:-2px;margin-left:4px"></span></div>
+     <div class="note" style="left:4%;top:72%;color:#16171a">COMMAND CHIP · half over the edge · 40 chars/s</div></div><div class="sw"><span style="flex:52;background:#eeeeee" title="light ground 52%"><i>light ground 52%</i></span><span style="flex:36;background:#1d1f24" title="window 36%"><i>window 36%</i></span><span style="flex:6;background:#0f1013" title="chip 6%"><i>chip 6%</i></span><span style="flex:4;background:#ffffff" title="pill 4%"><i>pill 4%</i></span><span style="flex:2;background:#3f63e0" title="cursor 2%"><i>cursor 2%</i></span></div>
+<!-- Board window-and-chip. References: C30. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>
