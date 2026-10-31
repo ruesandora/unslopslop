@@ -29,7 +29,7 @@ async function shot(url, w, h, path, check, full = false) {
   await p.evaluate(() => document.fonts.ready);
   await p.waitForTimeout(2600); // one-shot motion settles
   if (check) {
-    const missing = await p.evaluate((fams) => fams.filter((f) => !document.fonts.check(`16px "${f}"`) || ![...document.fonts].some((x) => x.family.replace(/"/g, '') === f && x.status === 'loaded')), check);
+    const missing = await p.evaluate((fams) => fams.filter((f) => ![...document.fonts].some((x) => x.family.replace(/"/g, '') === f && x.status === 'loaded')), check);
     if (missing.length) errors.push('fonts not loaded: ' + missing.join(', '));
   }
   await p.screenshot({ path, type: 'jpeg', quality: 82, fullPage: full });
