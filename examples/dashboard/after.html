@@ -35,7 +35,8 @@ button { font: inherit; color: inherit; }
 
 /* ---------- side navigation ---------- */
 
-aside { position: sticky; top: 0; height: 100vh; background: var(--bone-2); display: flex; flex-direction: column; gap: 28px; padding: 24px 16px; border-right: 1px solid var(--line); }
+aside { background: var(--bone-2); border-right: 1px solid var(--line); }
+.side-in { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 28px; padding: 24px 16px; }
 .ws { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
 .ws b { font: 800 20px/1.1 var(--display); letter-spacing: -.02em; }
 .ws span { font-size: 14px; }
@@ -134,7 +135,7 @@ tfoot td { border-bottom: 0; font-weight: 700; }
 </head>
 <body>
 <div class="app">
-  <aside id="drawer" aria-label="Workspace navigation">
+  <aside id="drawer" aria-label="Workspace navigation"><div class="side-in">
     <div class="ws"><b>Studio Lind</b><span>Fluxly workspace</span></div>
     <nav class="navgroup" aria-label="Main">
       <a href="#" aria-current="page"><span>Receivables</span><span>9</span></a>
@@ -150,7 +151,7 @@ tfoot td { border-bottom: 0; font-weight: 700; }
       <a href="#"><span>Paid in October</span><span>13</span></a>
     </nav>
     <p class="sidefoot">Example data: Studio Lind, its clients and every amount here are made up.</p>
-  </aside>
+  </div></aside>
 
   <main>
     <header class="head">
