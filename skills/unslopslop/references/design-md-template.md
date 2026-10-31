@@ -18,8 +18,9 @@ Signature move: the one thing only this product would do.
 - Contrast checked: body 4.5:1, large 3:1.
 
 ## Typography
-- Heading family, body family, why these two.
-- Scale (px): 56 / 32 / 20 / 17 / 14. Weights: 400, 500. Body line-height 1.6. Measure 62ch.
+- Type recipe: <id from type/>, why it fits the mood (not the recipe of the previous project).
+- Display, text and mono families; the ladder at 1440 and 390 from the recipe, adapted. Weights, line heights, tracking, case, numeral features.
+- Signature treatment from the recipe, and where it is allowed (one place per screen).
 
 ## Layout
 - Grid and content width. Spacing scale (4 px rhythm). Alignment rule.

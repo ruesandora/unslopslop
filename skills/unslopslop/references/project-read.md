@@ -22,7 +22,7 @@ Ask, or infer from what the user gave you (repo, copy, screenshots). Mark every 
 Project:      <product, verb, audience, device>
 Mood:         <three adjectives, e.g. calm, exact, warm>
 Combination:  <2-4 colours with role and share, e.g. ink 70% ground, bone 22% text and paper, cobalt 3% action and paid state, grey 5% lines>
-Type:         <display face + text face (free licence), sizes, one reason>
+Type:         <recipe id from type/ + one sentence tying it to the mood words, e.g. "finance-ledger, the mood is calm and exact and the hero is a sentence, not a figure"> (required; not the recipe or pairing of the previous project or the repo examples)
 Texture:      <grain / pattern / watermark / light, where, opacity>
 Depth:        <how surfaces stack: layered shadow, overlap, tones>
 Motion:       <character (crisp, springy, slow), the one written moment, durations, reduced-motion behaviour>
@@ -40,4 +40,4 @@ Before building, ask: if a plain prompt had solved this brief, where would it la
 
 ## 4. Same product, different moods
 
-A brief is right for a project, not in general. Write two alternative briefs in one line each before committing; if they differ only in colour, they are not alternatives (change layout family, type system or the main visual idea as well).
+A brief is right for a project, not in general. Write two alternative briefs in one line each before committing; if they differ only in colour, they are not alternatives (change layout family, type recipe from `type/` or the main visual idea as well).
