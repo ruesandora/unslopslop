@@ -50,7 +50,7 @@ Fix: Give buttons at least 12 px horizontal and 8 px vertical padding (anything 
 ### color-accent-decorative (minor, 4 pts, x7, desktop)
 Accent colour spent on decoration. When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.
 Fix: Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.
-- `nav.nav`: accent on a non-interactive, non-state element [desktop]
+- `#site-nav`: accent on a non-interactive, non-state element [desktop]
 - `#field`: accent on a non-interactive, non-state element [desktop]
 - `p.corner.right`: accent on a non-interactive, non-state element [desktop]
 - `td`: accent on a non-interactive, non-state element [desktop]

@@ -182,7 +182,7 @@
       ],
       "examples": [
         {
-          "el": "nav.nav",
+          "el": "#site-nav",
           "detail": "accent on a non-interactive, non-state element",
           "viewport": "desktop"
         },
@@ -296,7 +296,7 @@
       "visKinds": [
         "media"
       ],
-      "raf": 94,
+      "raf": 95,
       "mut": 19,
       "movers": 8,
       "inVisual": 1,
