@@ -109,7 +109,7 @@ export async function analyze(browser, target, { disable = [], only = null, fast
         if (res.__taste.error) errors.push(`taste: ${res.__taste.error}`);
         else {
           tasteSignals = res.__taste;
-          try { Object.assign(tasteSignals, await page.evaluate(`(${pixelProbe.toString()})(${JSON.stringify((await page.screenshot()).toString('base64'))})`)); } catch (e) { errors.push(`taste pixels: ${e.message}`); }
+          try { Object.assign(tasteSignals, await page.evaluate(`(${pixelProbe.toString()})(${JSON.stringify((await page.screenshot()).toString('base64'))}, ${JSON.stringify(tasteSignals.subjectRect)}, ${vp.w}, ${vp.h})`)); } catch (e) { errors.push(`taste pixels: ${e.message}`); }
         }
       }
       if (res.__craft) { if (res.__craft.error) errors.push(`craft: ${res.__craft.error}`); else signals = res.__craft; }
