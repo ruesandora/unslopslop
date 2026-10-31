@@ -27,6 +27,17 @@ Purple-blue gradient hero, announcement pill, coloured headline keyword, avatar 
 - **Explaining mega menu:** two text columns (label plus one plain line each) and a preview tile; each item owns one drawing that redraws on hover in under 500 ms.
 - **Commerce ink:** a brand ink replaces black for headings and full-bleed bands; one saturated action colour only for buttons, arrows and the "us" column.
 - **Devices with jobs:** every repeated graphic device carries content (badge = promise, marquee = proof, table highlight = our offer). Remove the ones that carry none.
+- **Navigation by job.** Pick the bar from what visitors do: a static bar (three to six links) for small sites; a dropdown when one item has three to eight children; a mega menu only when a section has more than about twelve destinations and each needs a line of explanation; a side bar for documentation and apps with deep trees (never on a phone, rule `layout-side-nav-mobile`); a search bar first when people arrive with a name in mind (catalogues, libraries); a full-screen menu for portfolios with few, large destinations; breadcrumbs for anything three levels deep. An announcement bar only for news that is true today, with a date.
+- **Content as the hero's texture.** For products about images (collecting, generating, shopping), let dozens of the product's own small items frame a clear centre (effect `../../effects/card-drift/`), and set one or two pictures inside the headline line at about 0.95 of the cap height, turned plus or minus 6 degrees (board `inspiration/boards/inline-image-headline.html`).
+- **Index list reveal.** A list of brands, projects or categories set large; the pointed row keeps full ink and opens a small picture in its line, the rest step back (recipe `../../recipes/index-reveal/`). At rest every row is fully readable.
+- **Delight with written timings.** Small, specific motion on controls: a selection indicator that stretches then settles (`../../recipes/stretch-settle/`), icons that move their own lines (`../../recipes/morph-icons/`), a status pill that rolls between true lines (`../../recipes/rolling-pill/`). One kind per control type, durations 160 to 620 ms, overshoot only on small elements.
+- **Definition hero.** A quiet product can lead with a short ordered list ("Name is / a. ... / b. ... / c. +") in one text size and one real dated fact; no display type at all (catalogue C28).
+- **Giant light display.** One display line at about 160 px, weight 400, tracking about -3.75%, flush left, with a small mono paragraph beside it and an image offset below (board `inspiration/boards/giant-tight-display.html`).
+
+## Newer slop signs
+- **Pale heading half:** a heading whose second clause or last word is set in pale grey at the same size (rule `color-faded-heading-part`).
+- **Countdown urgency:** a ticking "hh:mm:ss left" beside a claim button (rule `detail-urgency-timer`).
+- **Live placeholder:** "Your Sponsor Here", "Lorem", "Company name" visible on a live page (rule `copy-placeholder`).
 
 ## Craft signals
 Display type at 2.5x body or more; product visual on the first screen; overlapping layers; grain or tonal light; tabular figures; real interaction (a control that changes a preview). Measured ranges and reviewer checks: `../../references/craft-recipes.md`; references to pick from: `../../../../inspiration/catalog.md`.

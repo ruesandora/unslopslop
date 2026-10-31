@@ -10,7 +10,11 @@ The faces agents pick by reflex. Each one is a fine typeface; the problem is tha
 
 The reason must be a real sentence about this project. "Looks premium" is not a reason.
 
-**How to choose instead.** Start from the brief's three mood words and the content: what must the type do (numbers in tables, long reading, a loud poster line, small labels on a phone)? Pick a face with a free licence that serves that job, try it with the real headline at real size, and compare two candidates side by side. Record the choice and the reason in DESIGN.md.
+**How to choose instead.** Use the type library in `../type/` (gallery `../type/index.html`, procedure `../type/README.md`). Start from the brief's three mood words and the job the type must do (numbers in tables, long reading, a loud poster line, small labels on a phone, a child learning to read), shortlist 2 or 3 recipes, try them with the real headline at real size at 1440 and 390, and pick one. Write the recipe id and the reason in the brief's `Type:` line and in DESIGN.md. If no recipe fits, build a new one with the same fields.
+
+**The house default is slop too.** Avoiding the faces below is not enough. Our own pages fell into one move: a wide grotesk display, a plain sans body, a giant headline and a heavy/thin weight contrast inside it, on every project. That is a default as much as any listed font. Hierarchy can come from many places (an italic swap, a width axis, small caps, position on a grid, a second tone, a mask, a sign layer); the library has recipes for each, several with no large type at all.
+
+**Do not repeat the last project.** Pairings already shipped by this repo are listed in `../scripts/lib/used-type.mjs`; the rule `type-house-pairing` flags a page whose h1 and body faces repeat one. Add your pairing there after you ship, so the next project is steered away from it. The same `font:` brief line keeps a pairing on purpose.
 
 **Also slop:** giant display numbers (`type-hero-number`): a figure set alone at display size, such as "€18,460" or "99.9%". Put numbers in sentences with their comparison, or chart them.
 

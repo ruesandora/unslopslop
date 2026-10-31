@@ -41,7 +41,8 @@
     ember: ['#0c0a10', '#5a1530', '#e0465e', '#f6c27a'],
     seaglass: ['#04191f', '#0e5560', '#79c4bb', '#eef4ee'],
     graphite: ['#0b0b0c', '#3d3f44', '#a9abb0', '#f1f1ee'],
-    moss: ['#0b120c', '#2f4a2a', '#9fb58a', '#efeedd']
+    moss: ['#0b120c', '#2f4a2a', '#9fb58a', '#efeedd'],
+    signal: ['#07080c', '#2f5bf0', '#f2603c', '#d6e0fb']
   };
 
   function hex(h) { var n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }

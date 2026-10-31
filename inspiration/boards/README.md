@@ -1,6 +1,6 @@
 # Composition boards
 
-Eight 1440 x 900 diagrams re-drawn from the measurements in `../catalog.md`. Each shows proportion, layer order (z), corner labels and colour share (the strip at the bottom) for one composition family. No source image, wording or shape is reproduced; the subjects are placeholder shapes.
+Thirteen 1440 x 900 diagrams re-drawn from the measurements in `../catalog.md`. Each shows proportion, layer order (z), corner labels and colour share (the strip at the bottom) for one composition family. No source image, wording or shape is reproduced; the subjects are placeholder shapes.
 
 | Board | Family | Catalogue ids |
 |---|---|---|
@@ -12,6 +12,11 @@ Eight 1440 x 900 diagrams re-drawn from the measurements in `../catalog.md`. Eac
 | `tracked-serif-calm.html` | thin tracked serif, painted element cut by the edge | C03 |
 | `portrait-corners.html` | full-bleed image, display bottom left, facts in four corners | C05, C23 |
 | `object-in-landscape.html` | product object standing in a real place | C17, C01 |
+| `brand-deck-slide.html` | one slide skeleton for a whole brand book: title and rule, text column, specimen panel with corner brackets, italic tagline, four-column footer | C24 |
+| `signature-shape-system.html` | one geometric shape doing three jobs (recognition, appetite, count) on a two-field palette | C25 |
+| `giant-tight-display.html` | two-line display at 160 px with tight tracking, a mono caps column beside it, image offset below | C27 |
+| `inline-image-headline.html` | centred headline with picture tiles inside the line, a drifting card field around a clear centre | C26, W34 |
+| `window-and-chip.html` | label pill, product window, a command chip on the window edge (one frame of a product film) | C30 |
 
 Use at desktop width only (they are not responsive):
 

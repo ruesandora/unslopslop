@@ -28,6 +28,7 @@ One signature effect per screen. Grain may join any of them as a finish.
 | [Ordered dither](ordered-dither/) | Print and retro | one hero image, a 1-bit texture band | no | low |
 | [Halftone](halftone/) | Print and retro | editorial and print-led brands, photo heroes | no | low |
 | [ASCII render](ascii-render/) | Print and retro | developer tools, an image made of type | no | low |
+| [Dot lens](dot-lens/) | Print and retro | a product or mark drawn in dots that answers the pointer | on pointer | low (sleeps at rest) |
 | [Pixel mosaic](pixel-mosaic/) | Print and retro | game, toy, LED and signage stories | no | lowest |
 | [Scanlines](scanlines/) | Print and retro | video and broadcast brands | yes (roll) | low |
 | [Plaid weave](plaid-weave/) | Pattern | textile, heritage, packaging | no | low |
@@ -37,8 +38,11 @@ One signature effect per screen. Grain may join any of them as a finish.
 | [Light rays](light-rays/) | Light and colour | a real light source behind a product | yes | low |
 | [Iridescence](iridescence/) | Light and colour | foil, pearl, cosmetics; one object or band | yes | low to medium |
 | [Soft blobs](soft-blobs/) | Light and colour | an aura behind a product or portrait | yes | low |
+| [Light ribbon](light-ribbon/) | Light and colour | dark covers and launch heroes with one large title | yes | low |
+| [Card drift](card-drift/) | Image treatment | image-led product heroes with a clear centre | yes | low (DOM, transform only) |
 | [Duotone](duotone/) | Image treatment | photo grids from mixed sources | no | low (SVG filter) |
 | [Film grain](film-grain/) | Finish | every gradient and flat hero | flicker | lowest |
+| [Text shimmer](text-shimmer/) | Finish | pending labels and skeleton rows | while pending | near zero |
 | [Grain overlay](grain-overlay/) | Finish | the same, with no canvas at all | optional | near zero |
 
 The three that pay off most often on real sites: **grain** (fixes banding and flatness for almost nothing), **ribbed glass** (one strong material for a hero or card media) and **duotone** (makes a set of unrelated photos belong to one palette).
@@ -69,6 +73,6 @@ node effects/capture.mjs         # fresh screenshot.jpg for every effect; fails 
 node effects/capture.mjs halftone --ui out/   # one effect, plus the demo page at 1440 and 390
 ```
 
-Shader effects keep their source in `effect.js` (parameters, notes and the fragment shader); `demo.html` is generated from it and the shared runtime in `_runtime/fx.js`. CSS and SVG effects (`frosted-panel`, `grain-overlay`, `duotone`) are hand-written `demo.html` files. The gallery uses Schibsted Grotesk (SIL Open Font License, text in `_assets/fonts/`).
+Shader effects keep their source in `effect.js` (parameters, notes and the fragment shader); `demo.html` is generated from it and the shared runtime in `_runtime/fx.js`. CSS, SVG, canvas and DOM effects (`frosted-panel`, `grain-overlay`, `duotone`, `dot-lens`, `card-drift`, `text-shimmer`) are hand-written `demo.html` files. The gallery uses Schibsted Grotesk (SIL Open Font License, text in `_assets/fonts/`).
 
 To add an effect: make a folder, write `effect.js` with the same shape as the others, run both scripts, then add a README (the existing ones are the template) and a row in the table above.

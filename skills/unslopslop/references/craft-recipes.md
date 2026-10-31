@@ -52,7 +52,7 @@ Board: `inspiration/boards/subject-over-type.html`, `object-and-light.html`, `pr
 
 ## 2. Type scale ladders
 
-Measured ladders (px, largest to body), useful as starting points:
+Measured ladders (px, largest to body), useful as starting points. They describe reference pages, not a house style: choose the faces and the full ladder from a recipe in `../type/` (one per project, picked from the mood words), then check it against the ranges below.
 
 | Character | Ladder | Weights | From |
 |---|---|---|---|
@@ -141,6 +141,11 @@ Rule: texture is either the subject (pattern, halftone image) or under 10% opaci
 | Loops in useful entries | marquees slow enough to read as still, 111 to 535 s [C14, C16] | linear |
 | Loops in counter examples | decorative pulse 2 s, beam spin 3 to 4 s, rainbow border 3 s, several at once [W27, W30, W31] | linear |
 | Scroll stories (cinematic heroes) | median segment 0.13 to 1.0 s; idle 11 to 56% of the recording | scroll-linked |
+| Two-phase selection (31 Oct batch) | stretch 190 ms, then settle 420 ms with overshoot [C29] | `cubic-bezier(0.32, 0.72, 0.24, 1)`, then `cubic-bezier(0.28, 1.28, 0.36, 1)` |
+| Icon morph (31 Oct batch) | about 500 ms with no bounce; two-step 620 ms [C31] | critically damped spring; `cubic-bezier(0.65, 0, 0.35, 1)` |
+| Part-by-part mark change (31 Oct batch) | 320 to 460 ms per part, 0 to 120 ms stagger, flicker 1.6 s step-end [C29] | back-out `cubic-bezier(0.34, 1.56, 0.5, 1)` |
+| Brand film beats (31 Oct batch) | picture cuts 200 ms, words 300 ms apart [C25]; typing about 40 characters per second, lines every 400 ms [C30] | hard cuts; ease-out for words |
+| Ambient content field (31 Oct batch) | cards drift 20 to 30 px per second at three depths around a clear centre [C26] | linear |
 
 The difference is not the period but the job. Gold pages loop only something that is the product or a calm sign of life; counter examples loop decoration that keeps pulling the eye.
 

@@ -26,7 +26,7 @@ export const TASTE_COMPONENTS = { subject: 30, display: 25, overlap: 15, ground:
 
 export const TELLS = new Set([
   'color-purple-gradient', 'color-gradient-text', 'color-random-gradient', 'color-rainbow', 'color-framework-default', 'color-glow',
-  'image-blur-blob', 'image-avatar-stack', 'type-accent-keyword', 'type-hero-number', 'type-ai-default-font', 'type-eyebrow',
+  'image-blur-blob', 'image-avatar-stack', 'type-accent-keyword', 'type-hero-number', 'type-ai-default-font', 'type-house-pairing', 'type-eyebrow',
   'layout-stat-strip', 'layout-identical-cards', 'layout-nested-cards', 'detail-card-triple',
   'copy-cliche', 'copy-fake-data', 'copy-unverified-proof', 'copy-emoji', 'copy-placeholder', 'icon-emoji-ui', 'icon-tile',
   'detail-pulse-dot', 'detail-announce-pill', 'detail-fake-window', 'detail-paper-props', 'detail-stamp-sticker',

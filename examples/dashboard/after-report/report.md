@@ -1,7 +1,7 @@
 # unslopslop report
 
 - Target: `examples/dashboard/after.html`
-- Slop score: **10/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 90) and the genre-default tells (0 pts), which count less the more taste is proven. Rule-only pattern slop: 6 (raw 6).
+- Slop score: **10/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 90) and the genre-default tells (6 pts), which count less the more taste is proven. Rule-only pattern slop: 12 (raw 12).
 - Taste proof: **90/100** (higher is better; pass mark 60)
   - subject 30/30: largest subject 42% of the first screen (media), all subjects 42%
   - display 15/25: display line 40 px (app screen)
@@ -11,7 +11,7 @@
 - Craft score: **95/100** (higher is better; pass mark 70)
 - Overall: **PASS** (needs a slop verdict that is not HEAVY, craft >= 70, taste proof >= 60; UNPROVEN until a side-by-side reference compare was run: detect --compared <compare.png>)
 - Slop verdict: **CLEAN**. Clean: do not touch it. Run the template test (swap the brand name; if it still fits, add one signature move).
-- Rules checked: 97; findings: 2
+- Rules checked: 98; findings: 3
 
 ## Points by fix pass
 
@@ -21,7 +21,7 @@
 | color | 4 |
 | icons | 0 |
 | copy | 0 |
-| typography | 0 |
+| typography | 6 |
 | layout | 0 |
 | detail | 0 |
 | imagery | 0 |
@@ -60,4 +60,11 @@ Fix: Keep the accent for actions, selection, focus, live state and the key data 
 - `i`: accent on a non-interactive, non-state element [desktop]
 - `i`: accent on a non-interactive, non-state element [desktop]
 - `i`: accent on a non-interactive, non-state element [desktop]
+
+## typography
+
+### type-house-pairing (major, 6 pts, x1, desktop)
+Same type pairing as a previous project. Reusing the display and text pairing of the repo examples (or of your previous project) is a house style: every page starts to look like the last one, whatever the mood.
+Fix: Pick a recipe from type/ that matches the brief's mood words and is not in scripts/lib/used-type.mjs; write its id and reason in the brief. To keep the pairing for a real project reason, add <meta name="unslop-brief" content="font: Family, reason">.
+- `h1`: schibsted grotesk + atkinson hyperlegible next (already used: examples/saas-landing, examples/dashboard and the effects gallery (October 2026)) [desktop]
 

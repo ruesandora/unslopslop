@@ -236,6 +236,10 @@ export const FIXTURES = {
     bad: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '' },
     good: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '<meta name="unslop-brief" content="font: Fraunces, the client owns a licence and it is their house face for every printed menu">' },
   },
+  'type-house-pairing': {
+    bad: { css: "body{font-family:'Atkinson Hyperlegible Next',system-ui,sans-serif}h1{font-family:'Schibsted Grotesk',sans-serif}", body: '' },
+    good: { css: "body{font-family:'IBM Plex Sans',system-ui,sans-serif}h1{font-family:'Spectral',Georgia,serif}", body: '' },
+  },
   'type-hero-number': {
     bad: { body: '<div style="font-size:64px">€18,460</div>' },
     good: { body: '<p style="font-size:24px">€18,460 outstanding, down from €21,300 on 1 Oct</p>' },
@@ -384,5 +388,13 @@ Object.assign(FIXTURES, {
   'motion-hidden-reduced': {
     bad: { omit: ['reduced'], css: '@keyframes in{to{opacity:1}}.r{opacity:0;animation:in .5s forwards}@media (prefers-reduced-motion:reduce){.r{animation:none}}', body: '<p class="r">Reveal text</p>' },
     good: { omit: ['reduced'], css: '@keyframes in{to{opacity:1}}.r{opacity:0;animation:in .5s forwards}@media (prefers-reduced-motion:reduce){.r{opacity:1;animation:none}}', body: '<p class="r">Reveal text</p>' },
+  },
+  'color-faded-heading-part': {
+    bad: { body: '<h2>The search took hours. <span style="color:#c8c8c4">Now it takes one line.</span></h2>' },
+    good: { body: '<h2>The search took hours. <span style="color:#555">Now it takes one line.</span></h2>' },
+  },
+  'detail-urgency-timer': {
+    bad: { body: '<p>Founding price: <span>10:21:05</span> left. <a href="#c">Claim it</a></p>' },
+    good: { body: '<p>Founding price until 14 November, 18:00 CET. <a href="#c">Read the terms</a></p>' },
   },
 });

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Streaming tail · interaction recipes</title>
+<meta name="description" content="Text that arrives in pieces shows its newest words in a warm tone that settles into ink, so the eye finds the growing edge without a cursor.">
+<!-- Hand-written recipe demo. Each arriving word gets a timestamp; its colour is a function of age. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #fbfaf7; color: #1a1918; display: grid; place-content: center; padding: 32px; font: 17px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .msg { width: min(560px, 86vw); }
+  .msg h2 { margin: 0 0 10px; font-size: 19px; font-weight: 650; letter-spacing: -0.01em; }
+  .msg p { margin: 0 0 12px; min-height: 5em; }
+  .ex { margin: 0; font-size: 13px; color: #55524c; }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <div class="msg" aria-live="polite"><h2>Answer (example)</h2><p id="out"></p><p class="ex">Placeholder text streamed at a steady pace.</p></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Streaming tail</h1>
+    <p class="sum">When text arrives in pieces, the newest words show in a warm tone and settle into the ink colour over about 600 ms. The growing edge is easy to follow and the finished text is plain, with no blinking cursor and no fading of what is already there.</p>
+    <div class="ctl"><label for="settle"><span>Settle (ms)</span><output id="settle-o">600</output></label><input id="settle" type="range" min="150" max="1600" step="50" value="600"></div>
+    <div class="ctl"><label for="rate"><span>Words per second</span><output id="rate-o">14</output></label><input id="rate" type="range" min="3" max="40" step="1" value="14"></div>
+    <div class="ctl"><button id="again" type="button">Stream again</button></div>
+    <dl class="notes group">
+      <dt>How it is built</dt><dd>Each word is a span stamped with its arrival time. One loop sets each young word's colour from its age, mixing from the tail colour to the ink colour with an ease-out curve; words older than the settle time are left as plain text. Nothing moves, so layout never shifts.</dd>
+      <dt>Colour</dt><dd>The tail colour must still pass contrast on its own (here about 4.8:1), because a reader may stop on the newest word. Pick it from the product's accent, not a rainbow.</dd>
+      <dt>Reduced motion</dt><dd>Words appear in ink with no colour change.</dd>
+      <dt>Becomes slop when</dt><dd>Finished text keeps shimmering, each word flies in with a blur, or the tail colour is so pale the newest words cannot be read.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var TEXT = 'This is placeholder text standing in for a streamed answer. Each word is added as it arrives, and only the newest few carry the warm tone while they settle. Once a word is older than the settle time it is ordinary text again, so a long answer reads like any other paragraph.';
+  var INK = [26, 25, 24], TAIL = [178, 74, 32], out = $('out'), words = TEXT.split(' '), spans = [], start = 0, raf = 0;
+  function col(a) { var s = Number($('settle').value), p = Math.min(1, a / s), k = 1 - Math.pow(1 - p, 3); return 'rgb(' + TAIL.map(function (v, i) { return Math.round(v + (INK[i] - v) * k); }).join(',') + ')'; }
+  function tick(now) {
+    var rate = Number($('rate').value), n = Math.min(words.length, Math.floor((now - start) / 1000 * rate)), busy = n < words.length, s = Number($('settle').value);
+    while (spans.length < n) { var sp = document.createElement('span'); sp.textContent = words[spans.length] + ' '; sp.born = now; out.appendChild(sp); spans.push(sp); }
+    spans.forEach(function (sp) { var a = now - sp.born; if (sp.done) return; if (reduce || a >= s) { sp.style.color = ''; sp.done = true; } else { sp.style.color = col(a); busy = true; } });
+    if (busy) raf = requestAnimationFrame(tick);
+  }
+  function run() { cancelAnimationFrame(raf); out.textContent = ''; spans = []; start = performance.now(); raf = requestAnimationFrame(tick); }
+  ['settle', 'rate'].forEach(function (id) { $(id).addEventListener('input', function () { $(id + '-o').textContent = $(id).value; }); });
+  $('again').addEventListener('click', run);
+  if (q.has('shot')) { var now = 10000; words.slice(0, 30).forEach(function (w, i) { var sp = document.createElement('span'); sp.textContent = w + ' '; var age = (29 - i) * 70; if (age < 600) sp.style.color = col(age); out.appendChild(sp); }); }
+  else run();
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

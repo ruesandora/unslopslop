@@ -8,8 +8,8 @@ Every pack has the same sections: defining traits, when it fits, palette combina
 |---|---|
 | `retro-pixel` | ready |
 | `ascii-text-art` | ready |
-| `swiss-international` | early |
-| `editorial-serif` | early |
+| `swiss-international` | growing (first full pass) |
+| `editorial-serif` | growing (first full pass) |
 | `brutalist` | early |
 | `neo-brutalism` | early |
 | `y2k-chrome` | early |

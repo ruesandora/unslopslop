@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const font = (f) => pathToFileURL(fileURLToPath(new URL(`../examples/assets/fonts/${f}`, import.meta.url))).href;
 const FACES = `@font-face{font-family:"Schibsted Grotesk";src:url("${font('schibsted-grotesk-latin-var.woff2')}") format("woff2");font-weight:400 900;font-display:block}
 @font-face{font-family:"Atkinson Hyperlegible Next";src:url("${font('atkinson-hyperlegible-next-latin-var.woff2')}") format("woff2");font-weight:200 800;font-display:block}`;
-const PRELOAD = `<link rel="preload" as="font" type="font/woff2" crossorigin href="${font('schibsted-grotesk-latin-var.woff2')}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${font('atkinson-hyperlegible-next-latin-var.woff2')}">`;
+const PRELOAD = `<link rel="preload" as="font" type="font/woff2" crossorigin href="${font('schibsted-grotesk-latin-var.woff2')}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${font('atkinson-hyperlegible-next-latin-var.woff2')}"><meta name="unslop-brief" content="font: Schibsted Grotesk, test fixture: these two faces are the only font files shipped offline in this repo, so measurements stay stable">`;
 
 const BASE_CSS = `${FACES}
 *{box-sizing:border-box}
