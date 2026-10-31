@@ -3,8 +3,8 @@
   "version": 1,
   "target": "examples/saas-landing/after.html",
   "score": 8,
-  "patternScore": 24,
-  "tells": 0,
+  "patternScore": 30,
+  "tells": 6,
   "taste": {
     "proof": 92,
     "pass": true,
@@ -52,15 +52,15 @@
       "accent": 0.308
     }
   },
-  "rawPoints": 24,
+  "rawPoints": 30,
   "verdict": "clean",
-  "rulesChecked": 97,
+  "rulesChecked": 98,
   "byPass": {
     "spacing": 2,
     "color": 4,
     "icons": 0,
     "copy": 0,
-    "typography": 10.5,
+    "typography": 16.5,
     "layout": 7.5,
     "detail": 0,
     "imagery": 0,
@@ -97,6 +97,26 @@
         }
       ],
       "points": 7.5
+    },
+    {
+      "rule": "type-house-pairing",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Same type pairing as a previous project",
+      "why": "Reusing the display and text pairing of the repo examples (or of your previous project) is a house style: every page starts to look like the last one, whatever the mood.",
+      "fix": "Pick a recipe from type/ that matches the brief's mood words and is not in scripts/lib/used-type.mjs; write its id and reason in the brief. To keep the pairing for a real project reason, add <meta name=\"unslop-brief\" content=\"font: Family, reason\">.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "#hero-title",
+          "detail": "schibsted grotesk + atkinson hyperlegible next (already used: examples/saas-landing, examples/dashboard and the effects gallery (October 2026))",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
     },
     {
       "rule": "type-tight-leading",
@@ -296,7 +316,7 @@
       "visKinds": [
         "media"
       ],
-      "raf": 95,
+      "raf": 97,
       "mut": 19,
       "movers": 8,
       "inVisual": 1,

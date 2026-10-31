@@ -16,6 +16,7 @@ Scripts need Node 20+ and Playwright with Chromium installed (nothing is bundled
 3. If a style is named ("retro pixel", "swiss", "ASCII art") or clearly fits, load `styles/<style>/README.md` and combine it with the domain pack (style decides look, domain decides constraints). Styles marked *early* are thin; say so.
 4. **Pick references (required).** Open `../../inspiration/catalog.md` and pick 2 or 3 entries whose tags match the brief (domain, style, mood, palette, motion), at least one `role:gold`. Write their ids in the brief's `References:` line, each with the one thing you take from it (a proportion, a layer order, a timing). Open the matching board in `../../inspiration/boards/`. Read `references/craft-recipes.md`: it holds the measured ranges (hero scale, subject area, colour shares, depth, texture, motion) your page must meet. No ids in the brief, no build. If the catalogue is missing (the skill was copied alone), measure 2 or 3 strong references yourself with `scripts/intake.mjs` first.
 5. Colour: `references/palette-combinations.md`. Sets of two to four with roles and shares, chosen for the mood.
+6. **Type (required).** Pick one recipe id from `type/` (gallery: `type/index.html`, text: `type/recipes.md`) by the procedure in `type/README.md`: the brief's mood words, a shortlist of 2 or 3, a test at 1440 and 390. Write `Type: <recipe-id>, <reason tied to the mood>` in the brief and `<meta name="unslop-type" content="<recipe-id>">` in the page. Do not reuse the recipe or pairing of the previous project or of the repo examples (`scripts/lib/used-type.mjs`; rule `type-house-pairing`). A wide grotesk display over a plain sans body with a giant headline and a heavy/thin weight pair is this repo's own house default: it needs a written reason like any other default. No recipe id in the brief, no build.
 
 ## Loop
 
@@ -35,7 +36,7 @@ A page passes only with slop under 35, craft at 70 or more **and** taste proof a
 - Do not copy another site's look. From references take timing, proportion and ideas; never shapes, copy, imagery or palettes as-is (`references/motion-measurement.md`).
 - No paid generation without the user's approval of the cost. Image priority in `references/passes.md`.
 - Never invent proof: user counts, ratings, logos, testimonials. Example data is labelled once per page, not under every element.
-- Hard no's (detector rules, each with a fix): AI-default fonts without a project reason (`references/ai-default-fonts.md`), giant display numbers, captions under every block, paper / letter / receipt props, stamps and tilted stickers, emoji (unless the user asked), coloured side stripes on boxes, faded grey text (readable text 7:1, 4.5:1 from 24 px), heading + grey subtitle as the section template, rainbow tiles, floating chat pills.
+- Hard no's (detector rules, each with a fix): AI-default fonts without a project reason (`references/ai-default-fonts.md`), the repo examples' own type pairing reused (`type-house-pairing`), giant display numbers, captions under every block, paper / letter / receipt props, stamps and tilted stickers, emoji (unless the user asked), coloured side stripes on boxes, faded grey text (readable text 7:1, 4.5:1 from 24 px), heading + grey subtitle as the section template, rainbow tiles, floating chat pills.
 - Keep changes reversible: write next to the user's file or on a branch.
 - Disabling a rule (`--disable id`) needs a reason in the report.
 
@@ -49,4 +50,5 @@ A page passes only with slop under 35, craft at 70 or more **and** taste proof a
 - `../../inspiration/catalog.md` and `../../inspiration/boards/`: measured references and composition boards for the reference gate.
 - `domains/`, `styles/`: packs, loaded on demand.
 - `recipes/`: interaction and motion recipes with measured timings, each a live single-file demo (stretch-and-settle selection, rolling status pill, mark with a hidden turn, morphing icons, index list reveal, letter window, prompt-led product reel, streaming tail).
+- `type/`: typography recipes by mood (27, each with faces, ladder at 1440 and 390, OpenType settings, a signature treatment, a slop warning and a live specimen); `type/README.md` holds the selection procedure.
 - `effects/`: texture, light and glass effects (grain, ribbed and frosted glass, dither, halftone, ASCII, mesh gradient, caustics and more), each a live single-file demo with parameters, cost and a slop warning.

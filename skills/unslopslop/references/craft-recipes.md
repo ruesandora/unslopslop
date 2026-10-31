@@ -52,7 +52,7 @@ Board: `inspiration/boards/subject-over-type.html`, `object-and-light.html`, `pr
 
 ## 2. Type scale ladders
 
-Measured ladders (px, largest to body), useful as starting points:
+Measured ladders (px, largest to body), useful as starting points. They describe reference pages, not a house style: choose the faces and the full ladder from a recipe in `../type/` (one per project, picked from the mood words), then check it against the ranges below.
 
 | Character | Ladder | Weights | From |
 |---|---|---|---|

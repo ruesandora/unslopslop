@@ -11,7 +11,7 @@ This repo is a design skill plus a detector. It helps an agent design things tha
 6. Hard no's: AI-default fonts without a reason, giant numbers, captions everywhere, paper props, stamps, emoji, side stripes, faded grey text, heading + grey subtitle sections (see `skills/unslopslop/references/ai-default-fonts.md` and the rule catalogue).
 
 ## When someone asks for a design (any medium)
-1. **Read the project** (`skills/unslopslop/references/project-read.md`): ask or infer audience, job, mood, device. Write the direction brief: 3 adjectives, combination with roles, type pairing, texture, motion character, density, signature move, rejected default.
+1. **Read the project** (`skills/unslopslop/references/project-read.md`): ask or infer audience, job, mood, device. Write the direction brief: 3 adjectives, combination with roles, a type recipe id from `skills/unslopslop/type/` with a reason tied to the mood (never the previous project's), texture, motion character, density, signature move, rejected default.
 2. **Route:** pick the domain pack (`skills/unslopslop/domains/<domain>/`) and, if a style was named or fits, the style pack (`skills/unslopslop/styles/<style>/`). Pick 2 or 3 references in `inspiration/catalog.md` by tags (domain, style, mood, palette, motion), at least one `role:gold`, and write their ids in the brief (required). Read the measured ranges in `skills/unslopslop/references/craft-recipes.md`.
 3. **Build** the first screen first, with real content.
 4. **Detect:** `node skills/unslopslop/scripts/detect.mjs <file|url> --out <dir>` (web, dashboard, mobile web, email HTML). Read both numbers and open both PNGs.
@@ -28,6 +28,7 @@ This repo is a design skill plus a detector. It helps an agent design things tha
 | `skills/unslopslop/styles/` | Style packs (retro-pixel and ascii-text-art are full; swiss-international and editorial-serif have a first full pass; blueprint-mono, pantry-bold and pop-ritual are early; the rest are stubs) |
 | `skills/unslopslop/recipes/` | Interaction and motion recipes with measured timings, one live demo each |
 | `skills/unslopslop/effects/` | Texture, light and glass effects, one live demo each |
+| `skills/unslopslop/type/` | Typography recipes by mood, live specimens, gallery and the selection procedure |
 | `skills/unslopslop/scripts/` | `detect.mjs`, `compare.mjs`, `motion-probe.mjs`, `intake.mjs`, `review-crops.mjs` |
 | `inspiration/` | Measured, source-free catalogue (`catalog.md`), composition boards (`boards/`), intake how-to |
 | `examples/` | Before/after pairs with reports and screenshots |
