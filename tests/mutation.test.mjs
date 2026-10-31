@@ -63,3 +63,28 @@ for (const [gate, title] of Object.entries(tasteTests)) {
     assert.match(off.stdout, new RegExp(`✖ ${title}`));
   });
 }
+
+// Hierarchy cap and subject kinds (tests/hierarchy.test.mjs): switching one gate off must fail exactly its test.
+const hierFile = fileURLToPath(new URL('./hierarchy.test.mjs', import.meta.url));
+const hierTests = {
+  owns: 'bad: a crowded 48 px lead',
+  field: 'subject kind field',
+  mosaic: 'subject kind mosaic',
+  tool: 'subject kind tool',
+  watermark: 'watermark: an image at 7% opacity',
+  ghost: 'ghost: an empty canvas',
+};
+for (const [gate, title] of Object.entries(hierTests)) {
+  test(`switching off hierarchy gate ${gate} breaks its test`, () => {
+    const run = (off) =>
+      spawnSync(process.execPath, ['--test', '--test-reporter=spec', hierFile], {
+        encoding: 'utf8',
+        env: { ...cleanEnv, UNSLOP_TASTE_ONLY: gate, UNSLOP_TASTE_OFF: off },
+      });
+    const on = run('');
+    assert.equal(on.status, 0, `control run must pass for ${gate}:\n${on.stdout}`);
+    const off = run(gate);
+    assert.notEqual(off.status, 0, `${gate}: test still passes with it off`);
+    assert.match(off.stdout, new RegExp(`✖ ${title}`));
+  });
+}
