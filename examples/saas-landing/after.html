@@ -43,11 +43,11 @@ h1, h2, h3 { font-family: var(--display); margin: 0; }
 
 .top { position: absolute; z-index: 6; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 24px 32px 24px 48px; }
 .brand { padding: 12px 0; font: 800 22px/1 var(--display); letter-spacing: -.02em; text-decoration: none; }
-.nav { display: flex; gap: 22px; color: var(--bone); background: var(--cobalt); padding: 0 4px; }
+.nav { display: flex; gap: 24px; color: var(--bone); background: var(--cobalt); padding: 0 4px; }
 .nav a { text-decoration: none; padding: 8px 0; border-bottom: 1px solid transparent; transition: border-color 160ms ease-out; }
 .nav a:hover { border-color: currentColor; }
 
-.headline { font-family: var(--display); position: absolute; z-index: 3; left: 44px; top: 15%; margin: 0; font-size: clamp(56px, 11.6vw, 168px); line-height: 1; letter-spacing: -.045em; white-space: nowrap; padding: .1em .2em .22em 0; }
+.headline { font-family: var(--display); position: absolute; z-index: 3; left: 44px; top: 15%; margin: 0; font-size: clamp(56px, 11.6vw, 168px); line-height: 1; letter-spacing: -.045em; white-space: nowrap; padding: 16px 32px 36px 0; }
 .headline .heavy { display: block; font-weight: 820; }
 .headline .thin { display: block; font-weight: 380; letter-spacing: -.035em; }
 .headline .p { margin-left: -.16em; }
@@ -97,11 +97,11 @@ h1, h2, h3 { font-family: var(--display); margin: 0; }
 /* ---------- bank match ---------- */
 .match { padding: 136px 0; }
 .match .grid { display: grid; grid-template-columns: 6fr 5fr; gap: 72px; align-items: center; }
-.match h2 { font-size: clamp(40px, 4.4vw, 64px); line-height: 1; letter-spacing: -.035em; font-weight: 820; }
+.match h2 { font-size: clamp(40px, 3.9vw, 56px); line-height: 1; letter-spacing: -.035em; font-weight: 820; }
 .match p { font-size: 20px; line-height: 1.55; margin: 28px 0 0; max-width: 34ch; }
 table { width: 100%; border-collapse: collapse; font-size: 17px; }
 caption { text-align: left; padding: 0 0 14px; }
-th { text-align: left; font: 600 12px/1.3 var(--text); letter-spacing: .12em; text-transform: uppercase; padding: 0 16px 12px; border-bottom: 2px solid var(--ink); }
+th { text-align: left; font: 600 13px/1.3 var(--text); letter-spacing: .12em; text-transform: uppercase; padding: 0 16px 12px; border-bottom: 2px solid var(--ink); }
 td { padding: 17px 16px; border-bottom: 1px solid var(--line); }
 td:last-child, th:last-child { text-align: right; }
 tr.hit td { background: var(--cobalt); color: var(--bone); border-bottom-color: var(--cobalt); }
@@ -298,7 +298,7 @@ details p { margin: 0 0 24px; max-width: 56ch; }
   function size() {
     const r = field.getBoundingClientRect();
     W = Math.round(r.width); H = Math.round(r.height);
-    cell = W < 500 ? 3 : 4;
+    cell = innerWidth <= 820 ? 3 : 4;
     cv.width = W; cv.height = H;
     img = ctx.createImageData(W, H);
     // day width chosen so the day-14 column is cut by the right edge of the screen
@@ -356,10 +356,10 @@ details p { margin: 0 0 24px; max-width: 56ch; }
       const dd = +tg.dataset.day;
       const st = STEPS.find((q) => q.d === dd);
       let x = dayX(dd) - geo.colW / 2, y;
-      if (dd === PAID) { x = W < 500 ? dayX(PAID) + 10 : dayX(PAID) - 10 - tg.offsetWidth; y = geo.line - 4; }
+      if (dd === PAID) { x = innerWidth <= 820 ? dayX(PAID) + 10 : dayX(PAID) - 10 - tg.offsetWidth; y = geo.line - 4; }
       else {
         y = H - H * st.h - tg.offsetHeight - 12;
-        if (x + tg.offsetWidth > W - 8) x = dayX(dd) - geo.colW / 2 - tg.offsetWidth - 12;
+        if (x + tg.offsetWidth > W - 8) { x = dayX(dd) - geo.colW / 2 - tg.offsetWidth - 12; y = H - H * st.h; }
       }
       tg.style.left = x + 'px';
       tg.style.top = y + 'px';
