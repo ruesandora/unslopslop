@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board object-in-landscape: the product object stands in a real place at landscape scale</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #fff;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:linear-gradient(180deg,#e6aa86 0%,#b79688 45%,#885836 70%,#39352c 100%)"></div>
+     <div style="position:absolute;left:0;right:0;top:55%;height:20%;background:linear-gradient(170deg,transparent 30%,rgba(57,53,44,.6) 31%,rgba(57,53,44,.9))"></div>
+     <div style="position:absolute;left:47%;top:20%;width:8%;height:48%;background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.5);backdrop-filter:blur(4px);transform:skewY(-4deg)"></div>
+     <div class="note" style="left:56%;top:30%;color:#fff">OBJECT · upright · 8% width · glass</div>
+     <div style="position:absolute;left:4%;bottom:12%;font:400 64px/1.02 system-ui, -apple-system, 'Segoe UI', sans-serif;letter-spacing:-.01em;color:#fff">Two-line headline<br>bottom left</div>
+     <div class="corner" style="top:28px;left:32px;color:#fff;background:rgba(20,16,12,.55);padding:2px 4px">name</div><div class="corner" style="top:28px;right:32px;color:#fff;background:rgba(20,16,12,.55);padding:2px 4px">nav · watch</div><div class="corner" style="bottom:56px;left:32px;color:#fff;background:rgba(20,16,12,.55);padding:2px 4px">one-line award or fact</div><div class="corner" style="bottom:56px;right:32px;color:#fff;background:rgba(20,16,12,.55);padding:2px 4px">short paragraph · pause</div></div><div class="sw"><span style="flex:35;background:#b79688" title="sky 35%"><i>sky 35%</i></span><span style="flex:30;background:#885836" title="land 30%"><i>land 30%</i></span><span style="flex:25;background:#39352c" title="shadow 25%"><i>shadow 25%</i></span><span style="flex:10;background:#ffffff" title="type+object 10%"><i>type+object 10%</i></span></div>
+<!-- Board object-in-landscape. References: C17, C01. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>

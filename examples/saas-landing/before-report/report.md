@@ -1,23 +1,47 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/before.html`
-- Slop score: **100/100** (0 = clean; raw points before the 100 cap: 247)
-- Verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 72; findings: 38
+- Slop score: **92/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 10) and the genre-default tells (156 pts), which count less the more taste is proven. Rule-only pattern slop: 100 (raw 295).
+- Taste proof: **10/100** (higher is better; pass mark 60). no real subject on the first screen: proof capped at 10; display line under 80 px: proof capped at 55
+  - subject 0/30: largest subject 0% of the first screen (none), all subjects 0%
+  - display 0/25: display line 56 px
+  - overlap 0/15: nothing overlaps the subject
+  - ground 11/15: ground colour 61% of the first screen, accents 7.0%
+  - keyword 0/15: 1 coloured or gradient keyword(s) in the headline
+- Craft score: **51/100** (higher is better; pass mark 70)
+- Overall: **FAIL** (needs a slop verdict that is not HEAVY, craft >= 70, taste proof >= 60; UNPROVEN until a side-by-side reference compare was run: detect --compared <compare.png>)
+- Slop verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
+- Rules checked: 97; findings: 43
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
 | spacing | 6 |
-| color | 57 |
+| color | 73 |
 | icons | 19.5 |
-| copy | 31.5 |
-| typography | 22 |
+| copy | 43.5 |
+| typography | 42 |
 | layout | 48 |
 | detail | 37 |
 | imagery | 12 |
 | motion | 14 |
+
+## Craft
+
+| Component | Points | Reading |
+|---|---|---|
+| hierarchy | 15/15 | display 56px / body 15px = 3.73x, 11 sizes |
+| focal | 9/15 | headline 3.7x, largest visual 0% of the screen |
+| visual | 0/20 | 0% of the first screen is visual (none) |
+| motion | 7/15 | moves outside any visual, 15 moving elements, reduced motion not handled |
+| identity | 8/20 | no web font, one face, accent used 26x in 5 hue band(s), 4 shadows, 1 layers, 1 textured areas (gradient) |
+| density | 12/15 | landing, 25% of the first screen holds content |
+
+### Bland signals (the opposite failure: stripped too far)
+
+- **bland-no-hero-visual** (major): No real visual on the first screen. A first screen of text alone asks the reader to imagine the product. Strong pages show it: a product view, a photo, a drawing. Fix: Put the product itself in the first screen: a built UI view, a real screenshot, a photo or a meaningful drawing, at least 8% of the screen.
+  - `first screen`: no image, canvas, drawing or product surface
 
 ## spacing
 
@@ -61,6 +85,14 @@ Fix: Derive the palette from the brand: one accent chosen on purpose, neutrals t
 - `i`: #a855f7 [desktop]
 - `div.eyebrow`: #a78bfa [desktop]
 
+### color-faded-text (major, 12 pts, x12, desktop+mobile)
+Faded support text. Light grey support text that passes the bare minimum still reads as faded; it is the "muted subtitle" look of generated pages and tires the eye.
+Fix: Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.
+- `div.eyebrow`: 6.56:1 "Workflow automation" [desktop]
+- `p.sub`: 3.75:1 "Fluxly empowers modern teams …" [desktop]
+- `span`: 6.96:1 "Trusted by 10,000+ teams worl…" [desktop]
+- `div.quote`: 6.96:1 ""Fluxly changed how we work."…" [desktop]
+
 ### color-gradient-text (major, 6 pts, x1, desktop)
 Gradient-filled text. Headings or numbers clipped to a colour ramp are a stock "AI landing" signature.
 Fix: Set the text in one solid colour; emphasise with size, weight or position instead.
@@ -70,6 +102,14 @@ Fix: Set the text in one solid colour; emphasise with size, weight or position i
 Coloured glow shadow. Large zero-offset shadows in a saturated colour fake "energy" and hurt legibility.
 Fix: Use a neutral, low-alpha shadow with a real offset, or no shadow and a 1 px border.
 - `a.btn`: boxShadow rgba(139, 92, 246, 0.55) 0px 0px 40px 0px [desktop]
+
+### color-accent-decorative (minor, 4 pts, x16, desktop)
+Accent colour spent on decoration. When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.
+Fix: Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.
+- `div.blob`: accent on a non-interactive, non-state element [desktop]
+- `div.eyebrow`: accent on a non-interactive, non-state element [desktop]
+- `span`: accent on a non-interactive, non-state element [desktop]
+- `i`: accent on a non-interactive, non-state element [desktop]
 
 ## icons
 
@@ -98,6 +138,14 @@ Fix: Say the concrete thing: what the product does, for whom, with what number o
 - `p.sub`: "empowers" [desktop]
 - `p`: "all-in-one" [desktop]
 
+### copy-emoji (major, 12 pts, x5, desktop)
+Emoji in the page. Emoji in headings, buttons, labels or body copy are the most visible AI tell.
+Fix: Remove them. Use words, or one icon set drawn for the product. Keep emoji only if the brief says the user asked for them (<meta name="unslop-brief" content="emoji: reason">).
+- `span.pill`: ✨ Introducing Fluxly 2.0 — no… [desktop]
+- `b`: 4.9★ [desktop]
+- `div.ico`: ⚡ [desktop]
+- `div.ico`: 🔒 [desktop]
+
 ### copy-unverified-proof (major, 7.5 pts, x2, desktop)
 Social proof with no source. Round user counts, star scores and "trusted by" lines that cannot be checked read as invented.
 Fix: Cite the source and date, link to the real logo or review, or delete the claim.
@@ -116,12 +164,30 @@ Fix: Use plausible, specific sample entries, and label them as sample data.
 
 ## typography
 
+### type-heading-muted-subtitle (major, 10.5 pts, x4, desktop)
+Heading plus grey subtitle, section after section. A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.
+Fix: Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.
+- `h1 + p.sub`: "Unleash seamless workflows. N…" with a greyed subtitle [desktop]
+- `h3 + p`: "Lightning fast" with a greyed subtitle [desktop]
+- `h3 + p`: "Secure by design" with a greyed subtitle [desktop]
+- `h3 + p`: "Effortless setup" with a greyed subtitle [desktop]
+
 ### type-eyebrow (major, 9 pts, x3, desktop)
 Eyebrow label above the heading. A small, spaced, uppercase tag above every heading is a template habit.
 Fix: Delete it, or fold the information into the heading. Keep at most one, and only if it carries a fact.
 - `div.eyebrow`: Workflow automation [desktop]
 - `div.eyebrow`: Features [desktop]
 - `div.eyebrow`: How it works [desktop]
+
+### type-accent-keyword (major, 6 pts, x1, desktop)
+One word of the headline in the accent colour. Colouring or gradient-filling one keyword of the headline is the most common template tell, even on design-tool sites.
+Fix: Let the whole headline speak in one colour. If a second tone is wanted, make it a quieter grey for a whole line, not a bright keyword.
+- `h1`: "seamless workflows" coloured inside "Unleash seamless workflows. Not just a …" [desktop]
+
+### type-ai-default-font (major, 6 pts, x1, desktop)
+AI-default font. Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.
+Fix: Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name="unslop-brief" content="font: Family, reason">.
+- `body`: inter [desktop]
 
 ### type-heavy-weight (minor, 4 pts, x10, desktop)
 Heavy weights carry the hierarchy. Weights of 800 to 900, or bold on most text, flatten emphasis. Hierarchy should come from size and colour.
@@ -138,12 +204,6 @@ Fix: Raise captions and labels to at least 13 px (body 16 px).
 - `small`: 12px [desktop]
 - `small`: 12px [desktop]
 - `small`: 12px [desktop]
-
-### type-reflex-font (minor, 2.5 pts, x2, desktop)
-Reflex font family. Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.
-Fix: Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.
-- `body`: inter [desktop]
-- `h1`: inter [desktop]
 
 ### type-tight-leading (minor, 2.5 pts, x2, desktop+mobile)
 Body text set too tight. Multi-line paragraphs under 1.3 line-height, or letter-spacing below -0.04em, are hard to read.

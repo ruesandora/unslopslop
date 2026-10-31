@@ -9,9 +9,11 @@
 //   --disable ids    skip rules (comma separated); UNSLOP_DISABLE does the same
 //   --fail-on level  exit 1 when the slop verdict is at least that bad (default: always exit 0)
 //   --min-craft n    exit 1 when the craft score is below n (70 is the pass mark)
+//   --compared png   attest that compare.mjs was run against a strong reference (without it a passing page is UNPROVEN)
 //   --keep-consent   do not hide cookie / consent banners (hidden by default, never accepted)
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { existsSync } from 'node:fs';
 import { launch } from './lib/browser.mjs';
 import { analyze } from './lib/analyze.mjs';
 import { toJson, toMarkdown } from './lib/report.mjs';
@@ -19,7 +21,7 @@ import { RULE_IDS } from './lib/rules.mjs';
 import { BLAND_IDS } from './lib/rules-bland.mjs';
 
 const args = process.argv.slice(2);
-const o = { out: null, json: false, disable: [], failOn: null, minCraft: null, keepConsent: false };
+const o = { out: null, json: false, disable: [], failOn: null, minCraft: null, keepConsent: false, compared: false };
 let target = null;
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
@@ -28,6 +30,7 @@ for (let i = 0; i < args.length; i++) {
   else if (a === '--disable') o.disable = (args[++i] || '').split(',').map((s) => s.trim()).filter(Boolean);
   else if (a === '--fail-on') o.failOn = args[++i];
   else if (a === '--min-craft') o.minCraft = +args[++i];
+  else if (a === '--compared') { o.compared = true; if (!existsSync(resolve(args[++i] || ''))) { console.error('--compared needs the compare.png written by compare.mjs'); process.exit(2); } }
   else if (a === '--keep-consent') o.keepConsent = true;
   else if (a === '-h' || a === '--help') { console.log(readFileHelp()); process.exit(0); }
   else target = a;
@@ -43,7 +46,7 @@ if (o.out) { outDir = resolve(o.out); await mkdir(outDir, { recursive: true }); 
 const browser = await launch();
 let result;
 try {
-  result = await analyze(browser, target, { disable: o.disable, screenshotDir: outDir, keepConsent: o.keepConsent });
+  result = await analyze(browser, target, { disable: o.disable, screenshotDir: outDir, keepConsent: o.keepConsent, compared: o.compared });
 } catch (e) {
   console.error(`detect failed: ${e.message}`);
   await browser.close();

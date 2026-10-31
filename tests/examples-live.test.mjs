@@ -10,12 +10,12 @@ test('example pages score the same as their committed reports', async () => {
   const browser = await launch();
   try {
     for (const ex of ['saas-landing', 'dashboard', 'motion-pure']) {
-      for (const v of ex === 'motion-pure' ? ['index'] : ['before', 'after']) {
+      for (const v of ex === 'motion-pure' ? ['index'] : ['before', 'after-v1', 'after']) {
         const res = await analyze(browser, fileURLToPath(new URL(`../examples/${ex}/${v}.html`, import.meta.url)));
-        if (ex === 'motion-pure') { assert.equal(res.score, 0); continue; }
+        if (ex === 'motion-pure') { assert.equal(res.patternScore, 0); continue; }
         const saved = JSON.parse(await readFile(new URL(`../examples/${ex}/${v}-report/report.json`, import.meta.url), 'utf8'));
-        assert.equal(res.score, saved.score, `${ex}/${v}`);
-        assert.equal(res.verdict, saved.verdict, `${ex}/${v}`);
+        assert.equal(res.patternScore, saved.patternScore ?? saved.score, `${ex}/${v}`);
+        assert.ok(Math.abs(res.craft.score - saved.craft.score) <= 3, `${ex}/${v} craft ${res.craft.score} vs ${saved.craft.score}`);
       }
     }
   } finally { await browser.close(); }

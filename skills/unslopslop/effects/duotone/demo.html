@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duotone (SVG filter) · effects library</title>
+<meta name="description" content="Any photo mapped to two brand colours with one SVG filter: shadows take one ink, highlights the other.">
+<!-- Hand-written. One inline SVG filter (greyscale, then a two-colour table), applied with CSS filter: url(#duo). -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; background: #000; }
+  #stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: url(#duo); }
+  .split #stage img.orig { filter: none; clip-path: inset(0 50% 0 0); }
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  input[type=color] { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: #212126; padding: 2px; }
+  input[type=file] { font: inherit; font-size: 14px; color: var(--ink); }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="duo" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0"/>
+    <feComponentTransfer id="ct"><feFuncR type="table" tableValues="0 1"/><feFuncG type="table" tableValues="0 1"/><feFuncB type="table" tableValues="0 1"/></feComponentTransfer>
+  </filter>
+</svg>
+<div class="wrap">
+  <main id="stage"><img id="img" alt="Test scene in two colours"><img id="orig" class="orig" alt="" hidden></main>
+  <aside>
+    <a class="back" href="../index.html">All effects</a>
+    <h1>Duotone</h1>
+    <p class="sum">Any photo in two colours. One SVG filter turns it to grey, then maps black to the shadow ink and white to the highlight ink. It ties mismatched stock or user photos to one palette, and it is pure CSS on an img.</p>
+    <div class="ctl"><label for="dark">Shadow ink</label><input id="dark" type="color" value="#1b1446"></div>
+    <div class="ctl"><label for="light">Highlight ink</label><input id="light" type="color" value="#f2c27a"></div>
+    <div class="ctl"><label for="mid"><span>Midtone push</span><output id="mid-o">0.50</output></label><input id="mid" type="range" min="0.2" max="0.8" step="0.01" value="0.5"></div>
+    <div class="ctl"><label for="cmp">Compare</label><select id="cmp"><option value="0">Duotone only</option><option value="1">Original on the left half</option></select></div>
+    <div class="ctl"><label for="upload">Try your own image (stays in this browser)</label><input id="upload" type="file" accept="image/*"></div>
+    <dl class="notes group">
+      <dt>Cost</dt><dd>Two filter primitives per image, run by the browser compositor. Cheap; fine on a grid of card images. No script needed in production: paste the SVG once and add filter: url(#duo).</dd>
+      <dt>Fallback</dt><dd>Where SVG filters on HTML fail (very old browsers) the photo simply shows in colour.</dd>
+      <dt>Becomes slop when</dt><dd>Pink and blue by default, or applied to product photos where the real colour is what people are buying. Pick the two inks from the project palette.</dd>
+    </dl>
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  function rgb(h) { var n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
+  function update() {
+    var d = rgb($('dark').value), l = rgb($('light').value), m = parseFloat($('mid').value); $('mid-o').textContent = m.toFixed(2);
+    var fns = $('ct').children;
+    for (var i = 0; i < 3; i++) { var a = d[i], b = l[i], mid = a + (b - a) * m; fns[i].setAttribute('tableValues', a.toFixed(3) + ' ' + mid.toFixed(3) + ' ' + b.toFixed(3)); }
+    var split = $('cmp').value === '1' && !q.has('shot'); root.classList.toggle('split', split); $('orig').hidden = !split;
+  }
+  function scene() {
+    var c = document.createElement('canvas'), w = 1200, h = 800; c.width = w; c.height = h; var x = c.getContext('2d');
+    var g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#1d2b4a'); g.addColorStop(.6, '#7d93b8'); g.addColorStop(1, '#e9d9c4'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    var s = x.createRadialGradient(w * .72, h * .34, 0, w * .72, h * .34, w * .2); s.addColorStop(0, '#fff4dc'); s.addColorStop(.2, 'rgba(255,226,180,.95)'); s.addColorStop(1, 'rgba(255,200,150,0)'); x.fillStyle = s; x.fillRect(0, 0, w, h);
+    [[.62, .035, 5, .4, '#5c6b7c'], [.7, .04, 3.4, 2.1, '#38475a'], [.8, .03, 4.2, 4, '#1d2633']].forEach(function (k) { x.beginPath(); x.moveTo(0, h); for (var i = 0; i <= w; i += 4) x.lineTo(i, k[0] * h + Math.sin(i / w * k[2] + k[3]) * k[1] * h); x.lineTo(w, h); x.fillStyle = k[4]; x.fill(); });
+    var R = h * .2, sx = w * .3, sy = h * .52, sp = x.createRadialGradient(sx - R * .4, sy - R * .45, R * .05, sx, sy, R); sp.addColorStop(0, '#f7efe6'); sp.addColorStop(.45, '#c9805f'); sp.addColorStop(1, '#3a1a1a'); x.fillStyle = sp; x.beginPath(); x.arc(sx, sy, R, 0, 7); x.fill();
+    return c.toDataURL('image/jpeg', .9);
+  }
+  var url = scene(); $('img').onload = function () { window.__fxReady = true; }; $('img').src = url; $('orig').src = url;
+  ['dark', 'light', 'mid', 'cmp'].forEach(function (id) { $(id).addEventListener('input', update); });
+  $('upload').addEventListener('change', function () { var f = this.files[0]; if (!f) return; var u = URL.createObjectURL(f); $('img').src = u; $('orig').src = u; });
+  update();
+})();
+</script>
+</body>
+</html>

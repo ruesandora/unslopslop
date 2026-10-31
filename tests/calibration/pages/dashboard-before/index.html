@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluxly Dashboard</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', sans-serif; background: #0f172a; color: #94a3b8; display: flex; min-height: 100vh; line-height: 1.2; }
+  a { outline: none; text-decoration: none; color: inherit; }
+  aside { width: 230px; padding: 22px 14px; background: rgba(30,41,59,.6); backdrop-filter: blur(16px); border-right: 1px solid #1e293b; flex: none; }
+  aside .logo { color: #fff; font-weight: 800; font-size: 20px; margin: 0 8px 26px; }
+  aside a { display: block; padding: 9px 11px; border-radius: 12px; font-size: 14px; margin-bottom: 3px; transition: all .3s; }
+  aside a.on { background: rgba(99,102,241,.25); color: #fff; border-left: 3px solid #6366f1; }
+  main { flex: 1; padding: 26px; min-width: 0; }
+  .eyebrow { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #a78bfa; }
+  h1 { font-size: 26px; color: #fff; font-weight: 800; margin: 6px 0 4px; letter-spacing: -.04em; }
+  .sub { font-size: 13px; color: #475569; margin-bottom: 22px; }
+  .live { float: right; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+  .kpi { padding: 18px; border-radius: 22px; background: #1e293b; border: 1px solid #334155; box-shadow: 0 8px 30px rgba(99,102,241,.18); animation: rise .7s both; transition: all .3s; }
+  .kpi:hover { transform: translateY(-5px); }
+  .kpi small { font-size: 12px; color: #475569; }
+  .kpi b { display: block; font-size: 32px; font-weight: 900; margin: 6px 0; background: linear-gradient(90deg, #818cf8, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .kpi span { font-size: 12px; color: #22c55e; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+  .panel { padding: 18px; border-radius: 22px; background: #1e293b; border: 1px solid #334155; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+  .panel .inner { margin-top: 12px; padding: 14px; border-radius: 14px; background: #0f172a; border: 1px solid #334155; box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+  .panel h2 { margin: 0; font-size: 15px; color: #fff; font-weight: 800; }
+  .bars { display: flex; align-items: flex-end; gap: 8px; height: 140px; margin-top: 10px; }
+  .bars i { flex: 1; border-radius: 8px 8px 0 0; background: linear-gradient(180deg, #a855f7, #6366f1); display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  td, th { text-align: left; padding: 9px 4px; border-bottom: 1px solid #1e293b; color: #475569; font-weight: 400; }
+  td:first-child { color: #cbd5e1; }
+  .tag { padding: 2px 9px; border-radius: 99px; background: rgba(239,68,68,.2); color: #f87171; font-size: 11px; }
+  .alert { margin-top: 12px; padding: 12px 14px; border-left: 4px solid #f59e0b; background: rgba(245,158,11,.1); border-radius: 8px; font-size: 13px; color: #fbbf24; }
+  .more { display: inline-block; margin-top: 12px; color: #a78bfa; font-size: 12px; }
+  .spark { height: 28px; margin-top: 8px; display: flex; align-items: flex-end; gap: 2px; } .spark i { flex: 1; background: #6366f1; display: block; }
+  @media (max-width: 760px) { aside { display: none; } .kpis, .grid { grid-template-columns: 1fr 1fr; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<aside>
+  <div class="logo">Fluxly</div>
+  <a class="on" href="#">📊 Dashboard</a><a href="#">🧾 Invoices</a><a href="#">👥 Clients</a><a href="#">💬 Reminders</a><a href="#">⚙️ Settings</a>
+</aside>
+<main>
+  <div class="live"><i></i> Live</div>
+  <div class="eyebrow">Overview</div>
+  <h1>Welcome back, Alex 👋</h1>
+  <p class="sub">Here's what's happening with your invoices today.</p>
+  <div class="kpis">
+    <div class="kpi"><small>Total revenue</small><b>$48,920</b><span>↑ 12.5%</span><div class="spark"><i style="height:30%"></i><i style="height:50%"></i><i style="height:40%"></i><i style="height:80%"></i><i style="height:60%"></i><i style="height:100%"></i></div></div>
+    <div class="kpi"><small>Overdue</small><b>$4,820</b><span>↑ 3.1%</span></div>
+    <div class="kpi"><small>Paid invoices</small><b>128</b><span>↑ 8.2%</span></div>
+    <div class="kpi"><small>Avg. days to pay</small><b>11.4</b><span>↓ 2.0%</span></div>
+  </div>
+  <div class="grid">
+    <div class="panel">
+      <h2>Revenue overview</h2>
+      <div class="inner"><div class="bars"><i style="height:40%"></i><i style="height:60%"></i><i style="height:45%"></i><i style="height:80%"></i><i style="height:65%"></i><i style="height:90%"></i><i style="height:100%"></i></div></div>
+      <div class="alert">3 invoices are overdue by more than 14 days.</div>
+    </div>
+    <div class="panel">
+      <h2>Recent activity</h2>
+      <table>
+        <tr><th>Client</th><th>Amount</th><th>Status</th></tr>
+        <tr><td>Acme Inc.</td><td>$1,200</td><td><span class="tag">Overdue</span></td></tr>
+        <tr><td>John Doe</td><td>$860</td><td><span class="tag">Overdue</span></td></tr>
+        <tr><td>Globex Corp</td><td>$2,400</td><td><span class="tag">Overdue</span></td></tr>
+      </table>
+      <a class="more" href="#">View all →</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

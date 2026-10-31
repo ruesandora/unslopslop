@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample text for a made-up advisory firm, placeholder wording</title>
+<meta name="description" content="Placeholder description.">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --lime:#efede6; --lime-2:#e4e1d6; --petrol:#0f2a2e; --petrol-2:#163a3f; --ink-2:#1a3539;
+  --verd:#7fb3a9; --on-dark:#efede6; --on-dark-2:#dfe8e5; --ochre:#e0a43a;
+  --line-light:rgba(15,42,46,.16); --line-dark:rgba(127,179,169,.22);
+  --display:'Archivo',system-ui,sans-serif; --text:'Source Sans 3',system-ui,sans-serif;
+  --pad:80px; --max:1280px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--lime);color:var(--petrol);font:400 18px/1.6 var(--text);font-feature-settings:"kern"}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ochre);outline-offset:4px;border-radius:2px}
+.wrap{max-width:calc(var(--max) + 2*var(--pad));margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--display);font-stretch:112%;font-weight:600;letter-spacing:-.01em;margin:0}
+p{margin:0;text-wrap:pretty}
+.skip{position:absolute;left:16px;top:-80px;padding:12px 16px;min-height:44px}
+.skip:focus{top:16px;background:var(--ochre);color:var(--petrol);padding:12px 16px;z-index:10}
+
+/* ---------- hero band ---------- */
+.band{background:var(--petrol);color:var(--on-dark);position:relative;isolation:isolate}
+.hero{padding-bottom:64px}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+   linear-gradient(rgba(127,179,169,.05) 1px,transparent 1px),
+   linear-gradient(90deg,rgba(127,179,169,.05) 1px,transparent 1px);
+  background-size:24px 24px}
+.grain{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+nav.top{display:flex;align-items:center;justify-content:space-between;height:88px;border-bottom:1px solid var(--line-dark)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.mark{width:40px;height:40px;display:grid;place-items:center;border:1.5px solid var(--verd);font:600 16px/1 var(--display);font-stretch:118%;letter-spacing:.02em;color:var(--on-dark)}
+.brand .name b{font:600 18px/1.2 var(--display);font-stretch:112%;display:block}
+.brand .name small{font-size:14px;color:var(--on-dark-2);display:block}
+nav.top ul{list-style:none;display:flex;gap:32px;margin:0;padding:0;align-items:center}
+nav.top ul a{text-decoration:none;font-size:16px;font-weight:600;color:var(--on-dark);padding:8px 0;border-bottom:1.5px solid transparent;transition:border-color .2s}
+@media (hover:hover){nav.top ul a:hover{border-color:var(--verd)}}
+nav.top .cta-sm{background:var(--on-dark);color:var(--petrol);border:0;padding:10px 18px;border-radius:2px}
+@media (hover:hover){nav.top ul a.cta-sm:hover{border-color:transparent;background:#fff}}
+.menu{display:none;position:relative}
+.menu summary{list-style:none;cursor:pointer;font-weight:600;font-size:16px;padding:12px 16px;border:1.5px solid var(--on-dark);border-radius:2px}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] ul{display:grid;position:absolute;right:0;top:56px;z-index:5;background:var(--petrol-2);border:1px solid var(--line-dark);padding:16px 24px;gap:4px;min-width:220px;box-shadow:0 16px 32px -12px rgba(5,18,20,.5)}
+.menu ul a{display:block;padding:8px 0}
+.menu:not([open]) ul{display:none}
+
+.hero-head{padding:72px 0 48px}
+.hero h1{font-size:60px;line-height:1.08;max-width:1180px;color:var(--on-dark)}
+.hero-grid{display:grid;grid-template-columns:5fr 7fr;grid-template-areas:"copy map";column-gap:64px;align-items:start}
+.copy{grid-area:copy}.map{grid-area:map}.scope{grid-area:scope}
+.lede{font-size:20px;line-height:1.6;color:var(--on-dark);max-width:44ch}
+.actions{display:flex;gap:24px;align-items:center;margin-top:40px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:12px;background:var(--ochre);color:var(--petrol);text-decoration:none;font:600 17px/1 var(--text);padding:18px 24px;border-radius:2px;transition:background-color .2s}
+@media (hover:hover){.btn:hover{background:#ebb455}}
+.btn svg{width:18px;height:18px}
+.link{font-weight:600;text-underline-offset:6px;text-decoration-thickness:1.5px;padding:12px 0}
+.hero .link{color:var(--on-dark);text-decoration-color:var(--verd)}
+.scope{margin-top:48px;padding-top:24px;border-top:1px solid var(--line-dark);display:flex;flex-wrap:wrap;gap:8px 24px;font-size:16px;color:var(--on-dark-2)}
+.scope b{color:var(--on-dark);font-weight:600}
+
+/* control map panel */
+.map{position:relative;z-index:2;margin:0;background:var(--petrol-2);border:1px solid var(--line-dark);border-radius:4px;padding:32px;margin-bottom:-184px;
+  box-shadow:0 1px 2px rgba(5,18,20,.3),0 12px 24px -8px rgba(5,18,20,.3),0 32px 56px -28px rgba(5,18,20,.2)}
+.map-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line-dark);margin-bottom:24px}
+.map-top h2{font-size:20px;font-stretch:108%;color:var(--on-dark)}
+.readout{font-size:16px;color:var(--on-dark-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.readout b{color:var(--on-dark);font-weight:600}
+.theme{display:grid;grid-template-columns:152px 1fr;gap:16px;align-items:start;padding:12px 0;border-radius:2px;cursor:default}
+.theme + .theme{border-top:1px solid rgba(127,179,169,.1)}
+.theme button{all:unset;cursor:pointer;display:block;min-height:44px;font-size:16px;line-height:1.3;color:var(--on-dark)}
+.theme button span{display:block;color:var(--on-dark-2);font-size:14px;font-variant-numeric:tabular-nums;margin-top:4px}
+.theme button:focus-visible{outline:2px solid var(--ochre);outline-offset:4px}
+.cells{display:block;width:100%;height:auto;overflow:visible}
+.cells rect{fill:transparent;stroke:rgba(127,179,169,.45);stroke-width:1;transition:fill .25s,stroke .25s,opacity .25s}
+.cells rect.on{fill:var(--verd);stroke:var(--verd)}
+.cells rect.on.new{fill:var(--on-dark);stroke:var(--on-dark)}
+.key{display:flex;align-items:center;gap:12px;margin-top:20px;padding-top:20px;border-top:1px solid var(--line-dark);font-size:16px;color:var(--on-dark)}
+.key i{width:16px;height:16px;border-radius:2px;background:var(--on-dark);flex:none}
+.map.focus .theme:not(.hot) .cells rect{opacity:.28}
+.map.focus .theme.hot button{color:var(--ochre)}
+.cells rect.cursor{stroke:var(--ochre);stroke-width:2;fill:transparent}
+
+/* ---------- ledger (credentials) ---------- */
+.ledger{padding:168px 0 96px}
+.ledger-grid{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.who{display:grid;grid-template-columns:144px 1fr;gap:24px;align-items:end}
+.bio{margin-top:24px;font-size:18px;max-width:52ch}
+.portrait{margin:0;aspect-ratio:4/5;background:var(--lime-2);border:1.5px dashed rgba(15,42,46,.45);border-radius:2px;display:grid;place-items:center;text-align:center;padding:12px;font-size:14px;line-height:1.4;color:var(--petrol)}
+.ledger h2{font-size:30px;line-height:1.2;align-self:start}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
+dl div{padding:24px 0;border-top:1.5px solid var(--petrol)}
+dt{font:600 22px/1.25 var(--display);font-stretch:108%;margin-bottom:8px}
+dd{margin:0;color:var(--ink-2);font-size:17px}
+
+/* ---------- services index ---------- */
+.services{padding:96px 0;border-top:1px solid var(--line-light);background-color:#ebe8df;background-image:linear-gradient(rgba(15,42,46,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(15,42,46,.035) 1px,transparent 1px);background-size:24px 24px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:48px}
+.sec-head h2{font-size:44px;line-height:1.1;max-width:18ch}
+.link{color:var(--petrol);text-decoration-color:rgba(15,42,46,.45)}
+@media (hover:hover){.link:hover{text-decoration-color:currentColor}}
+.svc{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line-light)}
+.svc li{border-top:1px solid var(--line-light)}
+.svc a{display:grid;grid-template-columns:3.4fr 6fr 2.6fr;gap:40px;padding:32px 16px;margin:0 -16px;text-decoration:none;align-items:baseline;transition:background-color .2s}
+@media (hover:hover){.svc a:hover{background:var(--lime)}.svc a:hover .go{text-decoration-color:var(--petrol)}}
+.code{font:600 22px/1.25 var(--display);font-stretch:118%;letter-spacing:-.005em}
+.svc h3{font-size:21px;line-height:1.3;font-stretch:104%;margin-bottom:8px}
+.svc p{color:var(--ink-2);font-size:17px;max-width:62ch}
+.go{justify-self:end;font-weight:600;font-size:16px;text-decoration:underline;text-decoration-color:var(--line-light);text-underline-offset:6px;text-decoration-thickness:1.5px}
+
+/* ---------- article + training ---------- */
+.reads{padding:16px 0 80px}
+.reads-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:4px;overflow:hidden;box-shadow:0 1px 2px rgba(15,42,46,.08),0 24px 48px -24px rgba(15,42,46,.25)}
+.article{background:#e2ddcd;padding:48px;display:flex;flex-direction:column;gap:16px}
+.meta{font-size:15px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.article h2{font-size:28px;line-height:1.2}
+.article p{color:var(--ink-2);font-size:17px}
+.byline{display:flex;align-items:center;gap:12px;padding-top:24px;font-size:15px}
+.byline .mark{width:36px;height:36px;font-size:14px;color:var(--petrol);border-color:var(--petrol)}
+.byline b{display:block;font-weight:600}
+.article .link{align-self:flex-start}
+.training{background:var(--petrol);color:var(--on-dark);padding:48px;position:relative}
+.training .meta{color:var(--on-dark-2)}
+.training h2{font-size:30px;line-height:1.2;margin:16px 0}
+.training p{color:var(--on-dark);font-size:17px;max-width:58ch}
+.training ul{list-style:none;padding:0;margin:32px 0;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.training li{padding-top:16px;border-top:1px solid var(--line-dark);font-size:16px;color:var(--on-dark-2)}
+.training li b{display:block;color:var(--on-dark);font-weight:600;margin-bottom:4px}
+.training .actions{margin-top:0}
+.training .link{color:var(--on-dark);text-decoration-color:var(--verd)}
+
+/* ---------- perspective + shared structure ---------- */
+.persp{padding:80px 0;border-top:1px solid var(--line-light)}
+.persp-grid{display:grid;grid-template-columns:5fr 7fr;gap:64px;align-items:start}
+.plist{list-style:none;margin:0;padding:0}
+.plist li{padding:24px 0;border-top:1.5px solid var(--petrol);display:grid;grid-template-columns:132px 1fr;gap:4px 24px}
+.plist li > *:not(.when){grid-column:2}
+.plist .when{grid-row:1/3}
+.plist li:first-child{padding-top:20px}
+.plist .when{font-size:15px;font-weight:600;color:var(--ink-2);line-height:1.4;padding-top:4px}
+.plist h3{font-size:22px;line-height:1.25;font-stretch:108%;margin-bottom:8px}
+.plist p{color:var(--ink-2);font-size:17px}
+.hls{margin:0;background:var(--petrol);color:var(--on-dark);border-radius:4px;padding:32px;position:relative;isolation:isolate;overflow:hidden;
+  box-shadow:0 1px 2px rgba(15,42,46,.12),0 24px 48px -24px rgba(15,42,46,.2)}
+.hls h3{font-size:20px;font-stretch:108%;line-height:1.3;max-width:34ch}
+.hls > p{font-size:16px;color:var(--on-dark-2);margin-top:8px;max-width:56ch}
+.mx{display:grid;grid-template-columns:104px repeat(4,48px) minmax(150px,1fr) repeat(2,48px) 52px;grid-template-rows:auto repeat(3,60px);gap:6px;margin-top:28px}
+.mx .hd{font:600 15px/1 var(--display);font-stretch:112%;text-align:center;color:var(--on-dark);padding-bottom:6px;align-self:end}
+.mx .hd.w{text-align:left;padding-left:12px}
+.mx .rl{font-size:15px;font-weight:600;align-self:center;line-height:1.25}
+.mx .sh{grid-row:2/5;border-radius:2px;padding:12px 0;background:rgba(127,179,169,.38);display:grid;place-items:center;writing-mode:vertical-rl;transform:rotate(180deg);font-size:15px;font-weight:600;color:var(--on-dark);letter-spacing:.01em}
+.mx .d{border-radius:2px;background:var(--on-dark);color:var(--petrol);font-size:15px;line-height:1.25;font-weight:600;padding:8px 12px;display:flex;align-items:center}
+.mx .x{border-radius:2px;border:1.5px solid var(--on-dark);display:grid;place-items:center;font-size:14px;font-weight:600}
+.hls > .mkey{max-width:none}
+.mkey{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line-dark);font-size:15px;color:var(--on-dark)}
+.mkey span{display:inline-flex;align-items:center;gap:8px}
+.mkey i{width:16px;height:16px;border-radius:2px;display:inline-block}
+.mx-m{display:none}
+
+/* ---------- contact ---------- */
+.contact{padding:112px 0}
+.contact::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.contact-grid{display:grid;grid-template-columns:7fr 5fr;gap:64px;align-items:center}
+.contact h2{font-size:48px;line-height:1.1;color:var(--on-dark)}
+.contact p{color:var(--on-dark);font-size:19px;max-width:46ch;margin-bottom:32px}
+.contact .mail{font:600 24px/1.2 var(--display);font-stretch:108%;color:var(--on-dark);text-decoration:underline;text-decoration-color:var(--verd);text-underline-offset:8px;text-decoration-thickness:1.5px;display:inline-block;margin-top:32px;padding:6px 0}
+.contact .note{font-size:16px;color:var(--on-dark-2);margin:16px 0 0;max-width:52ch}
+.contact .link{color:var(--on-dark);text-decoration-color:var(--verd)}
+
+footer{background:var(--petrol);color:var(--on-dark-2);border-top:1px solid var(--line-dark);padding:64px 0 32px;font-size:16px}
+.foot{display:grid;grid-template-columns:6fr 3fr 3fr;gap:48px}
+footer b.f{font:600 22px/1.2 var(--display);font-stretch:112%;color:var(--on-dark);display:block;margin-bottom:12px}
+footer h2{font-size:16px;font-family:var(--text);font-stretch:100%;color:var(--on-dark);margin-bottom:16px;letter-spacing:0}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+footer a{text-decoration:none;color:var(--on-dark-2);display:inline-block;padding:4px 0}
+@media (hover:hover){footer a:hover{color:var(--on-dark)}}
+.foot-end{display:flex;justify-content:space-between;margin-top:56px;padding-top:24px;border-top:1px solid var(--line-dark);font-size:15px}
+
+/* ---------- phone ---------- */
+@media (max-width:1100px){
+  :root{--pad:40px}
+  .ledger-grid,.contact-grid,.reads-grid,.persp-grid{grid-template-columns:1fr}
+  .hero-grid{grid-template-columns:1fr;grid-template-areas:"copy" "map";grid-template-rows:auto;row-gap:40px}
+  .scope{margin-top:0}
+  .map{margin-bottom:0}
+  .hero{padding-bottom:48px}
+  .ledger{padding-top:96px}
+  .ledger{padding-top:128px}
+  nav.top > ul{display:none}
+  .menu{display:block}
+}
+@media (max-width:720px){
+  :root{--pad:24px}
+  body{font-size:17px}
+  nav.top{height:72px}
+  .hero-head{padding:40px 0 32px}
+  .hero h1{font-size:36px;line-height:1.12}
+  .lede{font-size:18px}
+  .actions{margin-top:32px;gap:16px}
+  .scope{margin-top:32px}
+  .hero-grid{gap:40px}
+  .map{padding:20px 16px}
+  .map-top{flex-direction:column;gap:4px}
+  .theme{grid-template-columns:1fr;gap:8px}
+  .theme button{display:flex;gap:8px;align-items:baseline}
+  .theme button span{margin-top:0}
+  .ledger{padding:64px 0}
+  .ledger h2,.sec-head h2{font-size:30px}
+  dl{grid-template-columns:1fr}
+  .services,.persp{padding:64px 0}
+  .sec-head{flex-direction:column;align-items:start;gap:16px;margin-bottom:32px}
+  .svc a{grid-template-columns:1fr;gap:12px;padding:28px 0;margin:0}
+  .go{justify-self:start}
+  .article,.training{padding:32px 24px}
+  .article h2,.training h2{font-size:24px}
+  .training ul{grid-template-columns:1fr}
+  .hls{padding:24px 16px}
+  .plist li{grid-template-columns:1fr}
+  .plist li > *:not(.when){grid-column:1}
+  .plist .when{grid-row:auto;padding-top:0}
+  .mx{display:none}
+  .mx-m{display:grid;gap:8px;margin-top:20px}
+  .mx-m .shared{display:flex;flex-wrap:wrap;gap:6px}
+  .mx-m .shared span{background:rgba(127,179,169,.38);border-radius:2px;padding:8px 12px;font-size:15px;font-weight:600}
+  .mx-m .row{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:stretch}
+  .mx-m .rl{font-size:15px;font-weight:600;align-self:center}
+  .mx-m .d{background:var(--on-dark);color:var(--petrol);border-radius:2px;padding:10px 12px;font-size:15px;font-weight:600;line-height:1.3}
+  .mx-m p{font-size:15px;color:var(--on-dark);margin-top:4px}
+  .who{grid-template-columns:120px 1fr;gap:16px}
+  .contact .mail{font-size:20px}
+  .contact{padding:72px 0}
+  .contact h2{font-size:32px}
+  .foot{grid-template-columns:1fr 1fr;gap:32px}
+  .foot > div:first-child{grid-column:1/-1}
+  .foot-end{flex-direction:column;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">only, nothing</a>
+
+<header class="band hero">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wrap">
+    <nav class="top" aria-label="Sample">
+      <a class="brand" href="#"><span class="mark" aria-hidden="true">AB</span><span class="name"><b>here is</b><small>real content Sample</small></span></a>
+      <ul>
+        <li><a href="#">text</a></li>
+        <li><a href="#">for</a></li>
+        <li><a href="#">a</a></li>
+        <li><a href="#">made-up advisory</a></li>
+        <li><a href="#">firm,</a></li>
+        <li><a class="cta-sm" href="#">placeholder wording</a></li>
+      </ul>
+      <details class="menu"><summary>only,</summary><ul>
+        <li><a href="#">nothing</a></li>
+        <li><a href="#">here</a></li>
+        <li><a href="#">is</a></li>
+        <li><a href="#">real content</a></li>
+        <li><a href="#">Sample</a></li>
+        <li><a href="#">text for</a></li>
+      </ul></details>
+    </nav>
+
+    <div class="hero-head" id="main">
+      <h1>a made-up advisory firm, placeholder wording only, nothing</h1>
+    </div>
+
+    <div class="hero-grid">
+      <div class="copy">
+        <p class="lede">here is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a made-up advisory firm, placeholder wording only,</p>
+        <div class="actions">
+          <a class="btn" href="#">nothing here <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h11M10 4.5 14.5 9 10 13.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a>
+          <a class="link" href="#">is real content</a>
+        </div>
+      </div>
+
+      <figure class="map" id="map" aria-labelledby="map-title">
+        <div class="map-top">
+          <h2 id="map-title">Sample text for a made-up</h2>
+          <p class="readout" id="readout" aria-live="polite"><b>93</b> advisory firm, placeholder wording</p>
+        </div>
+        <div id="themes"></div>
+        <p class="key"><i aria-hidden="true"></i>only, nothing here is real content</p>
+      </figure>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="ledger" aria-labelledby="ledger-title">
+    <div class="wrap ledger-grid">
+      <div class="me"><div class="who">
+        <figure class="portrait" aria-label="Sample">Sample text<br>for a</figure>
+        <h2 id="ledger-title">made-up advisory firm, placeholder wording only,</h2>
+      </div>
+      <p class="bio">nothing here is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real</p></div>
+      <dl>
+        <div><dt>content Sample</dt><dd>text for a made-up advisory firm,</dd></div>
+        <div><dt>placeholder wording only,</dt><dd>nothing here is real content Sample text</dd></div>
+        <div><dt>for a</dt><dd>made-up advisory firm, placeholder wording only,</dd></div>
+        <div><dt>nothing here</dt><dd>is real content Sample text for a</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="services" aria-labelledby="svc-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="svc-title">made-up advisory firm, placeholder wording</h2>
+        <a class="link" href="#">only, nothing here</a>
+      </div>
+      <ul class="svc">
+        <li><a href="#">
+          <span class="code">is real</span>
+          <span><h3>content Sample text for a</h3><p>made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a made-up advisory firm,</p></span>
+          <span class="go">placeholder wording only,</span></a></li>
+        <li><a href="#">
+          <span class="code">nothing</span>
+          <span><h3>here is real content Sample</h3><p>text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text for</p></span>
+          <span class="go">a made-up advisory firm,</span></a></li>
+        <li><a href="#">
+          <span class="code">placeholder wording</span>
+          <span><h3>only, nothing here is real content</h3><p>Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text</p></span>
+          <span class="go">for a made-up</span></a></li>
+        <li><a href="#">
+          <span class="code">advisory firm,</span>
+          <span><h3>placeholder wording only, nothing here</h3><p>is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content</p></span>
+          <span class="go">Sample text for</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="reads" aria-label="Sample">
+    <div class="wrap">
+      <div class="reads-grid">
+        <article class="article">
+          <p class="meta">a made-up advisory firm, placeholder wording only, nothing here is</p>
+          <h2>real content Sample text for a made-up advisory</h2>
+          <p>firm, placeholder wording only, nothing here is real content Sample text for a made-up advisory</p>
+          <a class="link" href="#">firm, placeholder</a>
+          <div class="byline"><span class="mark" aria-hidden="true">AB</span><span><b>wording only,</b>nothing here is real</span></div>
+        </article>
+        <div class="training">
+          <p class="meta">content Sample text for</p>
+          <h2>a made-up advisory firm, placeholder wording only, nothing here</h2>
+          <p>is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a</p>
+          <ul>
+            <li><b>made-up advisory</b>firm, placeholder wording only, nothing here is real</li>
+            <li><b>content Sample</b>text for a made-up advisory firm, placeholder</li>
+          </ul>
+          <div class="actions">
+            <a class="link" href="#">wording only, nothing</a>
+            <a class="link" href="#">here is</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="persp" aria-labelledby="persp-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="persp-title">real content Sample text for</h2>
+        <a class="link" href="#">a made-up advisory</a>
+      </div>
+      <div class="persp-grid">
+        <ol class="plist">
+          <li><p class="when">firm, placeholder</p><h3>wording only, nothing here</h3><p>is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real</p></li>
+          <li><p class="when">content Sample</p><h3>text for a</h3><p>made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a made-up advisory firm,</p></li>
+          <li><p class="when">placeholder wording only,</p><h3>nothing here is</h3><p>real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content</p></li>
+        </ol>
+        <figure class="hls" aria-labelledby="hls-title">
+          <h3 id="hls-title">Sample text for a made-up advisory firm, placeholder wording</h3>
+          <div class="mx" role="img" aria-label="Sample">
+            <span></span><span class="hd">4</span><span class="hd">5</span><span class="hd">6</span><span class="hd">7</span><span class="hd w">only, nothing</span><span class="hd">9</span><span class="hd">10</span><span></span>
+            <span class="rl" style="grid-row:2;grid-column:1">here is</span>
+            <span class="rl" style="grid-row:3;grid-column:1">real content</span>
+            <span class="rl" style="grid-row:4;grid-column:1">Sample text</span>
+            <span class="sh" style="grid-column:2">for</span><span class="sh" style="grid-column:3">a</span><span class="sh" style="grid-column:4">made-up</span><span class="sh" style="grid-column:5">advisory</span>
+            <span class="d" style="grid-row:2;grid-column:6">firm, placeholder wording only,</span>
+            <span class="d" style="grid-row:3;grid-column:6">nothing here is real content Sample</span>
+            <span class="d" style="grid-row:4;grid-column:6">text for a made-up</span>
+            <span class="sh" style="grid-column:7">advisory firm,</span><span class="sh" style="grid-column:8">placeholder</span>
+            <span class="x" style="grid-row:2;grid-column:9">wording</span>
+          </div>
+          <div class="mx-m">
+            <div class="shared" aria-label="Sample"><span>only, nothing</span><span>here is</span><span>real content</span><span>Sample text</span><span>for a</span><span>made-up advisory</span></div>
+            <p>firm, placeholder wording</p>
+            <div class="row"><span class="rl">only, nothing</span><span class="d">here is real content Sample</span></div>
+            <div class="row"><span class="rl">text for</span><span class="d">a made-up advisory firm, placeholder wording</span></div>
+            <div class="row"><span class="rl">only, nothing</span><span class="d">here is real content</span></div>
+          </div>
+          <p class="mkey"><span><i style="background:rgba(127,179,169,.38)"></i>Sample text</span><span><i style="background:var(--on-dark)"></i>for a made-up</span></p>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band contact" aria-labelledby="contact-title">
+    <div class="wrap contact-grid">
+      <h2 id="contact-title">advisory firm, placeholder wording only, nothing here</h2>
+      <div>
+        <p>is real content Sample text for a made-up advisory firm, placeholder wording only, nothing here is real content Sample text for a</p>
+        <div class="actions" style="margin-top:0">
+          <a class="btn" href="#">made-up advisory firm, <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h11M10 4.5 14.5 9 10 13.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a>
+          <a class="link" href="#">placeholder wording</a>
+        </div>
+        <a class="mail" href="mailto:name@example.com">only,</a>
+        <p class="note">nothing here is real content Sample text for a made-up advisory firm,</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><b class="f">placeholder wording</b><p style="max-width:40ch">only, nothing here is real content Sample text for a made-up advisory</p><p style="margin-top:16px"><a href="#" style="color:var(--on-dark);text-decoration:underline;text-decoration-color:var(--verd);text-underline-offset:6px">firm,</a></p></div>
+      <div><h2>placeholder</h2><ul><li><a href="#">wording</a></li><li><a href="#">only,</a></li><li><a href="#">nothing here</a></li></ul></div>
+      <div><h2>is real content</h2><ul><li><a href="#">Sample</a></li><li><a href="#">text</a></li><li><a href="#">for a made-up</a></li><li><a href="#">advisory firm,</a></li><li><a href="#">placeholder wording</a></li></ul></div>
+    </div>
+    <div class="foot-end"><span>only, nothing here is real content Sample</span><span>text for a</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // ISO/IEC 27001:2022 Annex A structure: themes and control counts
+  const THEMES = [
+    { id: 5, name: 'Organizasyonel', n: 37 },
+    { id: 6, name: 'İnsan', n: 8 },
+    { id: 7, name: 'Fiziksel', n: 14 },
+    { id: 8, name: 'Teknolojik', n: 34 }
+  ];
+  // the 11 controls added in the 2022 revision
+  const NEW = {'5.7':'Tehdit istihbaratı','5.23':'Bulut hizmetlerinde bilgi güvenliği','5.30':'İş sürekliliği için BİT hazırlığı','7.4':'Fiziksel güvenlik izleme','8.9':'Yapılandırma yönetimi','8.10':'Bilgi silme','8.11':'Veri maskeleme','8.12':'Veri sızıntısı önleme','8.16':'İzleme faaliyetleri','8.23':'Web filtreleme','8.28':'Güvenli kodlama'};
+  const COLS = 19, SIZE = 20, GAP = 6, STEP = SIZE + GAP;
+  const host = document.getElementById('themes');
+  const map = document.getElementById('map');
+  const readout = document.getElementById('readout');
+  const all = [];
+  const NS = 'http://www.w3.org/2000/svg';
+
+  THEMES.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'theme';
+    const rows = Math.ceil(t.n / COLS);
+    const w = COLS * STEP - GAP, h = rows * STEP - GAP;
+    row.innerHTML = `<button type="button" aria-pressed="false">A.${t.id} ${t.name}<span>${t.n} kontrol</span></button>`;
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'cells');
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', `A.${t.id} ${t.name}: ${t.n} kontrol`);
+    for (let i = 0; i < t.n; i++) {
+      const r = document.createElementNS(NS, 'rect');
+      r.setAttribute('x', (i % COLS) * STEP + .5);
+      r.setAttribute('y', Math.floor(i / COLS) * STEP + .5);
+      r.setAttribute('width', SIZE - 1); r.setAttribute('height', SIZE - 1);
+      r.setAttribute('rx', 2);
+      const ttl = document.createElementNS(NS, 'title');
+      const id = `${t.id}.${i + 1}`;
+      if (NEW[id]) r.classList.add('new');
+      ttl.textContent = NEW[id] ? `A.${id} ${NEW[id]} (2022'de eklendi)` : `A.${id}`;
+      r.addEventListener('mouseenter', () => { readout.innerHTML = NEW[id] ? `<b>A.${id}</b> ${NEW[id]}` : `<b>A.${id}</b>`; });
+      r.appendChild(ttl);
+      svg.appendChild(r);
+      all.push(r);
+    }
+    row.appendChild(svg);
+    host.appendChild(row);
+
+    const btn = row.querySelector('button');
+    const on = () => { map.classList.add('focus'); row.classList.add('hot'); btn.setAttribute('aria-pressed','true');
+      readout.innerHTML = `A.${t.id} ${t.name} · <b>${t.n}</b> / 93 kontrol`; };
+    const off = () => { map.classList.remove('focus'); row.classList.remove('hot'); btn.setAttribute('aria-pressed','false');
+      readout.innerHTML = '<b>93</b> kontrol · 4 tema'; };
+    row.addEventListener('mouseenter', on); row.addEventListener('mouseleave', off);
+    btn.addEventListener('focus', on); btn.addEventListener('blur', off);
+  });
+
+  // One written moment: the audit cursor walks the 93 controls in order, then stops.
+  // render(t) is a pure function of time.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DURATION = 2600;
+  function render(t) {
+    const k = Math.min(1, t / DURATION);
+    const eased = 1 - Math.pow(1 - k, 2);
+    const lit = Math.round(eased * all.length);
+    all.forEach((r, i) => {
+      r.classList.toggle('on', i < lit);
+      r.classList.toggle('cursor', i === lit && k < 1);
+    });
+    if (k < 1) readout.innerHTML = `<b>${String(lit).padStart(2, '0')}</b> / 93 kontrol`;
+    else readout.innerHTML = '<b>93</b> kontrol · 4 tema';
+  }
+  if (reduce) { render(DURATION); return; }
+  render(0);
+  let t0 = null;
+  function frame(now) {
+    if (t0 === null) t0 = now;
+    const t = now - t0;
+    render(t);
+    if (t < DURATION) requestAnimationFrame(frame);
+  }
+  setTimeout(() => requestAnimationFrame(frame), 400);
+})();
+</script>
+</body>
+</html>

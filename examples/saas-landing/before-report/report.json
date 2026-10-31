@@ -2,16 +2,68 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/saas-landing/before.html",
-  "score": 100,
-  "rawPoints": 247,
+  "score": 92,
+  "patternScore": 100,
+  "tells": 156,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 0,
+        "max": 25,
+        "why": "display line 56 px"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 11,
+        "max": 15,
+        "why": "ground colour 61% of the first screen, accents 7.0%"
+      },
+      "keyword": {
+        "points": 0,
+        "max": 15,
+        "why": "1 coloured or gradient keyword(s) in the headline"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10",
+      "display line under 80 px: proof capped at 55"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 56,
+      "overlap": 0,
+      "keyword": 1,
+      "imagery": 0,
+      "app": false,
+      "pageHeight": 2030,
+      "vpA": 1296000,
+      "ground": 0.606,
+      "accent": 0.07
+    }
+  },
+  "rawPoints": 295,
   "verdict": "heavy",
-  "rulesChecked": 72,
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 6,
-    "color": 57,
+    "color": 73,
     "icons": 19.5,
-    "copy": 31.5,
-    "typography": 22,
+    "copy": 43.5,
+    "typography": 42,
     "layout": 48,
     "detail": 37,
     "imagery": 12,
@@ -195,6 +247,77 @@
       "points": 12
     },
     {
+      "rule": "copy-emoji",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Emoji in the page",
+      "why": "Emoji in headings, buttons, labels or body copy are the most visible AI tell.",
+      "fix": "Remove them. Use words, or one icon set drawn for the product. Keep emoji only if the brief says the user asked for them (<meta name=\"unslop-brief\" content=\"emoji: reason\">).",
+      "count": 5,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "span.pill",
+          "detail": "✨ Introducing Fluxly 2.0 — no…",
+          "viewport": "desktop"
+        },
+        {
+          "el": "b",
+          "detail": "4.9★",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.ico",
+          "detail": "⚡",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.ico",
+          "detail": "🔒",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 12,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "div.eyebrow",
+          "detail": "6.56:1 \"Workflow automation\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.sub",
+          "detail": "3.75:1 \"Fluxly empowers modern teams …\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "6.96:1 \"Trusted by 10,000+ teams worl…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.quote",
+          "detail": "6.96:1 \"\"Fluxly changed how we work.\"…\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
       "rule": "icon-emoji-ui",
       "pass": "icons",
       "severity": "major",
@@ -224,6 +347,41 @@
         {
           "el": "div.ico",
           "detail": "🚀",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 10.5
+    },
+    {
+      "rule": "type-heading-muted-subtitle",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Heading plus grey subtitle, section after section",
+      "why": "A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.",
+      "fix": "Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.",
+      "count": 4,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1 + p.sub",
+          "detail": "\"Unleash seamless workflows. N…\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Lightning fast\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Secure by design\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"Effortless setup\" with a greyed subtitle",
           "viewport": "desktop"
         }
       ],
@@ -575,6 +733,46 @@
       "points": 6
     },
     {
+      "rule": "type-accent-keyword",
+      "pass": "typography",
+      "severity": "major",
+      "title": "One word of the headline in the accent colour",
+      "why": "Colouring or gradient-filling one keyword of the headline is the most common template tell, even on design-tool sites.",
+      "fix": "Let the whole headline speak in one colour. If a second tone is wanted, make it a quieter grey for a whole line, not a bright keyword.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1",
+          "detail": "\"seamless workflows\" coloured inside \"Unleash seamless workflows. Not just a …\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "type-ai-default-font",
+      "pass": "typography",
+      "severity": "major",
+      "title": "AI-default font",
+      "why": "Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.",
+      "fix": "Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name=\"unslop-brief\" content=\"font: Family, reason\">.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "body",
+          "detail": "inter",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
       "rule": "detail-focus-ring",
       "pass": "detail",
       "severity": "major",
@@ -771,6 +969,41 @@
       "points": 4
     },
     {
+      "rule": "color-accent-decorative",
+      "pass": "color",
+      "severity": "minor",
+      "title": "Accent colour spent on decoration",
+      "why": "When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.",
+      "fix": "Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.",
+      "count": 16,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "div.blob",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "div.eyebrow",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
       "rule": "detail-glass",
       "pass": "detail",
       "severity": "minor",
@@ -931,31 +1164,6 @@
       "points": 3
     },
     {
-      "rule": "type-reflex-font",
-      "pass": "typography",
-      "severity": "minor",
-      "title": "Reflex font family",
-      "why": "Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.",
-      "fix": "Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.",
-      "count": 2,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "body",
-          "detail": "inter",
-          "viewport": "desktop"
-        },
-        {
-          "el": "h1",
-          "detail": "inter",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 2.5
-    },
-    {
       "rule": "type-tight-leading",
       "pass": "typography",
       "severity": "minor",
@@ -1078,5 +1286,92 @@
       "points": 2
     }
   ],
+  "craft": {
+    "score": 51,
+    "passMark": 70,
+    "pass": false,
+    "components": {
+      "hierarchy": {
+        "points": 15,
+        "max": 15,
+        "why": "display 56px / body 15px = 3.73x, 11 sizes"
+      },
+      "focal": {
+        "points": 9,
+        "max": 15,
+        "why": "headline 3.7x, largest visual 0% of the screen"
+      },
+      "visual": {
+        "points": 0,
+        "max": 20,
+        "why": "0% of the first screen is visual (none)"
+      },
+      "motion": {
+        "points": 7,
+        "max": 15,
+        "why": "moves outside any visual, 15 moving elements, reduced motion not handled"
+      },
+      "identity": {
+        "points": 8,
+        "max": 20,
+        "why": "no web font, one face, accent used 26x in 5 hue band(s), 4 shadows, 1 layers, 1 textured areas (gradient)"
+      },
+      "density": {
+        "points": 12,
+        "max": 15,
+        "why": "landing, 25% of the first screen holds content"
+      }
+    },
+    "findings": [
+      {
+        "rule": "bland-no-hero-visual",
+        "pass": "craft",
+        "severity": "major",
+        "title": "No real visual on the first screen",
+        "why": "A first screen of text alone asks the reader to imagine the product. Strong pages show it: a product view, a photo, a drawing.",
+        "fix": "Put the product itself in the first screen: a built UI view, a real screenshot, a photo or a meaningful drawing, at least 8% of the screen.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "first screen",
+            "detail": "no image, canvas, drawing or product surface",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
+    "signals": {
+      "body": 15,
+      "display": 56,
+      "steps": 11,
+      "visFrac": 0,
+      "bestVis": 0,
+      "visKinds": [],
+      "raf": 0,
+      "mut": 1,
+      "movers": 15,
+      "inVisual": 0,
+      "canvasLive": false,
+      "mq": 0,
+      "webfont": false,
+      "distinctFaces": false,
+      "accentUses": 26,
+      "accentHues": 5,
+      "shadows": 4,
+      "layered": 1,
+      "textures": 1,
+      "textureKinds": [
+        "gradient"
+      ],
+      "app": false,
+      "firstTexts": 22,
+      "coverage": 0.2546875
+    }
+  },
+  "overall": "fail",
   "errors": []
 }

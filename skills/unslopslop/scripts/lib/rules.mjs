@@ -9,6 +9,7 @@ export const WEIGHTS = { critical: 12, major: 6, minor: 2 };
 const BOTH = ['desktop', 'mobile'];
 
 import { EXTRA } from './rules-extra.mjs';
+import { HARD } from './rules-hard.mjs';
 
 const BASE = [
   // ---------------------------------------------------------------- spacing
@@ -49,7 +50,9 @@ const BASE = [
         const isCtl = ['BUTTON', 'A', 'INPUT'].includes(el.tagName) || el.getAttribute('role') === 'button';
         const long = h.own(el).length >= 12;
         if (!isCtl && !long) continue;
-        const bad = isCtl ? pl < 8 || pr < 8 || pt < 4 || pb < 4 : Math.min(pl, pr, pt, pb) < 8;
+        // a control with a fixed height (line-height / height set instead of padding) is not cramped vertically
+        const tall = isCtl && h.rect(el).height >= 28;
+        const bad = isCtl ? pl < 8 || pr < 8 || (!tall && (pt < 4 || pb < 4)) : Math.min(pl, pr, pt, pb) < 8;
         if (bad) out.push({ el: h.sel(el), detail: `padding ${pt}/${pr}/${pb}/${pl}px` });
       }
       return out;
@@ -67,6 +70,8 @@ const BASE = [
       for (const el of h.all()) {
         const bi = h.cs(el).backgroundImage;
         if (!/gradient\(/.test(bi)) continue;
+        // a text highlight that sweeps across (background wider than the text) is a reveal effect, not a fill
+        if ((h.cs(el).webkitBackgroundClip === 'text' || h.cs(el).backgroundClip === 'text') && parseFloat(h.cs(el).backgroundSize) >= 200) continue;
         const stops = h.colorTokens(bi).map((t) => h.rgba(t)).filter((c) => c && c.a > 0.05).map((c) => h.hsl(c));
         const violet = stops.some((c) => c.h >= 245 && c.h <= 320 && c.s > 0.3 && c.l > 0.15 && c.l < 0.85);
         if (violet && stops.length >= 2) out.push({ el: h.sel(el), detail: h.snip(bi, 80) });
@@ -82,7 +87,7 @@ const BASE = [
     check: (h) =>
       h.textEls().filter((el) => {
         const s = h.cs(el);
-        return (s.webkitBackgroundClip === 'text' || s.backgroundClip === 'text') && /gradient\(/.test(s.backgroundImage);
+        return (s.webkitBackgroundClip === 'text' || s.backgroundClip === 'text') && /gradient\(/.test(s.backgroundImage) && !(parseFloat(s.backgroundSize) >= 200);
       }).map((el) => ({ el: h.sel(el), detail: h.snip(h.own(el)) })),
   },
   {
@@ -299,21 +304,6 @@ const BASE = [
 
   // ------------------------------------------------------------- typography
   {
-    id: 'type-reflex-font', pass: 'typography', severity: 'minor', scope: 'page', viewports: ['desktop'],
-    title: 'Reflex font family',
-    why: 'Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.',
-    fix: 'Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.',
-    check: (h) => {
-      const reflex = ['inter', 'roboto', 'open sans', 'poppins', 'dm sans', 'space grotesk', 'outfit', 'plus jakarta sans', 'instrument sans', 'instrument serif', 'fraunces', 'playfair display', 'syne', 'montserrat', 'jetbrains mono', 'space mono'];
-      const out = [];
-      for (const el of [document.body, document.querySelector('h1')].filter(Boolean)) {
-        const first = h.cs(el).fontFamily.split(',')[0].replace(/["']/g, '').trim().toLowerCase();
-        if (reflex.includes(first)) out.push({ el: h.sel(el), detail: first });
-      }
-      return out;
-    },
-  },
-  {
     id: 'type-flat-hierarchy', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
     title: 'Flat type hierarchy',
     why: 'When the largest text is barely bigger than body text, nothing leads the eye.',
@@ -486,8 +476,14 @@ const BASE = [
           if (w >= 3 && s['border' + side + 'Style'] !== 'none' && c && c.a > 0.3 && h.px(s.borderTopWidth) <= 1 && h.px(s.borderBottomWidth) <= 1 && el.tagName !== 'INPUT')
             out.push({ el: h.sel(el), detail: `${w}px ${side.toLowerCase()} border` });
         }
-        if (/inset\s+-?[3-9]px\s+0(px)?\s+0/.test(s.boxShadow) || /\)\s*inset\s+-?[3-9]px\s+0px\s+0px/.test(s.boxShadow))
+        if (/inset\s+-?[2-9]px\s+0(px)?\s+0/.test(s.boxShadow) || /\)\s*inset\s+-?[2-9]px\s+0px\s+0px/.test(s.boxShadow) || /^inset\s+-?[2-9]px\s+0px\s+0px/.test(s.boxShadow) || /\s-?[2-9]px 0px 0px 0px inset/.test(s.boxShadow))
           out.push({ el: h.sel(el), detail: 'inset side shadow' });
+        for (const pseudo of ['::before', '::after']) {
+          const ps = getComputedStyle(el, pseudo);
+          if (!ps || ps.content === 'none' || ps.position !== 'absolute') continue;
+          const w = h.px(ps.width), hh = h.px(ps.height), bgc = h.rgba(ps.backgroundColor);
+          if (w >= 2 && w <= 8 && hh >= h.rect(el).height * 0.6 && bgc && bgc.a > 0.3 && (h.px(ps.left) <= 2 || h.px(ps.right) <= 2)) out.push({ el: h.sel(el), detail: `${w}px bar drawn with ${pseudo}` });
+        }
       }
       return out;
     },
@@ -734,7 +730,10 @@ const BASE = [
         if (s.animationName === 'none' || !/infinite/.test(s.animationIterationCount)) continue;
         const r = h.rect(el);
         if (r.width <= 16 && r.height <= 16) continue;
-        if (el.closest('[role=progressbar], [aria-busy=true], [role=status]') || /spin|loader|loading|skeleton/i.test(el.className + s.animationName)) continue;
+        if (el.closest('[role=progressbar], [aria-busy=true], [role=status]') || /spin|loader|loading|skeleton|shimmer|breath/i.test(el.className + s.animationName)) continue;
+        // a long loop that replays a product demo (it holds text or media) has a job; ornaments are empty shapes
+        const dur = Math.max(...s.animationDuration.split(',').map((d) => parseFloat(d) * (/ms/.test(d) ? 0.001 : 1)));
+        if (dur >= 5 && (h.own(el).length > 0 || el.querySelector('img, video, canvas, svg, [class]') && h.textEls().some((t) => el.contains(t)))) continue;
         out.push({ el: h.sel(el), detail: `animation ${s.animationName}` });
       }
       return out;
@@ -765,6 +764,18 @@ const BASE = [
     },
   },
   {
+    id: 'motion-shadow-animated', pass: 'motion', severity: 'minor', scope: 'css', viewports: ['desktop'],
+    title: 'Shadow animated frame by frame',
+    why: 'Animating box-shadow repaints every frame and smears; on a layer that moves away from its base the shadow also ends up in the wrong place.',
+    fix: 'Put two pre-blurred shadow shapes behind the element (rest and raised) and crossfade their opacity; animate transform and opacity only.',
+    check: (css) => {
+      const kf = [...css.matchAll(/@keyframes\s+[\w-]+\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)].find((m) => /box-shadow\s*:/.test(m[1]));
+      const tr = css.match(/transition(-property)?\s*:[^;}]*\bbox-shadow\b[^;}]*/i);
+      const hit = kf ? `keyframes animate box-shadow` : tr ? tr[0].replace(/\s+/g, ' ').slice(0, 60) : null;
+      return hit ? [{ el: 'stylesheet', detail: hit }] : [];
+    },
+  },
+  {
     id: 'motion-transition-all', pass: 'motion', severity: 'minor', scope: 'css', viewports: ['desktop'],
     title: 'transition: all',
     why: 'Animating every property triggers layout work and surprising effects.',
@@ -776,5 +787,5 @@ const BASE = [
   },
 ];
 
-export const RULES = [...BASE, ...EXTRA];
+export const RULES = [...BASE, ...EXTRA, ...HARD];
 export const RULE_IDS = RULES.map((r) => r.id);

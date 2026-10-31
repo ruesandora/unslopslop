@@ -1,5 +1,5 @@
-// Rules added from research batch #1 (page frame, app screens, visual poverty, accessibility).
-// Same contract as rules.mjs. Ideas and thresholds are written in our own words (see docs/SOURCES.md).
+// More rules: page frame, app screens, visual poverty, accessibility, and later additions.
+// Same contract as rules.mjs.
 const BOTH = ['desktop', 'mobile'];
 
 export const EXTRA = [
@@ -104,7 +104,7 @@ export const EXTRA = [
     id: 'layout-side-nav-mobile', pass: 'layout', severity: 'major', scope: 'page', viewports: ['mobile'],
     title: 'Desktop side navigation on a phone',
     why: 'A fixed-width sidebar leaves a narrow strip for content on a 390 px screen.',
-    fix: 'Collapse the sidebar below 760 px: top bar with a menu button, or a bottom tab bar.',
+    fix: 'Below 760 px, fold the sidebar away: show a header row with a menu toggle, or tabs pinned to the bottom of the screen.',
     check: (h) => {
       const out = [];
       for (const el of h.all()) {
@@ -150,7 +150,7 @@ export const EXTRA = [
     why: 'Three or more small text elements make a page tiring to read, especially on phones.',
     fix: 'Raise captions and labels to at least 13 px (body 16 px).',
     check: (h) => {
-      const els = h.textEls().filter((e) => { const f = h.px(h.cs(e).fontSize); return f >= 11 && f < 13; });
+      const els = h.textEls().filter((e) => { const f = h.px(h.cs(e).fontSize); return f >= 11 && f < 13 && !e.closest('[aria-hidden="true"], [role=img], figure, svg'); });
       return els.length >= 3 ? els.map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px` })) : [];
     },
   },
@@ -159,7 +159,7 @@ export const EXTRA = [
     title: 'Text under 11 px',
     why: 'Text this small cannot be read by most people, even in an app.',
     fix: 'Never go below 11 px; aim for 13 px or more.',
-    check: (h) => h.textEls().filter((e) => h.px(h.cs(e).fontSize) < 11).map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px "${h.snip(h.own(e), 24)}"` })),
+    check: (h) => h.textEls().filter((e) => h.px(h.cs(e).fontSize) < 11 && !e.closest('[aria-hidden="true"], [role=img], figure, svg')).map((e) => ({ el: h.sel(e), detail: `${h.px(h.cs(e).fontSize)}px "${h.snip(h.own(e), 24)}"` })),
   },
   {
     id: 'type-long-headline', pass: 'typography', severity: 'minor', scope: 'page', viewports: ['desktop'],
@@ -191,6 +191,7 @@ export const EXTRA = [
       for (const el of h.all()) {
         const bi = h.cs(el).backgroundImage;
         if (!/gradient\(/.test(bi)) continue;
+        if ((h.cs(el).webkitBackgroundClip === 'text' || h.cs(el).backgroundClip === 'text') && parseFloat(h.cs(el).backgroundSize) >= 200) continue;
         const hs = h.colorTokens(bi).map((t) => h.rgba(t)).filter((c) => c && c.a > 0.3).map((c) => h.hsl(c)).filter((c) => c.s > 0.25 && c.l > 0.12 && c.l < 0.9).map((c) => c.h);
         if (hs.length < 2) continue;
         const spread = (a) => { const s = [...a].sort((x, y) => x - y); let gap = 0; for (let i = 0; i < s.length; i++) gap = Math.max(gap, (s[(i + 1) % s.length] - s[i] + 360) % 360); return 360 - gap; };
@@ -368,7 +369,7 @@ export const EXTRA = [
     },
   },
 
-  // ------------------------------------------------------- batch 2 (observation notes, 30 Oct 2026)
+  // ------------------------------------------------------- headline accents, live numbers, overlap, accent use
   {
     id: 'type-accent-keyword', pass: 'typography', severity: 'major', scope: 'page', viewports: ['desktop'],
     title: 'One word of the headline in the accent colour',
@@ -476,6 +477,37 @@ export const EXTRA = [
         out.push({ el: h.sel(e), detail: 'accent on a non-interactive, non-state element' });
       }
       return out.length >= 4 ? out : [];
+    },
+  },
+  {
+    id: 'layout-stock-dark-launch', pass: 'layout', severity: 'major', scope: 'page', viewports: ['desktop'],
+    title: 'Stock dark launch hero',
+    why: 'Black hero, centred headline, one hot pill button and an install-command chip is the default component-library launch page; on a product that is not a developer tool it says nothing about the product.',
+    fix: 'Start from the project read: show the product, pick a combination for this audience, drop the install chip unless people really install it.',
+    check: (h) => {
+      const h1 = document.querySelector('h1');
+      if (!h1 || !h.visible(h1) || h.rect(h1).top > h.vh) return [];
+      const bg = h.bgOf(h1) || { r: 0, g: 0, b: 0 };
+      const dark = h.lum(bg) < 0.03;
+      const centred = h.cs(h1).textAlign === 'center';
+      const pill = [...document.querySelectorAll('a, button')].some((e) => {
+        if (!h.visible(e) || h.rect(e).top > h.vh) return false;
+        const s = h.cs(e), c = h.rgba(s.backgroundColor), k = c ? h.hsl(c) : null;
+        return c && c.a > 0.8 && k.s > 0.5 && (k.h < 40 || k.h > 340) && h.px(s.borderTopLeftRadius) >= h.rect(e).height / 2 - 1;
+      });
+      const chip = [...document.querySelectorAll('code, pre, kbd')].some((e) => h.visible(e) && h.rect(e).top < h.vh && /\b(npm|npx|pnpm|yarn|bun|brew|pip|curl)\b/.test(e.textContent));
+      return dark && centred && pill && chip ? [{ el: h.sel(h1), detail: 'dark centred hero, hot pill button and install chip' }] : [];
+    },
+  },
+  {
+    id: 'detail-showcase-ornament', pass: 'detail', severity: 'minor', scope: 'page', viewports: ['desktop'],
+    title: 'Showcase effect with no job',
+    why: 'Glow orbs, beams, spotlights, shimmer borders and particle fields dropped in as decoration: delete them and the message loses nothing.',
+    fix: 'Remove the effect, or tie it to content (light behind the product, a beam that follows a real data flow).',
+    check: (h) => {
+      const re = /(^|[\s_-])(orb|beam|beams|spotlight|shimmer|particles?|sparkles?|meteors?|aurora|glow-?border|border-?beam)([\s_-]|$)/i;
+      return h.all().filter((e) => re.test(typeof e.className === 'string' ? e.className : '') && !h.own(e) && h.rect(e).width * h.rect(e).height >= 4000)
+        .map((e) => ({ el: h.sel(e), detail: 'decorative showcase effect without content' }));
     },
   },
 ];

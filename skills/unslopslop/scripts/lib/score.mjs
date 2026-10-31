@@ -13,8 +13,9 @@ export function score(findings) {
 }
 
 // clean: nothing to do. light: polish the listed items. heavy: rebuild the page, then re-run.
-export function verdict(points, findings) {
+// cleanBelow: 10 for pattern points; 20 for the owner reading (a proven page keeps a small "not yet perfect" remainder).
+export function verdict(points, findings, cleanBelow = 10) {
   if (points >= 35) return 'heavy';
-  if (points < 10 && !findings.some((f) => f.severity === 'critical')) return 'clean';
+  if (points < cleanBelow && !findings.some((f) => f.severity === 'critical')) return 'clean';
   return 'light';
 }

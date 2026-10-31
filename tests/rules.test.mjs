@@ -48,8 +48,7 @@ if (!only) {
     const res = await run('base', BASE);
     assert.deepEqual(res.findings.map((f) => f.rule), []);
     assert.deepEqual(res.errors, []);
-    assert.equal(res.score, 0);
-    assert.equal(res.verdict, 'clean');
+    assert.equal(res.patternScore, 0);
   });
 }
 

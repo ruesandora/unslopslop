@@ -6,11 +6,12 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { page } from './fixtures.mjs';
+import { RICH_IMG } from './fixtures-bland.mjs';
 
 const S = (n) => fileURLToPath(new URL(`../skills/unslopslop/scripts/${n}`, import.meta.url));
 const env = { ...process.env };
 delete env.NODE_TEST_CONTEXT;
-let dir, slop, clean, anim, consent;
+let dir, slop, clean, anim, consent, rich;
 
 before(async () => {
   dir = await mkdtemp(join(tmpdir(), 'unslop-cli-'));
@@ -18,9 +19,11 @@ before(async () => {
   clean = join(dir, 'clean.html');
   anim = join(dir, 'anim.html');
   consent = join(dir, 'consent.html');
-  await writeFile(consent, page({ body: '<div id="onetrust-banner-sdk"><p>We use cookies to unleash seamless experiences</p></div>' }));
+  await writeFile(consent, page({ body: '<div id="onetrust-banner-sdk"><h2>Unleash seamless cookies</h2></div>' }));
   await writeFile(slop, page({ body: '<h2>Unleash seamless power</h2><p>Lorem ipsum dolor sit amet</p><h2 style="background:linear-gradient(90deg,#6d28d9,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent">Go</h2><div style="width:2000px;height:10px"></div>' }));
   await writeFile(clean, page({ body: '' }));
+  rich = join(dir, 'rich.html');
+  await writeFile(rich, RICH_IMG);
   await writeFile(anim, page({
     css: '#b{width:100px;height:40px;background:#999;opacity:1}#b.go{opacity:.2;transition:opacity 400ms ease-out}',
     body: '<button id="t" onclick="document.getElementById(\'b\').classList.add(\'go\')" style="padding:12px 20px">go</button><div id="b"></div>',
@@ -41,20 +44,32 @@ test('detect --json: shape, verdict heavy on a sloppy page', () => {
   for (const id of ['copy-cliche', 'copy-placeholder', 'color-purple-gradient', 'layout-overflow-x']) assert.ok(ids.includes(id), id);
   assert.ok(Object.keys(j.byPass).length === 9);
 });
-test('detect on the clean page: score 0, verdict clean', () => {
+test('detect on the clean page: pattern score 0, but an empty page is not proven good', () => {
   const j = JSON.parse(run('detect.mjs', [clean, '--json']).stdout);
-  assert.equal(j.score, 0);
-  assert.equal(j.verdict, 'clean');
+  assert.equal(j.patternScore, 0);
+  assert.ok(j.score >= 90, `owner slop ${j.score}`);
+  assert.equal(j.verdict, 'heavy');
 });
-test('--fail-on heavy exits 1 for slop and 0 for clean', () => {
+test('a rich page with imagery is clean, and UNPROVEN until --compared is given', async () => {
+  const j = JSON.parse(run('detect.mjs', [rich, '--json']).stdout);
+  assert.equal(j.verdict, 'clean');
+  assert.equal(j.overall, 'unproven');
+  assert.equal(run('detect.mjs', [rich, '--json', '--compared', join(dir, 'missing.png')]).status, 2);
+  const png = join(dir, 'cmp-ok.png');
+  await writeFile(png, 'x');
+  const k = JSON.parse(run('detect.mjs', [rich, '--json', '--compared', png]).stdout);
+  assert.equal(k.overall, 'pass');
+});
+test('--fail-on heavy exits 1 for slop and 0 for a proven-clean page', () => {
   assert.equal(run('detect.mjs', [slop, '--fail-on', 'heavy', '--json']).status, 1);
-  assert.equal(run('detect.mjs', [clean, '--fail-on', 'light', '--json']).status, 0);
+  assert.equal(run('detect.mjs', [clean, '--fail-on', 'heavy', '--json']).status, 1);
+  assert.equal(run('detect.mjs', [rich, '--fail-on', 'light', '--json']).status, 0);
 });
 test('--disable removes a rule and lowers the score', () => {
   const full = JSON.parse(run('detect.mjs', [slop, '--json']).stdout);
   const cut = JSON.parse(run('detect.mjs', [slop, '--json', '--disable', 'color-purple-gradient']).stdout);
   assert.ok(!cut.findings.some((f) => f.rule === 'color-purple-gradient'));
-  assert.ok(cut.score < full.score);
+  assert.ok(cut.patternScore < full.patternScore);
 });
 test('unknown rule id and missing file are usage errors (exit 2)', () => {
   assert.equal(run('detect.mjs', [slop, '--disable', 'nope']).status, 2);
@@ -90,4 +105,12 @@ test('consent banners are hidden by default and kept with --keep-consent', () =>
 test('--min-craft exits 1 below the mark', () => {
   assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '70']).status, 1);
   assert.equal(run('detect.mjs', [clean, '--json', '--min-craft', '0']).status, 0);
+});
+test('compare.mjs keeps tall pages up to --max-height, not just the first screen', async () => {
+  const tall = join(dir, 'tall.html');
+  await writeFile(tall, page({ body: '<div style="height:3000px"></div>' }));
+  const out = join(dir, 'tall.png');
+  assert.equal(run('compare.mjs', [clean, tall, '--out', out, '--max-height', '2000', '--wait', '50']).status, 0);
+  const buf = await readFile(out);
+  assert.ok(buf.readUInt32BE(20) > 1900, `height ${buf.readUInt32BE(20)}`);
 });

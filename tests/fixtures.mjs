@@ -92,10 +92,6 @@ export const FIXTURES = {
     bad: { body: '<p>Trusted by 10,000+ teams worldwide</p>' },
     good: { body: '<p>Used by 214 teams, per our billing records, March 2026</p>' },
   },
-  'type-reflex-font': {
-    bad: { css: "body{font-family:'Inter',sans-serif}", body: '' },
-    good: { css: "body{font-family:Georgia,serif}", body: '' },
-  },
   'type-flat-hierarchy': {
     bad: { css: 'h1{font-size:18px}', body: many(12, (i) => `<p>Paragraph number ${i}.</p>`) },
     good: { body: many(12, (i) => `<p>Paragraph number ${i}.</p>`) },
@@ -224,9 +220,61 @@ export const FIXTURES = {
     bad: { body: '<p style="border-top:3px solid #2a5bd7;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Part four of the story.</p>' },
     good: { body: '<p style="border-top:3px solid #ccc;padding-top:8px">Part one of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part two of the story.</p><p style="border-top:3px solid #ccc;padding-top:8px">Part three of the story.</p><p style="border-top:3px solid #2a5bd7;padding-top:8px">Paid on 12 Oct.</p>' },
   },
+  'layout-stock-dark-launch': {
+    bad: { css: 'body{background:#050505;color:#eee}h1{text-align:center}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+    good: { css: 'body{background:#050505;color:#eee}h1{text-align:left}.cta{background:#ff4d1a;color:#000;border-radius:999px;padding:12px 24px;display:inline-block;text-decoration:none}', body: '<p><a class="cta" href="#a">Get started</a> <code>npx create-thing</code></p>' },
+  },
+  'detail-showcase-ornament': {
+    bad: { body: '<div class="glow orb" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+    good: { body: '<div class="photo" style="width:200px;height:200px;background:#ddd" aria-hidden="true"></div>' },
+  },
+  'motion-shadow-animated': {
+    bad: { css: '.c{transition:box-shadow 200ms ease-out}.c:hover{box-shadow:0 8px 16px rgba(0,0,0,.2)}', body: '<div class="c">Card</div>' },
+    good: { css: '.c{transition:opacity 200ms ease-out}.c:hover{opacity:.9}', body: '<div class="c">Card</div>' },
+  },
+  'type-ai-default-font': {
+    bad: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '' },
+    good: { css: "h1{font-family:'Fraunces',Georgia,serif}", body: '<meta name="unslop-brief" content="font: Fraunces, the client owns a licence and it is their house face for every printed menu">' },
+  },
+  'type-hero-number': {
+    bad: { body: '<div style="font-size:64px">€18,460</div>' },
+    good: { body: '<p style="font-size:24px">€18,460 outstanding, down from €21,300 on 1 Oct</p>' },
+  },
+  'copy-caption-sprawl': {
+    bad: { body: '<h2>Revenue</h2><p style="font-size:13px;color:#666">Example data. Numbers are samples.</p><h2>Clients</h2><p style="font-size:13px;color:#666">Example data. Names are samples.</p>' },
+    good: { body: '<h2>Revenue</h2><p>Revenue rose in October.</p><h2>Clients</h2><p>Eighteen clients this month.</p><footer><p style="font-size:13px">Example data. All names and numbers are samples.</p></footer>' },
+  },
+  'detail-paper-props': {
+    bad: { css: 'body{background:#101317}.paper{background:#f3ede2;border-radius:8px;padding:16px;margin:8px;min-height:80px;box-shadow:0 8px 16px rgba(0,0,0,.2)}', body: '<div class="paper">Dear client, a letter.</div><div class="paper">Another sheet of paper.</div>' },
+    good: { css: 'body{background:#101317}.panel{background:#1a1f2a;border-radius:8px;padding:16px;margin:8px;min-height:80px;box-shadow:0 8px 16px rgba(0,0,0,.2)}', body: '<div class="panel">Reminder queue</div><div class="panel">Bank feed</div>' },
+  },
+  'copy-emoji': {
+    bad: { body: '<p>Ship it 🚀</p>' },
+    good: { body: '<p>Ship it.</p>' },
+  },
+  'color-faded-text': {
+    bad: { body: '<p style="color:#8a8a8a">This support text is faded grey on light paper.</p><p style="color:#8a8a8a">So is this second line of quiet support text.</p>' },
+    good: { body: '<p style="color:#3a3a3a">This support text is dark enough to read easily.</p><p style="color:#3a3a3a">So is this second line of support text here.</p>' },
+  },
+  'type-heading-muted-subtitle': {
+    bad: { body: '<section><h2>Three letters</h2><p style="font-size:15px;color:#777">You approve the wording once and it goes out for you.</p></section><section><h2>Your tone</h2><p style="font-size:15px;color:#777">Pick how direct each letter sounds and when it goes out.</p></section>' },
+    good: { body: '<section><h2>Three letters</h2><p style="font-size:15px;color:#222">You approve the wording once and it goes out for you.</p></section><section><h2>Your tone</h2><p style="font-size:15px;color:#222">Pick how direct each letter sounds and when it goes out.</p></section>' },
+  },
+  'detail-stamp-sticker': {
+    bad: { body: '<div style="display:inline-block;rotate:6deg;border:2px solid #333;padding:8px 16px">Paid 12 Oct</div>' },
+    good: { body: '<div style="display:inline-block;padding:8px 16px">Paid on 12 Oct</div>' },
+  },
+  'color-rainbow-tiles': {
+    bad: { body: '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">' + ['#e33d5c', '#2d7be5', '#20a36a', '#f08a1c'].map((c) => `<div style="background:${c};border-radius:8px;height:80px;color:#fff;padding:12px">Tool</div>`).join('') + '</div>' },
+    good: { body: '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">' + ['#2d7be5', '#e8e8e8', '#e8e8e8', '#e8e8e8'].map((c) => `<div style="background:${c};border-radius:8px;height:80px;color:#111;padding:12px">Tool</div>`).join('') + '</div>' },
+  },
+  'detail-floating-chat': {
+    bad: { body: '<button style="position:fixed;right:16px;bottom:16px;padding:12px 20px">Live support</button>' },
+    good: { body: '<footer><a href="#help">Help and support</a></footer>' },
+  },
 };
 
-// ---- batch #1 rules ----
+// ---- page frame, app screens, visual poverty, accessibility ----
 const LONG = 'Long enough text to count as real content on the page. '.repeat(3);
 Object.assign(FIXTURES, {
   'page-no-heading': {

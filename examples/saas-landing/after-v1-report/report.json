@@ -1,0 +1,293 @@
+{
+  "tool": "unslopslop",
+  "version": 1,
+  "target": "examples/saas-landing/after-v1.html",
+  "score": 90,
+  "patternScore": 21,
+  "tells": 0,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 0,
+        "max": 25,
+        "why": "display line 56 px"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 15,
+        "max": 15,
+        "why": "ground colour 90% of the first screen, accents 0.5%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10",
+      "display line under 80 px: proof capped at 55"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 56,
+      "overlap": 0,
+      "keyword": 0,
+      "imagery": 0,
+      "app": false,
+      "pageHeight": 1689,
+      "vpA": 1296000,
+      "ground": 0.898,
+      "accent": 0.005
+    }
+  },
+  "rawPoints": 21,
+  "verdict": "heavy",
+  "rulesChecked": 97,
+  "byPass": {
+    "spacing": 0,
+    "color": 12,
+    "icons": 0,
+    "copy": 0,
+    "typography": 9,
+    "layout": 0,
+    "detail": 0,
+    "imagery": 0,
+    "motion": 0
+  },
+  "findings": [
+    {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 7,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "p.lead",
+          "detail": "6.68:1 \"Fluxly sends the polite remin…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"You approve the three templat…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"Bank transactions are matched…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p",
+          "detail": "6.68:1 \"Yes. Every message waits in a…\"",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "type-heading-muted-subtitle",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Heading plus grey subtitle, section after section",
+      "why": "A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.",
+      "fix": "Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.",
+      "count": 3,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1 + p.lead",
+          "detail": "\"Late invoices, chased for you\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"It writes in your voice\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h3 + p",
+          "detail": "\"It stops when paid\" with a greyed subtitle",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 9
+    }
+  ],
+  "craft": {
+    "score": 64,
+    "passMark": 70,
+    "pass": false,
+    "components": {
+      "hierarchy": {
+        "points": 14,
+        "max": 15,
+        "why": "display 56px / body 17px = 3.29x, 7 sizes"
+      },
+      "focal": {
+        "points": 11,
+        "max": 15,
+        "why": "headline 3.3x, largest visual 13% of the screen"
+      },
+      "visual": {
+        "points": 7,
+        "max": 20,
+        "why": "13% of the first screen is visual (surface)"
+      },
+      "motion": {
+        "points": 10,
+        "max": 15,
+        "why": "moves outside any visual, 1 moving elements, reduced motion handled"
+      },
+      "identity": {
+        "points": 7,
+        "max": 20,
+        "why": "no web font, display face differs from text, accent used 12x in 1 hue band(s), 0 shadows, 0 layers, 0 textured areas (none)"
+      },
+      "density": {
+        "points": 15,
+        "max": 15,
+        "why": "landing, 32% of the first screen holds content"
+      }
+    },
+    "findings": [
+      {
+        "rule": "bland-no-depth",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No depth at all",
+        "why": "No shadow, no layered surface, one flat colour everywhere: the page looks like printed paper, not an interface.",
+        "fix": "Add one layer system: a raised surface for the product view (soft layered shadow), a second surface tone, or one overlapping element.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "0 shadows, 2 surface tone(s)",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-no-texture",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No texture, pattern or tonal light anywhere",
+        "why": "Every surface is one flat fill. Good pages carry a material: grain, a faint pattern or watermark, a tonal light behind the product.",
+        "fix": "Add one material that suits the project: fine grain, a subtle pattern in one zone, a watermark, or a soft light behind the main visual. Keep it quiet (under 10% opacity).",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no background image, gradient, mask or noise on any large area",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-static",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "Nothing moves, even where a demo would explain the product",
+        "why": "A product page with a call to action but no motion leaves the reader to guess how the product behaves over time.",
+        "fix": "Animate the product view once: one short sequence (render(t) or a few keyframes) that shows what happens, then stops. Respect reduced motion.",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no animation, 0 animation frames, 1 DOM changes after load",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      },
+      {
+        "rule": "bland-default-serif",
+        "pass": "craft",
+        "severity": "major",
+        "title": "Default system serif",
+        "why": "Georgia, Times and other built-in serifs are what a browser shows when nobody chose a type face.",
+        "fix": "Choose a face on purpose (a real web font with a licence that allows self-hosting) and pair it with one text face.",
+        "count": 2,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "h1",
+            "detail": "Charter, \"Iowan Old Style\", Georgia, serif",
+            "viewport": "desktop"
+          },
+          {
+            "el": "h2",
+            "detail": "Charter, \"Iowan Old Style\", Georgia, serif",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
+    "signals": {
+      "body": 17,
+      "display": 56,
+      "steps": 7,
+      "visFrac": 0.1349579475308642,
+      "bestVis": 0.1349579475308642,
+      "visKinds": [
+        "surface"
+      ],
+      "raf": 0,
+      "mut": 1,
+      "movers": 1,
+      "inVisual": 0,
+      "canvasLive": false,
+      "mq": 0,
+      "webfont": false,
+      "distinctFaces": true,
+      "accentUses": 12,
+      "accentHues": 1,
+      "shadows": 0,
+      "layered": 0,
+      "textures": 0,
+      "textureKinds": [],
+      "app": false,
+      "firstTexts": 30,
+      "coverage": 0.31875
+    }
+  },
+  "overall": "fail",
+  "errors": []
+}

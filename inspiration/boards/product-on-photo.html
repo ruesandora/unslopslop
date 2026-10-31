@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board product-on-photo: product card laid over a photograph, a second layer crossing its edge</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:#fcfdfb"></div>
+     <div style="position:absolute;left:6%;top:18%;font:400 86px/0.93 Georgia, 'Times New Roman', serif;letter-spacing:-.02em;color:#2b2b2b">Serif display<br>86 / 80, four<br>short lines</div>
+     <div style="position:absolute;left:6%;top:66%;font:400 18px/26px system-ui, -apple-system, 'Segoe UI', sans-serif;color:#333">Two short lines of body, then one filled action.</div>
+     <div style="position:absolute;left:53%;top:10%;width:9%;height:70%;background:#c2ce49"></div>
+     <div style="position:absolute;left:58%;top:6%;width:40%;height:80%;background:linear-gradient(160deg,#6f8c8a,#c9b79a 55%,#5d4b3a);"></div>
+     <div class="note" style="left:59%;top:7%;color:#fff">PHOTO · real place · z 1</div>
+     <div style="position:absolute;left:61%;top:14%;width:29%;height:64%;background:#f7f5ef;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.08),0 18px 40px -12px rgba(0,0,0,.35);z-index:2"></div>
+     <div class="note" style="left:62%;top:16%;color:#333">PRODUCT CARD · real UI · z 2</div>
+     <div style="position:absolute;left:86%;top:46%;width:9%;height:26%;background:#334;border-radius:8px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);z-index:3"></div>
+     <div class="note" style="left:79%;top:74%;color:#333">LAYER 3 crosses the card edge</div>
+     <div class="corner" style="top:28px;left:32px;color:#555;background:transparent;padding:2px 4px">brand</div><div class="corner" style="top:28px;right:32px;color:#555;background:transparent;padding:2px 4px">nav · one action</div></div><div class="sw"><span style="flex:70;background:#fcfdfb" title="ground 70%"><i>ground 70%</i></span><span style="flex:18;background:#8a8f80" title="photo 18%"><i>photo 18%</i></span><span style="flex:9;background:#2b2b2b" title="ink 9%"><i>ink 9%</i></span><span style="flex:3;background:#c2ce49" title="accent 3%"><i>accent 3%</i></span></div>
+<!-- Board product-on-photo. References: C10, C17. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>

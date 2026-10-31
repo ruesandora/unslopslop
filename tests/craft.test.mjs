@@ -47,11 +47,11 @@ if (!only) {
     for (const id of ['bland-no-hero-visual', 'bland-document-column', 'bland-default-serif', 'bland-static', 'bland-no-depth', 'bland-no-texture']) assert.ok(ids.includes(id), id);
   });
   test('clean slop with low craft is an overall fail', () => {
-    assert.equal(doc.verdict, 'clean');
+    assert.equal(doc.patternScore, 0);
     assert.equal(doc.overall, 'fail');
   });
-  test('bland signals never add to the slop score', () => {
-    assert.equal(doc.score, 0);
+  test('bland signals never add to the pattern slop score', () => {
+    assert.equal(doc.patternScore, 0);
   });
   test('craftScore is pure: same signals, same score; more visual area, more points', () => {
     const s = rich.craft.signals;

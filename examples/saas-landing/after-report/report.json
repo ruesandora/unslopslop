@@ -2,21 +2,321 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/saas-landing/after.html",
-  "score": 0,
-  "rawPoints": 0,
+  "score": 8,
+  "patternScore": 24,
+  "tells": 0,
+  "taste": {
+    "proof": 92,
+    "pass": true,
+    "compared": true,
+    "components": {
+      "subject": {
+        "points": 30,
+        "max": 30,
+        "why": "largest subject 31% of the first screen (media), all subjects 31%"
+      },
+      "display": {
+        "points": 25,
+        "max": 25,
+        "why": "display line 167 px"
+      },
+      "overlap": {
+        "points": 15,
+        "max": 15,
+        "why": "15 layers overlap the subject"
+      },
+      "ground": {
+        "points": 7,
+        "max": 15,
+        "why": "ground colour 52% of the first screen, accents 30.8%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [],
+    "signals": {
+      "subjectFrac": 0.31,
+      "subjectKind": "media",
+      "mediaFrac": 0.31,
+      "display": 167.04,
+      "overlap": 15,
+      "keyword": 0,
+      "imagery": 2,
+      "app": false,
+      "pageHeight": 3872,
+      "vpA": 1296000,
+      "ground": 0.518,
+      "accent": 0.308
+    }
+  },
+  "rawPoints": 24,
   "verdict": "clean",
-  "rulesChecked": 72,
+  "rulesChecked": 97,
   "byPass": {
-    "spacing": 0,
-    "color": 0,
+    "spacing": 2,
+    "color": 4,
     "icons": 0,
     "copy": 0,
-    "typography": 0,
-    "layout": 0,
+    "typography": 10.5,
+    "layout": 7.5,
     "detail": 0,
     "imagery": 0,
     "motion": 0
   },
-  "findings": [],
+  "findings": [
+    {
+      "rule": "layout-text-overlap",
+      "pass": "layout",
+      "severity": "major",
+      "title": "Text drawn on top of other text",
+      "why": "Two pieces of text sharing the same spot cannot be read. It is usually an absolutely positioned label or a fixed height that broke on a narrow screen.",
+      "fix": "Give the elements their own space (grid, gap, wrapping), or put an opaque surface under the top layer if the overlap is intended.",
+      "count": 2,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "span.heavy / span.heavy",
+          "detail": "\"Late invoices\" over \"Late invoices\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.thin / span.thin",
+          "detail": "\"chased politely\" over \"chased politely\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.heavy / span.heavy",
+          "detail": "\"Late invoices\" over \"Late invoices\"",
+          "viewport": "mobile"
+        }
+      ],
+      "points": 7.5
+    },
+    {
+      "rule": "type-tight-leading",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Body text set too tight",
+      "why": "Multi-line paragraphs under 1.3 line-height, or letter-spacing below -0.04em, are hard to read.",
+      "fix": "Body line-height 1.5 to 1.7; keep tight leading for headings only and never track tighter than -0.03em.",
+      "count": 8,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "span.heavy",
+          "detail": "letter-spacing -0.045em",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.p",
+          "detail": "letter-spacing -0.045em",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.heavy",
+          "detail": "letter-spacing -0.045em",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.p",
+          "detail": "letter-spacing -0.045em",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "type-heavy-weight",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Heavy weights carry the hierarchy",
+      "why": "Weights of 800 to 900, or bold on most text, flatten emphasis. Hierarchy should come from size and colour.",
+      "fix": "Use 400 and 500 (600 sparingly). Let size and tone do the ranking.",
+      "count": 11,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.brand",
+          "detail": "weight 800",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.heavy",
+          "detail": "weight 820",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.p",
+          "detail": "weight 820",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.heavy",
+          "detail": "weight 820",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "color-accent-decorative",
+      "pass": "color",
+      "severity": "minor",
+      "title": "Accent colour spent on decoration",
+      "why": "When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.",
+      "fix": "Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.",
+      "count": 7,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "#site-nav",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "#field",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.corner.right",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "td",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "type-long-headline",
+      "pass": "typography",
+      "severity": "minor",
+      "title": "Headline longer than two lines",
+      "why": "A headline that needs three lines or more is a paragraph in disguise.",
+      "fix": "Cut it to one clear statement of at most two lines at desktop width.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "#faq-title",
+          "detail": "7 lines",
+          "viewport": "desktop"
+        },
+        {
+          "el": "#close-title",
+          "detail": "4 lines",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2.5
+    },
+    {
+      "rule": "spacing-cramped",
+      "pass": "spacing",
+      "severity": "minor",
+      "title": "Text sits against the edge of its box",
+      "why": "Buttons and cards with almost no inner padding read as unfinished.",
+      "fix": "Give buttons at least 12 px horizontal and 8 px vertical padding (anything under 8 px horizontal is flagged), cards at least 16 px.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "p.corner.right",
+          "detail": "padding 0/0/0/0px",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 2
+    }
+  ],
+  "craft": {
+    "score": 98,
+    "passMark": 70,
+    "pass": true,
+    "components": {
+      "hierarchy": {
+        "points": 15,
+        "max": 15,
+        "why": "display 167px / body 20px = 8.35x, 13 sizes"
+      },
+      "focal": {
+        "points": 15,
+        "max": 15,
+        "why": "headline 8.4x, largest visual 31% of the screen"
+      },
+      "visual": {
+        "points": 20,
+        "max": 20,
+        "why": "31% of the first screen is visual (media)"
+      },
+      "motion": {
+        "points": 15,
+        "max": 15,
+        "why": "moves inside the visual, 8 moving elements, reduced motion handled"
+      },
+      "identity": {
+        "points": 18,
+        "max": 20,
+        "why": "web font, display face differs from text, accent used 9x in 2 hue band(s), 0 shadows, 8 layers, 1 textured areas (image)"
+      },
+      "density": {
+        "points": 15,
+        "max": 15,
+        "why": "landing, 64% of the first screen holds content"
+      }
+    },
+    "findings": [],
+    "signals": {
+      "body": 20,
+      "display": 167.04,
+      "steps": 13,
+      "visFrac": 0.30999348958333334,
+      "bestVis": 0.30999348958333334,
+      "visKinds": [
+        "media"
+      ],
+      "raf": 95,
+      "mut": 19,
+      "movers": 8,
+      "inVisual": 1,
+      "canvasLive": true,
+      "mq": 2,
+      "webfont": true,
+      "distinctFaces": true,
+      "accentUses": 9,
+      "accentHues": 2,
+      "shadows": 0,
+      "layered": 8,
+      "textures": 1,
+      "textureKinds": [
+        "image"
+      ],
+      "app": false,
+      "firstTexts": 20,
+      "coverage": 0.6390625
+    }
+  },
+  "overall": "pass",
   "errors": []
 }

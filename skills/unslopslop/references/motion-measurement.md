@@ -4,7 +4,7 @@ Use this when the user points at an animation they like ("make it feel like this
 
 ## What you may take, and what you may not
 - Take: duration, delay, easing class, stagger interval, order, direction, distance relative to the element size.
-- Do not take: shapes, colours, copy, imagery, icons, illustrations. Those come from your own design system. If asked for "the same look", stop and ask the owner; that is an imitation question, not a motion one.
+- Do not take: shapes, colours, copy, imagery, icons, illustrations. Those come from your own design system. If asked for "the same look", stop and ask the person who requested it; that is an imitation question, not a motion one.
 - Pages that need a login cannot be recorded; ask for a screen recording.
 
 ## Method

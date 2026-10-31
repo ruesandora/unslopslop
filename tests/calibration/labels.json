@@ -1,0 +1,327 @@
+{
+  "note": "Human labels. ownerSlop is the owner's own reading (0 best, 100 worst). oldScorer is what the detector said before the taste proof existed (slop / craft / overall). Pages live in pages/<id>/index.html. Items with local:true are optional files outside the repo at $UNSLOP_CALIBRATION_DIR/<id>/index.html (tests skip them when absent); their derived measurements are in 'measured'.",
+  "items": [
+    {
+      "id": "b02",
+      "side": "bad",
+      "ownerSlop": 97,
+      "oldScorer": "4 / 88 / pass",
+      "note": "Our redesign of a consultancy homepage, copy replaced by neutral placeholder text: dark teal, cream, amber, CSS-built control map, no photo or drawing anywhere. Owner: about 97."
+    },
+    {
+      "id": "b01",
+      "side": "bad",
+      "ownerSlop": 100,
+      "oldScorer": "100 / 86 / fail",
+      "note": "Original homepage of the same consultancy (live site snapshot, kept outside the repo; optional local file). Owner: 100.",
+      "local": true
+    },
+    {
+      "id": "saas-landing-after",
+      "side": "bad",
+      "ownerSlop": 90,
+      "oldScorer": "0 / 97 / pass",
+      "note": "Example 'after' as committed in 773eee6; owner: as bad or worse than the before. Owner number is a floor, not a quote."
+    },
+    {
+      "id": "dashboard-after",
+      "side": "bad",
+      "ownerSlop": 90,
+      "oldScorer": "0 / 89 / pass",
+      "note": "Same, dashboard example."
+    },
+    {
+      "id": "saas-landing-before",
+      "side": "bad",
+      "ownerSlop": 100,
+      "oldScorer": "100 / 51 / fail",
+      "note": "Example 'before' (stock AI landing)."
+    },
+    {
+      "id": "dashboard-before",
+      "side": "bad",
+      "ownerSlop": 100,
+      "oldScorer": "100 / 49 / fail",
+      "note": "Example 'before' (stock AI dashboard)."
+    },
+    {
+      "id": "g00",
+      "side": "good",
+      "ownerSlop": null,
+      "oldScorer": "100 / 70 / fail",
+      "note": "Owner's own site, snapshot kept outside the repo (optional local file); good side, with a compare it must not fail.",
+      "local": true
+    }
+  ],
+  "goldFormat": "optional local file (kept outside the repo), path in the environment variable UNSLOP_GOLD_FILE: [{\"id\": \"...\", \"url\" or \"html\": \"...\"}]; every entry must pass with compared=true. The test is skipped when the variable or file is absent.",
+  "measured": [
+    {
+      "id": "g01",
+      "side": "gold",
+      "expect": "pass",
+      "note": "product panel hero, 95 px display",
+      "craft": 76,
+      "tells": 27,
+      "signals": {
+        "subjectFrac": 1,
+        "subjectKind": "media",
+        "mediaFrac": 1,
+        "display": 95.04,
+        "overlap": 106,
+        "keyword": 1,
+        "app": false,
+        "ground": 0.439,
+        "accent": 0
+      }
+    },
+    {
+      "id": "g02",
+      "side": "gold",
+      "expect": "pass",
+      "note": "product card on a photograph, 86 px display",
+      "craft": 93,
+      "tells": 92,
+      "signals": {
+        "subjectFrac": 0.236,
+        "subjectKind": "media",
+        "mediaFrac": 0.669,
+        "display": 86.4,
+        "overlap": 26,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.775,
+        "accent": 0.05
+      }
+    },
+    {
+      "id": "g03",
+      "side": "gold",
+      "expect": "pass",
+      "note": "96 px serif on black, one lit object",
+      "craft": 78,
+      "tells": 98,
+      "signals": {
+        "subjectFrac": 0.976,
+        "subjectKind": "media",
+        "mediaFrac": 1,
+        "display": 96,
+        "overlap": 16,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.935,
+        "accent": 0
+      }
+    },
+    {
+      "id": "g04",
+      "side": "gold",
+      "expect": "documented-miss",
+      "note": "DOCUMENTED MISS: pattern-as-image page, no first-screen subject measurable, 56 px display",
+      "craft": 81,
+      "tells": 0,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 56,
+        "overlap": 0,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.694,
+        "accent": 0.006
+      }
+    },
+    {
+      "id": "g05",
+      "side": "gold",
+      "expect": "documented-miss",
+      "note": "DOCUMENTED MISS: tool-first first screen, preview video fails headless",
+      "craft": 75,
+      "tells": 34,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 14,
+        "overlap": 0,
+        "keyword": 0,
+        "app": true,
+        "ground": 0.516,
+        "accent": 0.013
+      }
+    },
+    {
+      "id": "g06",
+      "side": "gold",
+      "expect": "documented-miss",
+      "note": "weaker gold, 58 px display (documented miss)",
+      "craft": 70,
+      "tells": 54,
+      "signals": {
+        "subjectFrac": 0.051,
+        "subjectKind": "media",
+        "mediaFrac": 1,
+        "display": 58.275,
+        "overlap": 1,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.554,
+        "accent": 0.041
+      }
+    },
+    {
+      "id": "c01",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 82,
+      "tells": 85,
+      "signals": {
+        "subjectFrac": 0.226,
+        "subjectKind": "media",
+        "mediaFrac": 0.526,
+        "display": 36,
+        "overlap": 17,
+        "keyword": 1,
+        "app": false,
+        "ground": 0.279,
+        "accent": 0.314
+      }
+    },
+    {
+      "id": "c02",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 54,
+      "tells": 126,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 60,
+        "overlap": 0,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.859,
+        "accent": 0.05
+      }
+    },
+    {
+      "id": "c03",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 93,
+      "tells": 149,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 62,
+        "overlap": 0,
+        "keyword": 1,
+        "app": false,
+        "ground": 0.803,
+        "accent": 0.029
+      }
+    },
+    {
+      "id": "c04",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 95,
+      "tells": 12,
+      "signals": {
+        "subjectFrac": 0.467,
+        "subjectKind": "media",
+        "mediaFrac": 0.467,
+        "display": 72,
+        "overlap": 7,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.718,
+        "accent": 0.006
+      }
+    },
+    {
+      "id": "c05",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 89,
+      "tells": 8,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 72,
+        "overlap": 0,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.937,
+        "accent": 0
+      }
+    },
+    {
+      "id": "c06",
+      "side": "counter",
+      "expect": "fail",
+      "note": "template-style counter reference",
+      "craft": 91,
+      "tells": 64,
+      "signals": {
+        "subjectFrac": 0.572,
+        "subjectKind": "media",
+        "mediaFrac": 0.572,
+        "display": 48,
+        "overlap": 35,
+        "keyword": 0,
+        "app": false,
+        "ground": 0.854,
+        "accent": 0.019
+      }
+    },
+    {
+      "id": "b01",
+      "side": "bad",
+      "expect": "fail",
+      "note": "original homepage of the redesigned consultancy (live snapshot, local only)",
+      "craft": 86,
+      "tells": 57,
+      "signals": {
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
+        "display": 44,
+        "overlap": 0,
+        "keyword": 1,
+        "app": false,
+        "ground": 0.888,
+        "accent": 0.012
+      }
+    },
+    {
+      "id": "g00",
+      "side": "gold",
+      "expect": "pass",
+      "note": "owner's own site, 95 px display (local snapshot)",
+      "craft": 70,
+      "tells": 27,
+      "signals": {
+        "subjectFrac": 0.978,
+        "subjectKind": "media",
+        "mediaFrac": 0.978,
+        "display": 95.04,
+        "overlap": 101,
+        "keyword": 1,
+        "app": false,
+        "ground": 0.549,
+        "accent": 0
+      }
+    }
+  ],
+  "measuredNote": "Derived measurements only (no third-party pages or names in the repo): first-screen taste signals, craft score and tells points measured on live pages on 30 Oct 2026. g = strong reference pages, c = template-style counters. 'documented-miss' = a strong page the scorer cannot yet recognise; they are listed, not asserted.",
+  "goldFileEnv": "UNSLOP_GOLD_FILE"
+}
