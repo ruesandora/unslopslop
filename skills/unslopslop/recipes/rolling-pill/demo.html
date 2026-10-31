@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rolling status pill · interaction recipes</title>
+<meta name="description" content="A small pill above a headline that rolls between two or three true statements and resizes to fit each one.">
+<!-- Hand-written recipe demo. Vertical roll of two spans plus a measured width transition. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #fbfaf8; color: #161514; display: grid; place-content: center; justify-items: center; gap: 22px; padding: 32px; text-align: center; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .pill { position: relative; display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px rgba(22,21,20,.12); font-size: 14px; font-weight: 500; overflow: hidden; white-space: nowrap; transition: width .42s cubic-bezier(.22,1,.36,1); }
+  .pill .line { display: block; line-height: 42px; transition: transform .42s cubic-bezier(.22,1,.36,1), opacity .42s cubic-bezier(.22,1,.36,1); }
+  .pill .line.next { position: absolute; left: 18px; top: 0; line-height: 42px; transform: translateY(100%); opacity: 0; }
+  .pill.go .line.cur { transform: translateY(-100%); opacity: 0; }
+  .pill.go .line.next { transform: none; opacity: 1; }
+  .sizer { position: absolute; left: -9999px; top: 0; visibility: hidden; white-space: nowrap; font-size: 14px; font-weight: 500; }
+  h2 { margin: 0; font: 600 clamp(30px, 4.4vw, 52px)/1.05 system-ui, -apple-system, "Segoe UI", sans-serif; letter-spacing: -0.03em; max-width: 16ch; }
+  .note { margin: 0; font-size: 13px; color: #55524c; }
+  @media (prefers-reduced-motion: reduce) { .pill, .pill .line { transition: none; } }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <span class="pill" id="pill" aria-live="polite"><span class="line cur">Changelog: new export panel</span></span>
+    <span class="sizer" id="sizer" aria-hidden="true"></span>
+    <h2>Placeholder headline under the pill</h2>
+    <p class="note">Pill lines are example text. Use statements you can check today.</p>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Rolling status pill</h1>
+    <p class="sum">A small pill above a headline that rolls between two or three short, true statements: what shipped, how often you update, what is live. Each line slides up out of the pill while the next rises in, and the pill width follows the new line, so nothing jumps.</p>
+    <div class="ctl"><label for="hold"><span>Hold per line (ms)</span><output id="hold-o">3000</output></label><input id="hold" type="range" min="1500" max="6000" step="100" value="3000"></div>
+    <dl class="notes group">
+      <dt>Timing</dt><dd>Roll and resize: 420 ms, cubic-bezier(.22, 1, .36, 1), both at once. Hold: about 3 s. Pauses while hovered or focused and in hidden tabs.</dd>
+      <dt>How it is built</dt><dd>The pill clips its content. The next line is placed one line below and moves up as the current line moves up and fades. Before the roll, the next line is measured in a hidden sizer with the same font, and the pill width is set from the old value to the new one so the transition has two numbers to work between.</dd>
+      <dt>Content rule</dt><dd>Only statements you can prove at the moment the page is read. A live count ("27 signed up today") must come from real data or not be there; an invented number is the fastest way to lose trust. aria-live is polite, and the lines are short enough to read in the hold time.</dd>
+      <dt>Reduced motion</dt><dd>The first line stays and nothing rolls.</dd>
+      <dt>Becomes slop when</dt><dd>The pill says "New" or "Introducing" with nothing behind it, the numbers are made up, or it rolls through more than three lines.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lines = ['Changelog: new export panel', 'Updated every week', 'Works offline'], i = 0, pill = $('pill'), sizer = $('sizer'), timer = 0, paused = false;
+  function widthOf(t) { sizer.textContent = t; return sizer.getBoundingClientRect().width + 36; }
+  pill.style.width = widthOf(lines[0]) + 'px';
+  function roll() {
+    if (paused || document.hidden) return schedule();
+    var next = lines[(i + 1) % lines.length], n = document.createElement('span');
+    n.className = 'line next'; n.textContent = next; pill.appendChild(n);
+    pill.getBoundingClientRect();
+    pill.style.width = widthOf(next) + 'px'; pill.classList.add('go');
+    setTimeout(function () { var c = pill.querySelector('.line.cur'); c.remove(); n.className = 'line cur'; pill.classList.remove('go'); i = (i + 1) % lines.length; schedule(); }, 440);
+  }
+  function schedule() { clearTimeout(timer); timer = setTimeout(roll, Number($('hold').value)); }
+  pill.addEventListener('pointerenter', function () { paused = true; }); pill.addEventListener('pointerleave', function () { paused = false; });
+  $('hold').addEventListener('input', function () { $('hold-o').textContent = $('hold').value; schedule(); });
+  if (q.has('shot')) {} else if (!reduce) schedule();
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

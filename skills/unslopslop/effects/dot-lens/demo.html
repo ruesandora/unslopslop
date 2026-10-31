@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dot lens (canvas) · effects library</title>
+<meta name="description" content="A dot screen that reacts: a lens under the pointer swells and pushes the dots on springs, a click sends a ripple through them.">
+<!-- Hand-written. Canvas 2D, no WebGL: each dot has a spring, the pointer is a lens, a click is a ripple. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: var(--paper, #f3f1ec); cursor: crosshair; touch-action: none; }
+  #dots { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hint { position: absolute; left: 20px; bottom: 16px; margin: 0; font-size: 13px; color: var(--hint, #4a4844); pointer-events: none; }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <canvas id="dots" aria-hidden="true"></canvas>
+    <p class="hint">Move over the dots. Click to send a ripple.</p>
+
+  </main>
+  <aside>
+    <a class="back" href="../index.html">All effects</a>
+    <h1>Dot lens</h1>
+    <p class="sum">A halftone screen that answers the pointer. Every dot keeps its place on a spring; a soft lens under the pointer makes dots larger and nudges them outward, and a click sends a ring through the field. Empty paper keeps a faint second screen so the grid is felt even where there is no picture.</p>
+    <div class="ctl"><label for="cell"><span>Cell (px)</span><output id="cell-o">7</output></label><input id="cell" type="range" min="4" max="16" step="1" value="7"></div>
+    <div class="ctl"><label for="lens"><span>Lens radius (px)</span><output id="lens-o">70</output></label><input id="lens" type="range" min="0" max="160" step="1" value="70"></div>
+    <div class="ctl"><label for="swell"><span>Lens swell</span><output id="swell-o">0.60</output></label><input id="swell" type="range" min="0" max="1.5" step="0.01" value="0.6"></div>
+    <div class="ctl"><label for="push"><span>Lens push (px)</span><output id="push-o">5</output></label><input id="push" type="range" min="0" max="16" step="0.5" value="5"></div>
+    <div class="ctl"><label for="ripple"><span>Ripple push (px)</span><output id="ripple-o">6</output></label><input id="ripple" type="range" min="0" max="16" step="0.5" value="6"></div>
+    <div class="ctl"><label for="latent"><span>Paper screen</span><output id="latent-o">0.18</output></label><input id="latent" type="range" min="0" max="0.5" step="0.01" value="0.18"></div>
+    <div class="group">
+      <div class="ctl"><label for="src">Source</label><select id="src"><option value="orb">Lit sphere</option><option value="glyph">Large letter</option><option value="horizon">Horizon</option><option value="upload" disabled>Your image</option></select></div>
+      <div class="ctl"><label for="pal">Palette</label><select id="pal"><option value="paper">Ink on paper</option><option value="signal">Signal on night</option><option value="moss">Moss on linen</option></select></div>
+      <div class="ctl"><label for="upload">Try your own image (stays in this browser)</label><input id="upload" type="file" accept="image/*"></div>
+      <div class="ctl"><button id="play" type="button">Pause motion</button></div>
+    </div>
+    <dl class="notes group">
+      <dt>How it works</dt><dd>The source is drawn small (one pixel per cell) and read once. Each dot stores its home, its size from darkness (square root, so area follows tone) and a spring offset. The lens sets a target offset and a size boost with a smooth falloff; a ripple is a ring that grows at a fixed speed and pushes the dots it crosses. Springs are integrated in fixed 8 ms steps so the feel does not change with frame rate.</dd>
+      <dt>Starting values (tuned by eye)</dt><dd>Cell 6 to 9 px. Lens 70 px, swell 0.6, push 5 px. Spring stiffness 1150, damping 56 (settles in about 200 ms with a barely visible give). Ripple 0.55 px per ms, 44 px wide, about 520 ms life, so the ring reads as a soft wave rather than a snap.</dd>
+      <dt>Cost</dt><dd>One arc per dot per frame while something moves; the loop sleeps when every spring is at rest. A 1440 x 900 stage at 7 px is about 26 000 dots: fine on a laptop, raise the cell to 9 px on phones.</dd>
+      <dt>Fallback and reduced motion</dt><dd>Reduced motion draws the screen once and ignores the pointer until Play is pressed. No canvas means the section shows its background colour; put the real image behind it if the picture matters.</dd>
+      <dt>Becomes slop when</dt><dd>The dots draw nothing in particular (a dot sphere because dot spheres are popular), the lens is on every card, or the field sits behind body text. One reactive field per page, showing the product, the mark or a real photo.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PALS = {
+    paper: { paper: '#f3f1ec', a: '#1d1b19', b: '#6a3df0', hint: '#4a4844' },
+    signal: { paper: '#0b0d14', a: '#2f5bf0', b: '#f2603c', hint: '#c9ccd6' },
+    moss: { paper: '#efece2', a: '#24331f', b: '#7d8f3a', hint: '#45463c' }
+  };
+  var K = 1150, C = 56, STEP = 8, RIPPLE_SPEED = 0.55, RIPPLE_W = 44, RIPPLE_LIFE = 520;
+  var cv = $('dots'), ctx = cv.getContext('2d'), stage = $('stage');
+  var dots = [], W = 0, H = 0, dpr = 1, upload = null, playing = !reduce, running = false, visible = true;
+  var pointer = { x: -9999, y: -9999, on: 0, target: 0 }, ripples = [], last = 0, acc = 0;
+  function val(id) { return Number($(id).value); }
+  function source(cols, rows, kind) {
+    var c = document.createElement('canvas'); c.width = cols; c.height = rows; var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0, 0, cols, rows);
+    if (kind === 'upload' && upload) {
+      var s = Math.max(cols / upload.width, rows / upload.height); x.drawImage(upload, (cols - upload.width * s) / 2, (rows - upload.height * s) / 2, upload.width * s, upload.height * s);
+    } else if (kind === 'glyph') {
+      x.fillStyle = '#000'; x.font = '600 ' + Math.round(rows * 0.95) + 'px Georgia, serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('&', cols * 0.62, rows * 0.54);
+    } else if (kind === 'horizon') {
+      var g = x.createLinearGradient(0, 0, 0, rows); g.addColorStop(0, '#fff'); g.addColorStop(0.55, '#9a9a9a'); g.addColorStop(0.56, '#222'); g.addColorStop(1, '#000'); x.fillStyle = g; x.fillRect(0, 0, cols, rows);
+      x.fillStyle = '#fff'; x.beginPath(); x.arc(cols * 0.7, rows * 0.5, rows * 0.12, 0, 7); x.fill();
+    } else {
+      var R = rows * 0.36, cx = cols * 0.64, cy = rows * 0.5, s2 = x.createRadialGradient(cx - R * 0.45, cy - R * 0.5, R * 0.05, cx, cy, R);
+      s2.addColorStop(0, '#f4f4f4'); s2.addColorStop(0.5, '#6b6b6b'); s2.addColorStop(1, '#000'); x.fillStyle = s2; x.beginPath(); x.arc(cx, cy, R, 0, 7); x.fill();
+    }
+    return x.getImageData(0, 0, cols, rows).data;
+  }
+  function build() {
+    var r = stage.getBoundingClientRect(); W = r.width; H = r.height; dpr = Math.min(devicePixelRatio || 1, W < 600 ? 1.5 : 2);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    var cell = val('cell'), cols = Math.ceil(W / cell), rows = Math.ceil(H / cell), data = source(cols, rows, $('src').value);
+    dots = [];
+    for (var j = 0; j < rows; j++) for (var i = 0; i < cols; i++) {
+      var k = (j * cols + i) * 4, l = (data[k] * 0.2126 + data[k + 1] * 0.7152 + data[k + 2] * 0.0722) / 255;
+      dots.push({ hx: (i + 0.5) * cell, hy: (j + 0.5) * cell, ink: Math.sqrt(1 - l), ox: 0, oy: 0, vx: 0, vy: 0, s: 0 });
+    }
+    draw(); kick();
+  }
+  function mix(a, b, t) { var A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16); var r = (A >> 16) + ((B >> 16) - (A >> 16)) * t, g = (A >> 8 & 255) + ((B >> 8 & 255) - (A >> 8 & 255)) * t, bl = (A & 255) + ((B & 255) - (A & 255)) * t; return 'rgb(' + (r | 0) + ',' + (g | 0) + ',' + (bl | 0) + ')'; }
+  function draw() {
+    var P = PALS[$('pal').value], cell = val('cell'), latent = val('latent');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = P.paper; ctx.fillRect(0, 0, W, H);
+    var bands = 8, fills = []; for (var b = 0; b < bands; b++) fills.push(mix(P.a, P.b, b / (bands - 1)));
+    for (var n = 0; n < dots.length; n++) {
+      var d = dots[n], paperDot = d.ink < 0.12, ink = paperDot ? latent : d.ink, rad = (0.5 * cell * 0.92) * ink * (1 + d.s);
+      if (rad < 0.3) continue;
+      ctx.globalAlpha = paperDot ? 0.45 : 1;
+      ctx.fillStyle = fills[Math.min(bands - 1, Math.floor((d.hy / H) * bands))];
+      ctx.beginPath(); ctx.arc(d.hx + d.ox, d.hy + d.oy, rad, 0, 6.2832); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function step(dt) {
+    var R = val('lens'), swell = val('swell'), push = val('push'), rpush = val('ripple'), moving = false, now = performance.now();
+    pointer.on += (pointer.target - pointer.on) * Math.min(1, dt / (pointer.target ? 140 : 220));
+    ripples = ripples.filter(function (rp) { return now - rp.t < RIPPLE_LIFE; });
+    var h = dt / 1000;
+    for (var n = 0; n < dots.length; n++) {
+      var d = dots[n], tx = 0, ty = 0, ts = 0, dx = d.hx - pointer.x, dy = d.hy - pointer.y, dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      if (R > 0 && dist < R && pointer.on > 0.001) { var f = 1 - dist / R; f = f * f * (3 - 2 * f) * pointer.on; tx = dx / dist * push * f; ty = dy / dist * push * f; ts = swell * f; }
+      for (var m = 0; m < ripples.length; m++) {
+        var rp = ripples[m], age = now - rp.t, rr = age * RIPPLE_SPEED, ex = d.hx - rp.x, ey = d.hy - rp.y, de = Math.sqrt(ex * ex + ey * ey) || 1, band = 1 - Math.abs(de - rr) / RIPPLE_W;
+        if (band > 0) { var life = 1 - age / RIPPLE_LIFE; tx += ex / de * rpush * band * life; ty += ey / de * rpush * band * life; ts += 0.3 * band * life; }
+      }
+      d.vx += (K * (tx - d.ox) - C * d.vx) * h; d.vy += (K * (ty - d.oy) - C * d.vy) * h; d.ox += d.vx * h; d.oy += d.vy * h;
+      d.s += (ts - d.s) * Math.min(1, dt / 60);
+      if (Math.abs(d.vx) + Math.abs(d.vy) > 0.02 || Math.abs(d.ox) + Math.abs(d.oy) > 0.02 || Math.abs(ts - d.s) > 0.002 || d.s > 0.002) moving = true;
+    }
+    return moving || ripples.length > 0 || Math.abs(pointer.target - pointer.on) > 0.01;
+  }
+  function frame(t) {
+    if (!playing || !visible) { running = false; return; }
+    var first = !last, dt = Math.min(64, t - (last || t)); last = t; acc += dt; var busy = first;
+    while (acc >= STEP) { busy = step(STEP) || busy; acc -= STEP; }
+    draw();
+    if (busy) requestAnimationFrame(frame); else { running = false; last = 0; }
+  }
+  function kick() { if (playing && visible && !running) { running = true; last = 0; requestAnimationFrame(frame); } }
+  stage.addEventListener('pointermove', function (e) { var r = stage.getBoundingClientRect(); pointer.x = e.clientX - r.left; pointer.y = e.clientY - r.top; pointer.target = 1; kick(); });
+  stage.addEventListener('pointerleave', function () { pointer.target = 0; kick(); });
+  stage.addEventListener('pointerdown', function (e) { var r = stage.getBoundingClientRect(); ripples.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() }); if (ripples.length > 6) ripples.shift(); kick(); });
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; kick(); }).observe(stage);
+  document.addEventListener('visibilitychange', function () { visible = !document.hidden; kick(); });
+  function applyPal() { var P = PALS[$('pal').value]; stage.style.setProperty('--paper', P.paper); stage.style.setProperty('--hint', P.hint); }
+  ['cell', 'latent'].forEach(function (id) { $(id).addEventListener('input', function () { $(id + '-o').textContent = $(id).value; build(); }); });
+  ['lens', 'swell', 'push', 'ripple'].forEach(function (id) { $(id).addEventListener('input', function () { $(id + '-o').textContent = $(id).value; }); });
+  $('src').addEventListener('change', build); $('pal').addEventListener('change', function () { applyPal(); draw(); });
+  $('upload').addEventListener('change', function (e) { var f = e.target.files[0]; if (!f) return; var im = new Image(); im.onload = function () { upload = im; var o = $('src').querySelector('[value=upload]'); o.disabled = false; $('src').value = 'upload'; build(); }; im.src = URL.createObjectURL(f); });
+  $('play').textContent = playing ? 'Pause motion' : 'Play motion';
+  $('play').addEventListener('click', function () { playing = !playing; $('play').textContent = playing ? 'Pause motion' : 'Play motion'; kick(); });
+  addEventListener('resize', build);
+  applyPal(); build();
+  if (q.has('shot')) { pointer.x = W * 0.58; pointer.y = H * 0.44; pointer.target = 1; pointer.on = 1; for (var i = 0; i < 80; i++) step(8); draw(); }
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

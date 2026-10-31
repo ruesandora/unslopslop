@@ -25,7 +25,7 @@ It writes `inspiration/<date>-<slug>/notes.md` (fonts, palette by area, declared
 | `style:` | any folder in `skills/unslopslop/styles/` |
 | `mood:` | calm, exact, playful, loud, warm, technical, luxurious |
 | `palette:` | the combination in words, e.g. `ink+bone+cobalt` |
-| `motion:` | none, one-demo, scroll-story, micro-only, ambient-slow |
+| `motion:` | none, one-demo, scroll-story, micro-only, ambient-slow, brand-film, product-film |
 | `type:` | serif-display, grotesk, mono-ids, bitmap |
 
 ## Rules

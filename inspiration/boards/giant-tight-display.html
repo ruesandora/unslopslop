@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Board giant-tight-display: two-line display at 11% of the width, mono caps beside it, image offset below</title>
+<style>
+*{box-sizing:border-box;margin:0}html,body{height:100%}
+body{width:100%;min-height:900px;position:relative;overflow:hidden;font-family:system-ui, -apple-system, 'Segoe UI', sans-serif}
+.stage{position:absolute;inset:0 0 36px 0;overflow:hidden}
+.corner{position:absolute;font:500 11px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.08em;text-transform:uppercase;z-index:9}
+.note{position:absolute;font:500 12px/1.4 ui-monospace, Menlo, monospace;letter-spacing:.02em;padding:4px 6px;border:1px dashed currentColor;z-index:9}
+.sw{position:absolute;left:0;right:0;bottom:0;height:36px;display:flex;font:500 11px/36px ui-monospace, Menlo, monospace;z-index:10}
+.sw span{position:relative;min-width:2px}.sw i{position:absolute;left:6px;white-space:nowrap;font-style:normal;color:#fff;mix-blend-mode:difference}
+.cap{position:absolute;left:0;right:0;border-top:1px dashed #111;opacity:.55;z-index:8}
+</style></head><body>
+<div class="stage"><div style="position:absolute;inset:0;background:#f2f1ee"></div>
+     <div style="position:absolute;left:1.4%;top:7%;font:400 160px/0.9 system-ui, -apple-system, 'Segoe UI', sans-serif;letter-spacing:-.0375em;color:#191919">Two word<br>display line</div>
+     <div class="note" style="left:2%;top:41%;color:#191919">160 / 144 px · tracking -3.75% · weight 400 · left edge 20 px</div>
+     <div style="position:absolute;left:70%;top:12%;width:22%;font:400 11px/1.6 ui-monospace, Menlo, monospace;letter-spacing:.02em;text-transform:uppercase;color:#5f5e5d">twelve years of practice<br><br>a short paragraph in mono capitals sits beside the display line, about one fifth of the width, eight to ten lines long</div>
+     <div class="note" style="left:70%;top:33%;color:#5f5e5d">MONO CAPS COLUMN · 22% · grey 6.0:1</div>
+     <div style="position:absolute;left:3%;top:57%;font:400 14px/1 system-ui, -apple-system, 'Segoe UI', sans-serif;padding:8px 12px;background:#fff;color:#191919">Small action →</div>
+     <div style="position:absolute;left:40%;top:50%;right:0;bottom:0;background:linear-gradient(160deg,#c9ccd0,#8d9196 60%,#5d6166);z-index:1"></div>
+     <div class="note" style="left:42%;top:53%;color:#fff">IMAGE · starts at 40% · bleeds right and bottom</div>
+     <div class="corner" style="top:28px;left:32px;color:#191919;background:transparent;padding:2px 4px">wordmark</div><div class="corner" style="top:28px;right:32px;color:#191919;background:transparent;padding:2px 4px">menu</div></div><div class="sw"><span style="flex:58;background:#f2f1ee" title="putty 58%"><i>putty 58%</i></span><span style="flex:30;background:#8d9196" title="photo 30%"><i>photo 30%</i></span><span style="flex:9;background:#191919" title="ink 9%"><i>ink 9%</i></span><span style="flex:3;background:#ffffff" title="panel 3%"><i>panel 3%</i></span></div>
+<!-- Board giant-tight-display. References: C27. Composition diagram re-drawn from measurements; not a design to copy. -->
+</body></html>

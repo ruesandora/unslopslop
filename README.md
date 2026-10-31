@@ -43,7 +43,11 @@ The detector runs fully on web pages, app screens, mobile web and email HTML. Lo
 
 ## Styles
 
-Name a style and the skill loads it on top of the domain pack: `styles/retro-pixel` and `styles/ascii-text-art` (with a dependency-free demo) are complete; swiss-international, editorial-serif, brutalist, neo-brutalism, y2k-chrome, glass-aurora, bento, terminal-dev, memphis, japanese-minimal, organic-earthy, luxury-fashion, data-dense, claymorphism, risograph-print, playful-kids and zine-punk, blueprint-mono, pantry-bold and pop-ritual are early packs. Each pack lists its slop versions, so "retro pixel" done lazily is caught too.
+Name a style and the skill loads it on top of the domain pack: `styles/retro-pixel` and `styles/ascii-text-art` (with a dependency-free demo) are complete; swiss-international and editorial-serif have a first full pass; brutalist, neo-brutalism, y2k-chrome, glass-aurora, bento, terminal-dev, memphis, japanese-minimal, organic-earthy, luxury-fashion, data-dense, claymorphism, risograph-print, playful-kids and zine-punk, blueprint-mono, pantry-bold and pop-ritual are early packs. Each pack lists its slop versions, so "retro pixel" done lazily is caught too.
+
+## Effects and recipes
+
+`skills/unslopslop/effects/` holds 25 hand-built texture, light and glass effects (grain, ribbed glass, halftone, light ribbon, dot lens, card drift and more); `skills/unslopslop/recipes/` holds measured interaction and motion recipes (stretch-and-settle selection, morphing icons, a mark with a hidden turn, a letter window, a product film told by commands and more). Each is one self-contained HTML demo with its timings and a slop warning.
 
 ## How it thinks
 

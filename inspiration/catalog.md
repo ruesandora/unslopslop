@@ -1,6 +1,6 @@
 # Inspiration catalogue
 
-The catalogue holds 32 measured entries (C01 to C23, W18, W19, W26 to W32) plus 5 short notes from an earlier batch (B01 to B05). Measured references, written without names, links or copied material. Every number below was measured by us on 30 October 2026 (computed styles in a 1440 x 900 headless browser, palette shares from the first-screen pixels, motion from declared animations or frame differences). Values read from screen recordings are scaled to a 1440 x 900 frame and are approximate (about ±10%). Hex values are measurements, not palettes to reuse.
+The catalogue holds 46 measured entries (C01 to C31, W18, W19, W26 to W38) plus 5 short notes from an earlier batch (B01 to B05). Measured references, written without names, links or copied material. Every number below was measured by us on 30 October 2026 (entries C24 to C31 and W33 to W38 on 31 October 2026) (computed styles in a 1440 x 900 headless browser, palette shares from the first-screen pixels, motion from declared animations or frame differences). Values read from screen recordings are scaled to a 1440 x 900 frame and are approximate (about ±10%). Hex values are measurements, not palettes to reuse.
 
 **How to use it.** Before building, pick 2 or 3 entries whose tags match the brief (the gold ones first) and write their ids in the brief's `References:` line with what you take from each. Open the matching composition board in `boards/` and put your first screen next to it with `scripts/compare.mjs`. Check your page against the measured ranges in `skills/unslopslop/references/craft-recipes.md`. Never copy a shape, subject, wording or palette; take the proportion, the layer order, the timing.
 
@@ -15,6 +15,16 @@ The catalogue holds 32 measured entries (C01 to C23, W18, W19, W26 to W32) plus 
 5. **Depth comes from light and overlap, not from card shadows.** One light source on a dark stage, a product card laid over a photograph, a layer that crosses the edge of another. Box shadows, where present, use negative spread or a 1 px inset line.
 
 Technique to try next: a hero where the display line is set at 20%+ of screen height and one subject crosses it, on a two-colour field, with corner labels; compare against board `subject-over-type`.
+
+## Batch 2026-10-31: what repeated
+
+1. **Brand books are one skeleton, repeated.** Both gold brand books keep one slide frame (title, rule, text column, specimen area, tagline, footer row) and change only the specimen. The system shows through repetition, not through decoration.
+2. **A signature shape or light does three jobs.** One shape (a disc with an off-centre core) or one image (a folded light sheet) is the logo crop, the pattern, the photo frame and the cover. Colour is given as approved text-on-ground pairs with contrast ratios.
+3. **Image products show their content in the first screen.** The strongest collecting and saving products put dozens of small real items around a clear centre (drifting cards, tiles inside the headline). The weakest show a dark gradient and a pill.
+4. **Delight is small and specific.** A logo that changes costume on hover, an indicator that stretches before it settles, icons that move their own lines. Each has written timings (160 to 620 ms) and overshoot only on small elements.
+5. **Pale halves and ticking clocks are the new tells.** Headings whose second half is pale grey, and countdown bars over launch pages, repeated across template and library sites.
+
+Technique to try next: a dark cover with one folded light sheet (effect `light-ribbon`) and the brand-deck slide skeleton (board `brand-deck-slide`) for a product's docs or pitch.
 
 ## Gold
 
@@ -163,6 +173,56 @@ Technique to try next: a hero where the display line is set at 20%+ of screen he
 - Signature: type is the image.
 - Steal as a principle: the owner's taste is poster-scale type interlocked with one subject, technical micro labels and one texture. A page that keeps type under 8% of the screen height will read as timid to this owner.
 
+### C24 · Brand book on a navy slide, folded light on the cover
+- Tags: domain:logo-brand, social · style:none · mood:calm, exact, luminous · palette:void+navy+cobalt+flare+ice+paper · motion:none · type:grotesk+italic-serif+mono · role:gold
+- Measured (one 2048 x 1824 image, six slides): page #060709; slides about 920 x 518 (16:9) on a vertical gradient #2C3D68 to #1F2638 to #111521; inner panel #111521 with a 1 px line, radius about 12. Palette written on the slide: paper #F3F2EF, navy #0A1640, cobalt #285CFF, ice #C4D7FF, flare #FF5436, with roles (paper and navy grounds, cobalt the signature, flare the spark used sparingly, ice for charts and quiet moments, AA contrast). Each colour is a vertical bar that continues above and below in three translucent steps over the slide (a tint ladder). Type spec: headline medium 68/22 px, tracking -3% / -0.5%, line height 100% / 150%; a grotesk, an italic serif for statements, a mono for numbers.
+- Layers: cover = a folded sheet of cobalt, flare and ice light crossing a black void, with grain; title about 130 px in two tight lines bottom left; three small mono labels across the top (document, volume, date) and one action bottom right.
+- Signature: every slide has the same skeleton (title, hairline, text column 22%, specimen panel with corner brackets, one italic serif line bottom left, footer of mark, document, section, page number).
+- Steal as a principle: one cover image that is also the logo backdrop and the section band; colour roles written next to the swatches; a fixed slide skeleton. Built here as effect `light-ribbon` and board `brand-deck-slide`.
+- Do not take: the mark, the palette, the wording.
+
+### C25 · Signature shape with three jobs (food brand book)
+- Tags: domain:logo-brand, social, motion · style:pantry-bold, pop-ritual · mood:playful, sunny, confident · palette:violet+pink+lime+yolk+white+ink · motion:brand-film · type:grotesk-bold · role:gold
+- Measured (9.5 s film, 60 fps, scaled frames): violet #4B1ACF, pink #F45DD1, lime #BAFF39, yolk #FFD21C, white, ink #161515. Pairs given with ratios: white on violet 8.94:1, ink on lime 15.17:1; white on pink marked low contrast, small text in ink. One grotesk, bold 700 for headlines, regular 400 for copy; display tracking -0.035 to -0.050 em, copy -0.010 to -0.020 em. Clear space x = half the lowercase o height; smallest digital size 120 px wide. Shape: white disc 1.00 D with a yolk core 0.44 D, off centre.
+- Layers: tactic tiles (flat shape for recognition, photo inside the shape for appetite, a 2 x 3 grid for product count); scale-and-crop row (complete mark, large crop, small concept); a five-template social set ("type, colour and geometry keep the family; content decides which element leads"); formats 1080 x 1350 and 1080 x 1920.
+- Motion: the first round letter of the wordmark becomes a window; about ten photos flick through it at about 200 ms each (12 frames), it lands on the hero photo, then the line arrives word by word about 300 ms apart and a picture pill pops between two words.
+- Steal as a principle: give one shape several jobs and write the rules down; let a letter of the mark be the frame for real use moments. Built here as recipe `letter-window` and board `signature-shape-system`.
+- Do not take: the shape, the name, the colours together.
+
+### C26 · Image collector with a drifting card field
+- Tags: domain:web · style:none · mood:curious, light, calm · palette:warm-white+ink · motion:ambient-slow, micro-only · type:grotesk-custom · role:gold
+- Measured: ground #F7F5F3 68%, ink about #0A0A0A. One custom grotesk at 400, 500 and 700. Display 72/72 px weight 700, tracking -2.88 px (-4%); section titles 48 px weight 500, -1.92 px; card titles 26 px. Radii 16, 12, 8 and 999. Almost no shadows; backdrop blur only on the top bar.
+- Layers: a single canvas draws 40+ small photo cards at three depths around the hero (far ones small and pale), drifting down and turning slowly; the centre (headline, search, one action) stays clear; two 68 px picture tiles sit inside the headline at ±6 degrees; the headline's last noun rotates. A brand index below: 72 px rows in light grey, the pointed row turns ink and a 64 px picture opens beside it. A text shimmer (mask position 100 to 0%, 1.3 s linear) marks pending states.
+- Signature: the product's own content is the hero's texture.
+- Steal as a principle: for products about images, show many small real items around a clear centre; set two pictures inside the headline line. Built here as effect `card-drift`, effect `text-shimmer`, recipe `index-reveal` and board `inline-image-headline`.
+- Do not take: the photos, the brand list, the wording.
+
+### C27 · Architecture studio, putty ground and a 160 px display
+- Tags: domain:web · style:swiss-international, japanese-minimal · mood:quiet, exact, gallery · palette:putty+ink+white · motion:none · type:grotesk-light+mono-caps · role:useful
+- Measured: ground #F2F1EE 56%, ink #191919, white panels. Display 160/144 px weight 400, tracking -6 px (-3.75%), two lines flush left 20 px from the edge. Beside it a mono paragraph in capitals at about 11 px, grey about 6:1. Services as rows inside a white panel: bullet, 62 px name, mono description, small action. Hero photo starts at about 40% of the width and bleeds right. Transitions only (0.6 s ease, 0.3 s); no animation. Tells: a section title with its second word in pale grey (#A6A5A2 on putty, about 2.2:1), demo figures ("230 projects completed") and a repeated FAQ question.
+- Steal as a principle: one very large, light, tightly tracked display plus one small mono column is a complete type system. Board `giant-tight-display`.
+
+### C28 · Network for collecting, hero written as a definition
+- Tags: domain:web · style:editorial-serif, data-dense · mood:plain, honest, slow · palette:white+graphite+navy · motion:ambient-slow · type:grotesk-single-size · role:gold
+- Measured: white 77%, text #333, one navy #00025B for the button. One size, 19.2 px, weights 400 and 700, for everything including the hero. The hero is a short ordered list: "Name is / a. one sentence / b. another / c. +" with the "+" inviting the visitor's own line; then a real age in bold ("15 years and 83 days"), counted, not claimed. Product screens with real collected items; slow 48 to 60 s loops.
+- Signature: no display type at all; the hierarchy is the list.
+- Steal as a principle: a quiet product can lead with a definition list and one real number that is a fact (an age, a date), never a boast.
+
+### C29 · Interaction library, a mark with a hidden turn
+- Tags: domain:web, motion · style:none · mood:playful, exact · palette:white+ink+one-seasonal-colour · motion:micro-only · type:grotesk · role:useful
+- Measured: hover on the logo turns it into a seasonal character part by part: body fill changes, ribs fade to 0.55, a stem scales from 0.2 (overshoot to 1.06), eyes move up 9 px and turn ±14 degrees, a grin scales from 0.4 with a 60 ms delay, colours flicker on a 1.6 s step-end loop; the swap pops in 360 ms cubic-bezier(.34, 1.56, .5, 1). Eyes follow the pointer (180 ms ease-out) and blink (80 ms). A hero pill rolls between two lines every 3 s and resizes. Segment indicator: stretch 190 ms cubic-bezier(.32, .72, .24, 1), settle 420 ms cubic-bezier(.28, 1.28, .36, 1). Hero entrance 620 ms cubic-bezier(.22, 1, .36, 1) with 0/60/220/380 ms stagger. Components are filed by verb: hover, press, drag, slide, swipe, type, select, loading.
+- Steal as a principle: small delights with written timings, and a library filed by what the user does. Built here as recipes `mark-turn`, `rolling-pill` and `stretch-settle`. Tell: a live sign-up count in the pill; only show it if the number is real.
+
+### C30 · Product film told by typed commands
+- Tags: domain:motion, social · style:none · mood:capable, calm, technical · palette:light-grey+charcoal+one-blue · motion:product-film · type:grotesk+mono · role:useful
+- Measured (54.9 s, 1080 x 1350, 60 fps): light grey ground scenes alternate with a dark terminal. Terminal lines arrive about every 400 ms, dim first, then full tone; the last line in green. A title darkens word by word from pale grey to ink. Each scene: a white label pill with a blue dot above a dark app window that slides in with a slight 3D turn; a dark command chip sits half over the window's bottom edge and types at about 40 to 45 characters per second with a blue block cursor; the result appears in the window. An orbit diagram puts "your agent" in the centre with tools around it.
+- Steal as a principle: let real requests carry a product film; one chip, one window, one result per beat. Built here as recipe `prompt-reel` and board `window-and-chip`.
+
+### C31 · Tool-first component library with a reactive dot field
+- Tags: domain:web, dashboard · style:data-dense · mood:exact, quiet · palette:white+ink+one-accent · motion:micro-only · type:grotesk+mono · role:useful
+- Measured: left index (free, generative, agents), live preview in the middle, prop table on the right, code tabs below (component, styles, prompt). Morphing icons: spring about 500 ms with no bounce, two-step morphs 620 ms cubic-bezier(.65, 0, .35, 1), blink about 450 ms. Halftone field: 6 px cells, a pointer lens of 64 px radius that grows dots by 0.55 and pushes them 4.5 px on springs (stiffness 1600, damping 68), a click ripple at 0.75 px per ms, 30 px wide, 400 ms life; faint dots on empty paper. Streaming text: newest words in the accent, settling to ink.
+- Steal as a principle: show the component working, its props and its code on one screen. Built here as effect `dot-lens` and recipes `morph-icons` and `streaming-tail`.
+
 ## Useful, with tells
 
 ### W18 · 3D image orbit tool
@@ -175,11 +235,30 @@ Technique to try next: a hero where the display line is set at 20%+ of screen he
 - Measured: #F8F7F4 85%; display 60/60 px weight 700, -1.5 px; 3 columns, 32 px gaps, 24 px radius cards. Under each thumbnail, four dots show that page's palette.
 - Steal: show a palette as dots beside the thing it belongs to (useful in reports).
 
+### W33 · Manifesto in a large serif, pastel tag chips
+- Tags: domain:web · style:editorial-serif · mood:warm, personal · palette:white+slate-ink+orange · motion:scroll-story · type:serif-display+grotesk · role:useful
+- Measured: serif display 140/119 px, tracking -8.4 px (-6%), two lines. Inline tag chips inside a sentence, each its own pastel (orange #E98F53, pink #E48ABF, blue #99D2FB, coral #EA726B, yellow #FFCF27): text colour equals the 1 px border, radius 36, padding 4/18, 18 px. Manifesto 42 px serif with the first word at 84 px italic; a "NO ..." list with the "NO" in orange over a warm gradient band. Transitions 0.5 to 0.7 s cubic-bezier(.165, .84, .44, 1).
+- Steal: a manifesto set large in one serif, one italic drop word. Tells: pastel chip text fails contrast (blue on white about 1.7:1); rainbow chips.
+
+### W34 · Saving app, icons inside the headline
+- Tags: domain:web · style:none · mood:light, curated · palette:white+ink · motion:micro-only · type:grotesk-custom · role:useful
+- Measured: display 95.8 px weight 500, tracking -3.35 px (-3.5%), three small app-icon pictures set inside the headline lines; masonry of saved images; entrance 1 s cubic-bezier(.16, 1, .3, 1), image swap 300 ms. Tell: a two-clause heading with the second clause in #A3A3A3 (about 2.5:1), now caught by `color-faded-heading-part`.
+
+### W35 · Board tool, slate hero and the real board
+- Tags: domain:web · style:none · mood:practical · palette:slate+white+orange · motion:none · type:serif-heading+grotesk · role:useful
+- Measured: slate hero band (about #2F3542) with a serif heading and one orange action; the real board screenshot fills the lower half and is cut by a diagonal edge into white. Sections: short rule, serif title, one line, real screen.
+- Steal: a diagonal cut that hands the product screen from the dark band to the page.
+
+### W36 · Navigation gallery and its taxonomy
+- Tags: domain:web · style:none · mood:neutral · palette:near-black+white · motion:none · type:grotesk · role:useful
+- Measured: #111111 ground; a left index of navigation types (static, dropdown, mega menu, side bar, search bar, announcement, full screen, breadcrumbs) over a grid of real site captures.
+- Steal: choose the navigation type by the job (see `skills/unslopslop/domains/web/README.md`, "Navigation by job").
+
 ## Counter examples (measured, for calibration)
 
 | Id | What it is | Measured tells |
 |---|---|---|
-| W26 | Template shop's own landing page (dark) | 88 px display weight 800 with the last word in a gradient; mono eyebrow pill; avatar stack with a "13,500+" count; `transition: all` on 126 elements; blur 64 px blob behind the hero; brown-blue orb gradient over 60% of the first screen |
+| W26 | Template shop's own landing page (dark) | 88 px display weight 800 with the last word in a gradient; mono eyebrow pill; avatar stack with a "13,500+" count; re-measured 31 Oct: a top bar with a price and a ticking "hh:mm:ss left" countdown next to a claim button (now `detail-urgency-timer`); `transition: all` on 126 elements; blur 64 px blob behind the hero; brown-blue orb gradient over 60% of the first screen |
 | W27 | Component shop, dark | 60 px weight 500 with two highlighted keywords (`mark`); 45 degree stripe texture on 52 elements; infinite 3 to 32 s loops (rainbow border, beam spin) |
 | W28 | Design-system product page | 62 px weight 800 with a gradient keyword; purple-blue accent; dot grid; 433 elements share one 150 ms transition |
 | W29 | Component shop, dark with orange | centred 72 px weight 700 title over a large faint logo; install-command chip next to an orange pill button (stock dark launch); testimonial wall |
@@ -188,6 +267,8 @@ Technique to try next: a hero where the display line is set at 20%+ of screen he
 | C07 | Agency template, orange portrait | strong move (a face cutting a full-width word) spoiled by invented stat chips ("15M+", "96%") and four headline sizes in one corner |
 | C08 | Coffee template, dark brown | coloured keyword in the headline; product cut-outs floating with splash; generic three-card menu |
 | W32 | Static AI SaaS mock-up | announcement pill, coloured blur blob, logo strip, 3 + 2 feature cards with line icons, a stat column (500+, 70%, 3x, 98%) |
+| W37 | Asset manager, dark launch | centred pill badge above a two-line gradient-filled headline, centred grey paragraph, one blue button, logo strip; the real app screen is good but sits under a stock dark launch |
+| W38 | Image prompt gallery | light ground, 48 px weight 300 centred line that swaps sentences letter by letter, small cards flying outward from the centre (a good motion) with a live "Backed by Your Sponsor Here" placeholder above the headline |
 
 ## Batch-2 notes (measured earlier from recordings; frames not re-checked in this pass)
 

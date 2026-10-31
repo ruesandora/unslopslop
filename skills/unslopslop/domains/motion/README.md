@@ -32,6 +32,13 @@ The animated component, a frame strip PNG, optional webm/mp4, measured timings.
 - **One path for clip and edge.** The same path clips the layer and is stroked as its hairline; nested radius = outer radius minus inset. Do not mix a CSS border with a clip-path corner.
 - **Static hit area.** Hover and focus live on the non-moving parent; moving children get `pointer-events: none`. `:focus-visible` opens it like hover.
 - **Radial picker.** 8 to 10 chips on a ring around the trigger. Open: scale up from the centre while the ring rotates from about -90 degrees to 0 with a per-item stagger, about 600 ms with gentle overshoot, then a slow settle of about 0.7 s. Close: about 400 ms back to the centre, reversed stagger. Hover darkens the icon only.
+- **Stretch and settle.** A selection indicator first stretches to cover the old and the new choice (190 ms, cubic-bezier(.32, .72, .24, 1)), then lets go and settles on the new one with a small overshoot (420 ms, cubic-bezier(.28, 1.28, .36, 1)). Demo: `../../recipes/stretch-settle/`.
+- **Part-by-part costume.** A character mark changes in a sequence of parts, each with its own origin, delay (0 to 120 ms) and overshoot (cubic-bezier(.34, 1.56, .5, 1)); a flicker uses step-end so it never looks like a fade. Demo: `../../recipes/mark-turn/`.
+- **Point morph.** Two icon states share stroke and point counts; vanishing strokes collapse to a point and fade; ease from the current points so reversals are smooth. Spring about 500 ms, two-step morphs 620 ms. Demo: `../../recipes/morph-icons/`.
+- **Letter window.** A round letter of the mark as a picture window: hard cuts every 200 ms, land, then words 300 ms apart. Demo: `../../recipes/letter-window/`.
+- **Product film by commands.** Beats of one label pill, one window and one command chip typing at about 40 characters per second; checklist lines every 400 ms that arrive dim and settle; a title that darkens word by word. Demo: `../../recipes/prompt-reel/`.
+- **Streaming tail.** New words arrive in the accent and settle to ink in about 600 ms; no cursor, no blur. Demo: `../../recipes/streaming-tail/`.
+- **Drifting field.** Three depths (0.45, 0.7, 1) for size, speed and opacity; 20 to 30 px per second; a clear ellipse around the content. Effect: `../../effects/card-drift/`.
 
 ## More slop signs
 Stagger by index only (same distance, constant delay, nothing else changes); shadows that stay on a layer after it lifts away; animated blur or box-shadow; the moving element is also the hover target, so it flickers at the edge.

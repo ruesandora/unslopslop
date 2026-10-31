@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Index list reveal · interaction recipes</title>
+<meta name="description" content="A large type index where the pointed row keeps full ink, opens a small picture in its own line and fills the preview, while the other rows step back.">
+<!-- Hand-written recipe demo. Colour and width transitions on links; a preview panel swaps generated pictures. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #f6f3ee; color: #151413; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: center; gap: 32px; padding: 32px 40px; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .idx { list-style: none; margin: 0; padding: 0; }
+  .idx a { display: flex; align-items: center; gap: 0; color: #151413; text-decoration: none; font-weight: 700; font-size: clamp(30px, 4.4vw, 60px); line-height: 1.08; letter-spacing: -0.035em; transition: color .22s cubic-bezier(.2,.8,.2,1), gap .26s cubic-bezier(.2,.8,.2,1); }
+  .idx a .th { display: inline-block; width: 0; height: .9em; border-radius: 8px; background-size: cover; background-position: center; transition: width .26s cubic-bezier(.2,.8,.2,1); }
+  .idx.dim a { color: #a29d94; }
+  .idx.dim a.on { color: #151413; gap: 14px; }
+  .idx.dim a.on .th { width: .9em; }
+  .idx a:focus-visible { outline: 2px solid #151413; outline-offset: 4px; border-radius: 6px; }
+  .pv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-self: stretch; align-content: center; }
+  .pv div { aspect-ratio: 3 / 4; border-radius: 10px; background-size: cover; background-position: center; transition: opacity .3s; }
+  .pv div:nth-child(2) { aspect-ratio: 1; align-self: end; }
+  .cap { grid-column: 1 / -1; margin: 4px 0 0; font-size: 13px; color: #55524c; }
+  @media (max-width: 760px) { #stage { grid-template-columns: 1fr; padding: 24px 18px; } .pv { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .idx a, .idx a .th { transition: none; } }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <ul class="idx" id="idx"></ul>
+    <div class="pv" id="pv" aria-hidden="true"><div></div><div></div><p class="cap">Generated example pictures, one pair per row.</p></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Index list reveal</h1>
+    <p class="sum">A big typographic index (brands, projects, categories) that turns into a picture browser on hover. The pointed row keeps full ink and opens a small square picture inside its own line; the other rows step back to a quieter tone; a preview beside the list fills with that row's pictures.</p>
+    <dl class="notes group">
+      <dt>Timing</dt><dd>Row colour 220 ms and inline picture 260 ms, both cubic-bezier(.2, .8, .2, 1). The dim state starts on entering the list, not on entering a row, so moving between rows never flashes back to full ink.</dd>
+      <dt>Contrast choice</dt><dd>At rest every row has full ink. Only while one row is pointed do the others step back, and even then the quieter tone keeps about 3:1 on the ground, which is enough for type this large. A list that is pale at rest and only dark under the pointer is unreadable on touch screens, where nothing is ever pointed.</dd>
+      <dt>How it is built</dt><dd>Real links in a list. Pointer and focus set one class on the list and one on the row. The inline picture is a span whose width grows from 0 to the line height, so the word slides right instead of the picture covering it. The preview swaps two background images.</dd>
+      <dt>Phones</dt><dd>The preview is hidden and the list is a plain list of links; nothing depends on hover.</dd>
+      <dt>Becomes slop when</dt><dd>The rows are a fake client list, the pictures are random stock, or the whole page is built from hover lists.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var ROWS = [['Linen', '#6d6250', '#d9cdb7'], ['Ceramics', '#7a3f2c', '#e8c2a3'], ['Outerwear', '#283548', '#93a7c2'], ['Lighting', '#3e3a33', '#e8d9a8'], ['Footwear', '#4a2f22', '#c49a7c'], ['Glassware', '#2d4440', '#a8cbc2'], ['Paper goods', '#5b4e3f', '#ede3d1']];
+  function art(a, b, k) { var c = document.createElement('canvas'); c.width = 120; c.height = 160; var x = c.getContext('2d'); var g = x.createLinearGradient(0, 0, 120 * (k ? 1 : 0.2), 160); g.addColorStop(0, b); g.addColorStop(1, a); x.fillStyle = g; x.fillRect(0, 0, 120, 160); x.fillStyle = a; x.globalAlpha = .5; if (k) { x.beginPath(); x.arc(60, 92, 34, 0, 7); x.fill(); } else { x.fillRect(22, 40, 76, 96); } return 'url(' + c.toDataURL('image/jpeg', .8) + ')'; }
+  var idx = $('idx'), pv = $('pv').querySelectorAll('div'), links = [];
+  ROWS.forEach(function (r, i) {
+    var li = document.createElement('li'), a = document.createElement('a'); a.href = '#'; a.innerHTML = '<span class="th" aria-hidden="true"></span><span></span>'; a.lastChild.textContent = r[0];
+    a.firstChild.style.backgroundImage = art(r[1], r[2], 1); a.dataset.i = i; li.appendChild(a); idx.appendChild(li); links.push(a);
+    a.addEventListener('click', function (e) { e.preventDefault(); });
+  });
+  function show(i) { links.forEach(function (a, k) { a.classList.toggle('on', k === i); }); idx.classList.toggle('dim', i >= 0); if (i >= 0) { pv[0].style.backgroundImage = art(ROWS[i][1], ROWS[i][2], 0); pv[1].style.backgroundImage = art(ROWS[i][1], ROWS[i][2], 1); } }
+  links.forEach(function (a, i) { a.addEventListener('pointerenter', function () { show(i); }); a.addEventListener('focus', function () { show(i); }); });
+  idx.addEventListener('pointerleave', function () { show(-1); }); idx.addEventListener('focusout', function (e) { if (!idx.contains(e.relatedTarget)) show(-1); });
+  show(-1); pv[0].style.backgroundImage = art(ROWS[0][1], ROWS[0][2], 0); pv[1].style.backgroundImage = art(ROWS[0][1], ROWS[0][2], 1);
+  if (q.has('shot')) show(2);
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

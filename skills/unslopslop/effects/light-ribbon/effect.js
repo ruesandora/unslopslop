@@ -1,0 +1,43 @@
+FX.mount({
+  title: 'Light ribbon',
+  summary: 'One folded sheet of light crossing a dark void. The sheet splits into a cool edge and a warm edge like light split by a glass edge, and brightens where it folds. Built for a cover or a hero with a large title on top.',
+  cost: 'A few sines and two samples of the same field per pixel; no texture reads. Light. Animated at 30 fps; one still frame under reduced motion.',
+  fallback: 'No WebGL: the CSS gradient. A still frame exported as WebP (1600 px, about 120 KB with grain) is the zero-script version.',
+  slop: 'Used as a generic purple-blue screensaver behind every section, or with the void removed so the whole frame is colour. The dark void is half the effect: keep at least a third of the frame empty.',
+  source: 'none', palette: 'signal', animated: true, fps: 30,
+  params: [
+    { id: 'width', label: 'Sheet width', min: 0.05, max: 1.2, step: 0.01, value: 0.6 },
+    { id: 'fold', label: 'Fold depth', min: 0, max: 2.5, step: 0.01, value: 1.9 },
+    { id: 'split', label: 'Colour split', min: 0, max: 1, step: 0.01, value: 0.6 },
+    { id: 'shine', label: 'Fold light', min: 0, max: 2, step: 0.01, value: 0.9 },
+    { id: 'soft', label: 'Edge softness', min: 0.002, max: 0.2, step: 0.001, value: 0.012 },
+    { id: 'tilt', label: 'Tilt', min: -1.2, max: 1.2, step: 0.01, value: -0.35 },
+    { id: 'speed', label: 'Flow', min: 0, max: 1, step: 0.01, value: 0.3 },
+    { id: 'grain', label: 'Grain', min: 0, max: 0.3, step: 0.01, value: 0.09 }
+  ],
+  frag: [
+    '/* The sheet is the set of points whose warped height h(p) sits inside [-width, width]. */',
+    'float sheetH(vec2 p, float t) {',
+    '  float w = sin(p.x * 1.3 + t) * 0.5 + sin(p.x * 2.1 - t * 0.7 + p.y * 2.4) * 0.45 + sin(p.x * 0.7 - p.y * 1.6 + t * 0.4) * 0.5;',
+    '  return p.y + p.x * u_tilt + w * u_fold * 0.5;',
+    '}',
+    'void main() {',
+    '  float asp = u_res.x / u_res.y; vec2 p = (v_uv - 0.5) * vec2(asp, 1.0) * 2.0; float t = u_time * u_speed * 0.6;',
+    '  float h = sheetH(p, t);',
+    '  float e = 0.004; float dh = (sheetH(p + vec2(0.0, e), t) - h) / e;',
+    '  /* dh near 0 means the sheet is seen edge-on: that is a fold, where light gathers. dh < 0 means we see its back. */',
+    '  float across = h / u_width;',
+    '  float inside = smoothstep(1.0 + u_soft / u_width, 1.0 - u_soft / u_width, abs(across));',
+    '  float side = clamp(across * 0.5 + 0.5, 0.0, 1.0);',
+    '  vec3 band = mix(u_c1, u_c2, smoothstep(0.5 - u_split * 0.5, 0.5 + u_split * 0.5, side));',
+    '  float back = smoothstep(0.15, -0.15, dh);',
+    '  band = mix(band, mix(u_c1, u_c0, 0.55), back * 0.85);',
+    '  float fold = exp(-abs(dh) * 2.2) * u_shine;',
+    '  float body = 0.35 + 0.65 * pow(1.0 - abs(across), 0.6);',
+    '  vec3 c = band * body + u_c3 * fold * 0.75 * (1.0 - abs(across) * 0.6);',
+    '  float halo = exp(-max(abs(across) - 1.0, 0.0) * 3.0) * 0.10 * (1.0 - inside);',
+    '  c = mix(u_c0, c, inside) + mix(u_c1, u_c2, side) * halo;',
+    '  gl_FragColor = vec4(finish(c), 1.0);',
+    '}'
+  ].join('\n')
+});

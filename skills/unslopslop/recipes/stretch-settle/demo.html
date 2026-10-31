@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stretch and settle · interaction recipes</title>
+<meta name="description" content="A selection indicator that first stretches to cover the old and new choice, then settles on the new one with a small overshoot.">
+<!-- Hand-written recipe demo. Two transitions in sequence on one small element; press tilt on the control. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #f4f2ee; color: #1a1918; display: grid; place-content: center; gap: 40px; padding: 32px; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .lab { margin: 0 0 10px; font-size: 13px; color: #4f4c47; }
+  .seg { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: #e7e3dc; box-shadow: inset 0 0 0 1px rgba(26,25,24,.08); transition: transform .42s cubic-bezier(.24,1.34,.38,1); }
+  .seg[data-press="l"] { transform: perspective(320px) rotateY(-4deg) scale(.99); transition-duration: .16s; }
+  .seg[data-press="r"] { transform: perspective(320px) rotateY(4deg) scale(.99); transition-duration: .16s; }
+  .seg button { position: relative; z-index: 1; border: 0; background: none; font: inherit; font-size: 14px; color: #55524c; padding: 10px 18px; min-height: 40px; border-radius: 999px; cursor: pointer; transition: color .26s cubic-bezier(.32,.72,.24,1); }
+  .seg button[aria-pressed="true"] { color: #1a1918; }
+  .seg button:focus-visible { outline: 2px solid #1a1918; outline-offset: 2px; }
+  .ind { position: absolute; top: 4px; bottom: 4px; left: 0; width: 10px; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgba(26,25,24,.12), 0 4px 10px -6px rgba(26,25,24,.3); }
+  .ind[data-phase="plain"] { transition: transform .22s cubic-bezier(.2,.8,.2,1), width .22s cubic-bezier(.2,.8,.2,1); }
+  .ind[data-phase="stretch"] { transition: transform .19s cubic-bezier(.32,.72,.24,1), width .19s cubic-bezier(.32,.72,.24,1); }
+  .ind[data-phase="settle"] { transition: transform .42s cubic-bezier(.28,1.28,.36,1), width .42s cubic-bezier(.24,1.34,.38,1); }
+  @media (prefers-reduced-motion: reduce) { .ind, .seg { transition: none !important; } }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <div><p class="lab">Plain slide, 220 ms ease-out (for comparison)</p>
+      <div class="seg" data-mode="plain" role="group" aria-label="Plain example"><span class="ind" aria-hidden="true"></span><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
+    <div><p class="lab">Stretch and settle, 190 ms then 420 ms</p>
+      <div class="seg" data-mode="stretch" role="group" aria-label="Stretch example"><span class="ind" aria-hidden="true"></span><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Stretch and settle</h1>
+    <p class="sum">A selection indicator that moves in two phases. First it stretches so it covers both the old and the new choice, fast and without overshoot. Then it lets go of the old side and settles on the new one with a small overshoot. It reads as a soft object being pulled, where a plain slide reads as a box on rails.</p>
+    <div class="ctl"><button id="auto" type="button">Run both again</button></div>
+    <dl class="notes group">
+      <dt>Timing</dt><dd>Stretch: 190 ms, cubic-bezier(.32, .72, .24, 1). Settle: 420 ms, cubic-bezier(.28, 1.28, .36, 1) for position and (.24, 1.34, .38, 1) for width. Label colour 260 ms. Press: the whole control tilts 4 degrees toward the pressed side and scales to 0.99 for 160 ms, then springs back in 420 ms.</dd>
+      <dt>How it is built</dt><dd>The indicator is one absolutely placed element. On a click the script measures both buttons, sets the stretch phase (left edge at the smaller of the two, width spanning both), waits for that transition to end, then sets the settle phase on the target. A click during the stretch starts again from where the indicator is.</dd>
+      <dt>Where it fits</dt><dd>Segmented controls, tab bars, a filter row, a theme switch. Small elements only: on a full-width panel the overshoot looks like a mistake.</dd>
+      <dt>Reduced motion</dt><dd>The indicator jumps to the target. Selection is also carried by the label colour and aria-pressed, never by motion alone.</dd>
+      <dt>Becomes slop when</dt><dd>Every control on the page wobbles, the overshoot is large enough to be noticed on its own, or the same stretch is used for page transitions.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function place(ind, x, w) { ind.style.transform = 'translateX(' + x + 'px)'; ind.style.width = w + 'px'; }
+  function setup(seg) {
+    var ind = seg.querySelector('.ind'), btns = [].slice.call(seg.querySelectorAll('button')), cur = 0, timer = 0;
+    function box(b) { return { x: b.offsetLeft, w: b.offsetWidth }; }
+    function select(i, instant) {
+      btns.forEach(function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+      var to = box(btns[i]), from = box(btns[cur]); cur = i; clearTimeout(timer);
+      if (instant || reduce) { ind.dataset.phase = 'idle'; place(ind, to.x, to.w); return; }
+      if (seg.dataset.mode === 'plain') { ind.dataset.phase = 'plain'; place(ind, to.x, to.w); return; }
+      var left = Math.min(from.x, to.x), right = Math.max(from.x + from.w, to.x + to.w);
+      ind.dataset.phase = 'stretch'; place(ind, left, right - left);
+      timer = setTimeout(function () { ind.dataset.phase = 'settle'; place(ind, to.x, to.w); }, 190);
+    }
+    btns.forEach(function (b, i) {
+      b.addEventListener('click', function () { select(i); });
+      b.addEventListener('pointerdown', function (e) { var r = seg.getBoundingClientRect(); seg.dataset.press = e.clientX < r.left + r.width / 2 ? 'l' : 'r'; });
+    });
+    addEventListener('pointerup', function () { delete seg.dataset.press; });
+    select(0, true);
+    return select;
+  }
+  var sels = [].map.call(document.querySelectorAll('.seg'), setup);
+  function demo() { var seq = [3, 1, 2, 0]; seq.forEach(function (i, k) { setTimeout(function () { sels.forEach(function (s) { s(i); }); }, 300 + k * 900); }); }
+  document.getElementById('auto').addEventListener('click', demo);
+  if (q.has('shot')) { sels.forEach(function (s) { s(2, true); }); var segs = document.querySelectorAll('.seg'), b = segs[1].querySelectorAll('button'), ind = segs[1].querySelector('.ind'); ind.dataset.phase = 'idle'; place(ind, b[0].offsetLeft, b[2].offsetLeft + b[2].offsetWidth - b[0].offsetLeft); segs[1].previousElementSibling.textContent = 'Stretch and settle, frozen mid-stretch (Day to Month)'; }
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>
