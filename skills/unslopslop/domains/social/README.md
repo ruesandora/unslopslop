@@ -22,3 +22,9 @@ PNG per slide (1080 x 1350 or the platform size), the HTML source, caption text.
 
 ## Checks the detector runs
 Web checks on each slide HTML (text size, contrast, overlap). Platform-specific checks are manual.
+
+## Recipes
+- **Family resemblance, content leads.** A set of four or five post templates that share type, colour and one geometric device; each post lets its content decide which element is biggest (the photo, the word, the shape). Show the set side by side before making more.
+- **Two formats from one layout.** Design at 1080 x 1350 and 1080 x 1920 together; the shape or the photo absorbs the extra height, the type block does not move.
+- **Signature shape as frame.** Put real photos inside the brand's shape (a disc, a letter counter) instead of on a plain rectangle; flat shape for recognition, photo-in-shape for appetite, a grid of shapes for quantity (board `../../../../inspiration/boards/signature-shape-system.html`).
+- **Brand opener.** For a 3 to 5 s opener, a letter window that flicks real use moments and lands on the hero (recipe `../../recipes/letter-window/`).

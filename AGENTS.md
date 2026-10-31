@@ -25,7 +25,9 @@ This repo is a design skill plus a detector. It helps an agent design things tha
 | `skills/unslopslop/SKILL.md` | The core loop (copy this folder into `.claude/skills/` of any project) |
 | `skills/unslopslop/references/` | Project read, palette combinations, fix passes and recipes, measured craft recipes, rule catalogue, DESIGN.md template, motion measurement |
 | `skills/unslopslop/domains/` | Medium packs: web, dashboard, mobile, email, logo-brand, motion, social |
-| `skills/unslopslop/styles/` | Style packs (retro-pixel and ascii-text-art are full; the rest are early stubs) |
+| `skills/unslopslop/styles/` | Style packs (retro-pixel and ascii-text-art are full; swiss-international and editorial-serif have a first full pass; blueprint-mono, pantry-bold and pop-ritual are early; the rest are stubs) |
+| `skills/unslopslop/recipes/` | Interaction and motion recipes with measured timings, one live demo each |
+| `skills/unslopslop/effects/` | Texture, light and glass effects, one live demo each |
 | `skills/unslopslop/scripts/` | `detect.mjs`, `compare.mjs`, `motion-probe.mjs`, `intake.mjs`, `review-crops.mjs` |
 | `inspiration/` | Measured, source-free catalogue (`catalog.md`), composition boards (`boards/`), intake how-to |
 | `examples/` | Before/after pairs with reports and screenshots |
