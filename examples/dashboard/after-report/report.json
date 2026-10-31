@@ -2,13 +2,62 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/dashboard/after.html",
-  "score": 0,
-  "rawPoints": 0,
+  "score": 10,
+  "patternScore": 6,
+  "tells": 0,
+  "taste": {
+    "proof": 90,
+    "pass": true,
+    "compared": true,
+    "components": {
+      "subject": {
+        "points": 30,
+        "max": 30,
+        "why": "largest subject 42% of the first screen (media), all subjects 42%"
+      },
+      "display": {
+        "points": 15,
+        "max": 25,
+        "why": "display line 40 px (app screen)"
+      },
+      "overlap": {
+        "points": 15,
+        "max": 15,
+        "why": "25 layers overlap the subject"
+      },
+      "ground": {
+        "points": 15,
+        "max": 15,
+        "why": "ground colour 61% of the first screen, accents 0.6%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [],
+    "signals": {
+      "subjectFrac": 0.415,
+      "subjectKind": "media",
+      "mediaFrac": 0.415,
+      "display": 40,
+      "overlap": 25,
+      "keyword": 0,
+      "imagery": 1,
+      "app": true,
+      "pageHeight": 1877,
+      "vpA": 1296000,
+      "ground": 0.614,
+      "accent": 0.006
+    }
+  },
+  "rawPoints": 6,
   "verdict": "clean",
-  "rulesChecked": 85,
+  "rulesChecked": 97,
   "byPass": {
-    "spacing": 0,
-    "color": 0,
+    "spacing": 2,
+    "color": 4,
     "icons": 0,
     "copy": 0,
     "typography": 0,
@@ -17,76 +66,155 @@
     "imagery": 0,
     "motion": 0
   },
-  "findings": [],
+  "findings": [
+    {
+      "rule": "color-accent-decorative",
+      "pass": "color",
+      "severity": "minor",
+      "title": "Accent colour spent on decoration",
+      "why": "When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.",
+      "fix": "Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.",
+      "count": 5,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "span.today",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        },
+        {
+          "el": "i",
+          "detail": "accent on a non-interactive, non-state element",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 4
+    },
+    {
+      "rule": "spacing-cramped",
+      "pass": "spacing",
+      "severity": "minor",
+      "title": "Text sits against the edge of its box",
+      "why": "Buttons and cards with almost no inner padding read as unfinished.",
+      "fix": "Give buttons at least 12 px horizontal and 8 px vertical padding (anything under 8 px horizontal is flagged), cards at least 16 px.",
+      "count": 1,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "span.today",
+          "detail": "padding 6/8/6/8px",
+          "viewport": "desktop"
+        },
+        {
+          "el": "span.today",
+          "detail": "padding 6/8/6/8px",
+          "viewport": "mobile"
+        }
+      ],
+      "points": 2
+    }
+  ],
   "craft": {
-    "score": 94,
+    "score": 95,
     "passMark": 70,
     "pass": true,
     "components": {
       "hierarchy": {
-        "points": 13,
+        "points": 15,
         "max": 15,
-        "why": "display 60px / body 14px = 4.29x, 5 sizes"
+        "why": "display 40px / body 14px = 2.86x, 6 sizes"
       },
       "focal": {
         "points": 15,
         "max": 15,
-        "why": "headline 4.3x, largest visual 20% of the screen"
+        "why": "headline 2.9x, largest visual 41% of the screen"
       },
       "visual": {
         "points": 20,
         "max": 20,
-        "why": "65% of the first screen is visual (surface, surface, surface, surface)"
+        "why": "67% of the first screen is visual (surface, media, surface)"
       },
       "motion": {
-        "points": 11,
+        "points": 15,
         "max": 15,
-        "why": "moves inside the visual, 36 moving elements, reduced motion handled"
+        "why": "moves inside the visual, 21 moving elements, reduced motion handled"
       },
       "identity": {
-        "points": 20,
+        "points": 15,
         "max": 20,
-        "why": "web font, display face differs from text, accent used 14x in 1 hue band(s), 7 shadows, 0 layers, 6 textured areas (image, gradient)"
+        "why": "web font, display face differs from text, accent used 20x in 2 hue band(s), 1 shadows, 1 layers, 0 textured areas (none)"
       },
       "density": {
         "points": 15,
         "max": 15,
-        "why": "app screen, 112 text items on the first screen"
+        "why": "app screen, 74 text items on the first screen"
       }
     },
-    "findings": [],
+    "findings": [
+      {
+        "rule": "bland-no-texture",
+        "pass": "craft",
+        "severity": "minor",
+        "title": "No texture, pattern or tonal light anywhere",
+        "why": "Every surface is one flat fill. Good pages carry a material: grain, a faint pattern or watermark, a tonal light behind the product.",
+        "fix": "Add one material that suits the project: fine grain, a subtle pattern in one zone, a watermark, or a soft light behind the main visual. Keep it quiet (under 10% opacity).",
+        "count": 1,
+        "viewports": [
+          "desktop"
+        ],
+        "examples": [
+          {
+            "el": "body",
+            "detail": "no background image, gradient, mask or noise on any large area",
+            "viewport": "desktop"
+          }
+        ],
+        "points": 0
+      }
+    ],
     "signals": {
       "body": 14,
-      "display": 60,
-      "steps": 5,
-      "visFrac": 0.651783950617284,
-      "bestVis": 0.2023148148148148,
+      "display": 40,
+      "steps": 6,
+      "visFrac": 0.6700673707561728,
+      "bestVis": 0.41487654320987655,
       "visKinds": [
         "surface",
-        "surface",
-        "surface",
+        "media",
         "surface"
       ],
-      "raf": 64,
-      "mut": 1134,
-      "movers": 36,
-      "inVisual": 35,
+      "raf": 85,
+      "mut": 64,
+      "movers": 21,
+      "inVisual": 1,
       "canvasLive": true,
       "mq": 1,
       "webfont": true,
       "distinctFaces": true,
-      "accentUses": 14,
-      "accentHues": 1,
-      "shadows": 7,
-      "layered": 0,
-      "textures": 6,
-      "textureKinds": [
-        "image",
-        "gradient"
-      ],
+      "accentUses": 20,
+      "accentHues": 2,
+      "shadows": 1,
+      "layered": 1,
+      "textures": 0,
+      "textureKinds": [],
       "app": true,
-      "firstTexts": 112,
-      "coverage": 0.7625
+      "firstTexts": 74,
+      "coverage": 0.740625
     }
   },
   "overall": "pass",

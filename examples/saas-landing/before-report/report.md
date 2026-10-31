@@ -1,9 +1,15 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/before.html`
-- Slop score: **100/100** (lower is better; raw points before the 100 cap: 295)
+- Slop score: **92/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 10) and the genre-default tells (156 pts), which count less the more taste is proven. Rule-only pattern slop: 100 (raw 295).
+- Taste proof: **10/100** (higher is better; pass mark 60). no real subject on the first screen: proof capped at 10; display line under 80 px: proof capped at 55
+  - subject 0/30: largest subject 0% of the first screen (none), all subjects 0%
+  - display 0/25: display line 56 px
+  - overlap 0/15: nothing overlaps the subject
+  - ground 11/15: ground colour 61% of the first screen, accents 7.0%
+  - keyword 0/15: 1 coloured or gradient keyword(s) in the headline
 - Craft score: **51/100** (higher is better; pass mark 70)
-- Overall: **FAIL** (needs a clean slop verdict and craft >= 70)
+- Overall: **FAIL** (needs a slop verdict that is not HEAVY, craft >= 70, taste proof >= 60; UNPROVEN until a side-by-side reference compare was run: detect --compared <compare.png>)
 - Slop verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
 - Rules checked: 97; findings: 43
 

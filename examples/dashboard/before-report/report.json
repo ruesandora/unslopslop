@@ -2,16 +2,67 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/dashboard/before.html",
-  "score": 100,
-  "rawPoints": 160.5,
+  "score": 92,
+  "patternScore": 100,
+  "tells": 124,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 15,
+        "max": 25,
+        "why": "display line 32 px (app screen)"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 10,
+        "max": 15,
+        "why": "ground colour 46% of the first screen, accents 5.6%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 32,
+      "overlap": 0,
+      "keyword": 0,
+      "imagery": 0,
+      "app": true,
+      "pageHeight": 900,
+      "vpA": 1296000,
+      "ground": 0.46,
+      "accent": 0.056
+    }
+  },
+  "rawPoints": 183.5,
   "verdict": "heavy",
-  "rulesChecked": 85,
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 4,
-    "color": 73,
+    "color": 80.5,
     "icons": 12,
-    "copy": 11,
-    "typography": 16.5,
+    "copy": 23,
+    "typography": 20,
     "layout": 19.5,
     "detail": 20.5,
     "imagery": 0,
@@ -131,6 +182,41 @@
       "title": "Emoji used as interface icons",
       "why": "Emoji in headings, buttons and list items render differently per platform and signal a quick draft.",
       "fix": "Use one consistent line-icon set (one size, one stroke width) or remove the glyph.",
+      "count": 6,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "a.on",
+          "detail": "📊 Dashboard",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "🧾 Invoices",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "👥 Clients",
+          "viewport": "desktop"
+        },
+        {
+          "el": "a",
+          "detail": "💬 Reminders",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 12
+    },
+    {
+      "rule": "copy-emoji",
+      "pass": "copy",
+      "severity": "major",
+      "title": "Emoji in the page",
+      "why": "Emoji in headings, buttons, labels or body copy are the most visible AI tell.",
+      "fix": "Remove them. Use words, or one icon set drawn for the product. Keep emoji only if the brief says the user asked for them (<meta name=\"unslop-brief\" content=\"emoji: reason\">).",
       "count": 6,
       "viewports": [
         "desktop"
@@ -285,6 +371,42 @@
       "points": 7.5
     },
     {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 2,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "p.sub",
+          "detail": "2.36:1 \"Here's what's happening with …\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "small",
+          "detail": "1.93:1 \"Avg. days to pay\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.sub",
+          "detail": "2.36:1 \"Here's what's happening with …\"",
+          "viewport": "mobile"
+        },
+        {
+          "el": "small",
+          "detail": "1.93:1 \"Avg. days to pay\"",
+          "viewport": "mobile"
+        }
+      ],
+      "points": 7.5
+    },
+    {
       "rule": "type-eyebrow",
       "pass": "typography",
       "severity": "major",
@@ -359,6 +481,26 @@
         {
           "el": "i",
           "detail": "animation pulse",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 6
+    },
+    {
+      "rule": "type-ai-default-font",
+      "pass": "typography",
+      "severity": "major",
+      "title": "AI-default font",
+      "why": "Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.",
+      "fix": "Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name=\"unslop-brief\" content=\"font: Family, reason\">.",
+      "count": 1,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "body",
+          "detail": "inter",
           "viewport": "desktop"
         }
       ],
@@ -559,31 +701,6 @@
         }
       ],
       "points": 4
-    },
-    {
-      "rule": "type-reflex-font",
-      "pass": "typography",
-      "severity": "minor",
-      "title": "Reflex font family",
-      "why": "Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.",
-      "fix": "Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.",
-      "count": 2,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "body",
-          "detail": "inter",
-          "viewport": "desktop"
-        },
-        {
-          "el": "h1",
-          "detail": "inter",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 2.5
     },
     {
       "rule": "detail-heavy-shadow",

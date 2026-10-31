@@ -2,7 +2,59 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/saas-landing/before.html",
-  "score": 100,
+  "score": 92,
+  "patternScore": 100,
+  "tells": 156,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 0,
+        "max": 25,
+        "why": "display line 56 px"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 11,
+        "max": 15,
+        "why": "ground colour 61% of the first screen, accents 7.0%"
+      },
+      "keyword": {
+        "points": 0,
+        "max": 15,
+        "why": "1 coloured or gradient keyword(s) in the headline"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10",
+      "display line under 80 px: proof capped at 55"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 56,
+      "overlap": 0,
+      "keyword": 1,
+      "imagery": 0,
+      "app": false,
+      "pageHeight": 2030,
+      "vpA": 1296000,
+      "ground": 0.606,
+      "accent": 0.07
+    }
+  },
   "rawPoints": 295,
   "verdict": "heavy",
   "rulesChecked": 97,

@@ -2,9 +2,61 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/saas-landing/after-v1.html",
-  "score": 21,
+  "score": 90,
+  "patternScore": 21,
+  "tells": 0,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 0,
+        "max": 25,
+        "why": "display line 56 px"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 15,
+        "max": 15,
+        "why": "ground colour 90% of the first screen, accents 0.5%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10",
+      "display line under 80 px: proof capped at 55"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 56,
+      "overlap": 0,
+      "keyword": 0,
+      "imagery": 0,
+      "app": false,
+      "pageHeight": 1689,
+      "vpA": 1296000,
+      "ground": 0.898,
+      "accent": 0.005
+    }
+  },
   "rawPoints": 21,
-  "verdict": "light",
+  "verdict": "heavy",
   "rulesChecked": 97,
   "byPass": {
     "spacing": 0,
