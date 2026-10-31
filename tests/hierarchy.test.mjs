@@ -116,7 +116,7 @@ if (want('tool')) {
   });
 }
 if (want('watermark')) {
-  test('watermark: an image at 7% opacity is not the subject, the same image at full opacity is', async () => {
+  test('watermark: an image at 25% opacity is not the subject, the same image at full opacity is', async () => {
     const { good, bad } = await kind('watermark', SUBJECT_WATERMARK);
     assert.ok(good.taste.components.subject.points > 0 && good.taste.signals.subjectKind === 'media', JSON.stringify(good.taste.signals));
     assert.equal(bad.taste.components.subject.points, 0, JSON.stringify(bad.taste.signals));

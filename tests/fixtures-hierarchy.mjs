@@ -2,7 +2,7 @@
 // only computed size, weight, colour and position matter. Each page is 1440 x 900 first screen.
 const head = (css) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>fixture</title><style>*{box-sizing:border-box}body{margin:0;font:400 17px/1.5 system-ui,sans-serif;overflow-x:hidden}${css}</style></head><body>`;
 const circles = (w, h) => `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" style="max-width:100%;height:auto" role="img" aria-label="Example drawing">${Array.from({ length: 14 }, (_, i) => `<circle cx="${40 + i * 50}" cy="${h / 2 + Math.sin(i) * h / 4}" r="${18 + (i % 4) * 8}" fill="hsl(${190 + i * 9} 22% ${34 + (i % 5) * 6}%)"/>`).join('')}</svg>`;
-const tile = (hue) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="360" height="180"><rect width="360" height="180" fill="hsl(${hue} 30% 55%)"/><circle cx="180" cy="90" r="50" fill="hsl(${hue + 40} 40% 30%)"/></svg>`)}`;
+const tile = (hue, light = 55) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="360" height="180"><rect width="360" height="180" fill="hsl(${hue} 30% ${light}%)"/><circle cx="180" cy="90" r="50" fill="hsl(${hue + 40} 40% 30%)"/></svg>`)}`;
 
 // Hierarchy from weight, tone and position, no giant size: a 44 px weight 800 near-black lead over 300 weight grey copy,
 // alone in clear space, next to a drawing.
@@ -35,10 +35,10 @@ const toolPage = (nControls) => head('body{background:#faf9f6;color:#1a1a1a;font
   + `<div class="app"><aside class="panel"><b>Scenes</b><div>${buttons(2)}</div></aside><main class="col"><section class="panel"><canvas id="c" width="480" height="420" style="margin:0 auto"></canvas><div>${buttons(2)}</div></section><section class="panel"><b>Timeline</b><div>${buttons(nControls)}</div></section></main><aside class="panel"><b>Output</b><div>${buttons(3)}</div></aside></div><script>const x=document.getElementById('c').getContext('2d');x.fillStyle='#223';x.fillRect(0,0,480,420);x.fillStyle='#e8c07a';x.beginPath();x.arc(240,210,120,0,7);x.fill();x.fillStyle='#a33';x.fillRect(60,300,360,40)</script></body></html>`;
 export const SUBJECT_TOOL = { good: toolPage(8), bad: toolPage(0) };
 
-// Ghost: a subject has to be visible. A hero image at 7% opacity is a watermark; an empty canvas has nothing to see.
+// Ghost: a subject has to be visible. A pale hero image at 25% opacity is a watermark (clearly visible in pixels, so only the opacity rule catches it); an empty canvas has nothing to see.
 const hero = (img) => head('body{background:#101010;color:#f2f2f2}.stage{position:relative;min-height:900px;padding:300px 120px 0}h1{font:700 72px/1 system-ui,sans-serif;margin:0 0 16px;position:relative;z-index:1}p{margin:0;font-size:20px;color:#bbb;position:relative;z-index:1}.art{position:absolute;left:290px;top:100px;width:860px;height:700px}')
   + `<main class="stage"><h1>Tasteful components</h1><p>Made to stand out, in one command.</p>${img}</main></body></html>`;
-const photo = (op) => `<img class="art" alt="" style="opacity:${op}" src="${tile(200).replace('width%3D%22360%22%20height%3D%22180%22', 'width%3D%22860%22%20height%3D%22700%22')}">`;
-export const SUBJECT_WATERMARK = { good: hero(photo(1)), bad: hero(photo(0.07)) };
+const photo = (op) => `<img class="art" alt="" style="opacity:${op}" src="${tile(200, 88).replace('width%3D%22360%22%20height%3D%22180%22', 'width%3D%22860%22%20height%3D%22700%22')}">`;
+export const SUBJECT_WATERMARK = { good: hero(photo(1)), bad: hero(photo(0.25)) };
 const canvas = (draw) => `<canvas class="art" id="c" width="860" height="700"></canvas>${draw ? '<script>const x=document.getElementById("c").getContext("2d");x.fillStyle="#d9d2c3";x.beginPath();x.arc(430,350,220,0,7);x.fill();x.fillStyle="#7a2a2a";x.fillRect(260,330,340,60)</script>' : ''}`;
 export const SUBJECT_GHOST = { good: hero(canvas(true)), bad: hero(canvas(false)) };

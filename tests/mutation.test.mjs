@@ -71,7 +71,7 @@ const hierTests = {
   field: 'subject kind field',
   mosaic: 'subject kind mosaic',
   tool: 'subject kind tool',
-  watermark: 'watermark: an image at 7% opacity',
+  watermark: 'watermark: an image at 25% opacity',
   ghost: 'ghost: an empty canvas',
 };
 for (const [gate, title] of Object.entries(hierTests)) {
