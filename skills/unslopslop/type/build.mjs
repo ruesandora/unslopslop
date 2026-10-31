@@ -53,7 +53,7 @@ function specimen(r) {
   const rows = r.ladder.map(([role, d, m, lh, tr, w, face, sample, extra]) => `
       <div class="step">
         <p class="meta"><b>${esc(role)}</b> ${d} / ${m} px · lh ${lh} · ${tr > 0 ? '+' : ''}${tr} em · ${esc(w)}</p>
-        <p class="sample" style="font-family:var(--f-${face});--d:${d}px;--m:${m}px;line-height:${lh};letter-spacing:${tr}em;font-weight:${typeof w === 'number' ? w : String(w).split(/\D/)[0] || 400};${extra || ''}">${sample}</p>
+        <p class="sample" style="font-family:var(--f-${face});--d:${d}px;--m:${m}px;line-height:${lh};letter-spacing:${tr}em;font-weight:${typeof w === 'number' ? w : String(w).split(/\D/)[0] || 400};${(extra || '').replace(/"/g, "'")}">${sample}</p>
       </div>`).join('');
   return `<!doctype html>
 <html lang="${r.lang || 'en'}">
