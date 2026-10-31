@@ -26,7 +26,7 @@ Palette roles: void (most of the frame), cool edge, warm edge, highlight. A good
 | Fold depth | 0 to 2.5 | 1.9 |
 | Prism split | 0 to 1 | 0.6 |
 | Fold light | 0 to 2 | 0.9 |
-| Edge softness | 0.002 to 0.2 | 0.05 |
+| Edge softness | 0.002 to 0.2 | 0.012 |
 | Tilt | -1.2 to 1.2 | -0.35 |
 | Flow | 0 to 1 | 0.3 |
 | Grain | 0 to 0.3 | 0.09 |

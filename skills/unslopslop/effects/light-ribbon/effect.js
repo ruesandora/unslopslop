@@ -10,7 +10,7 @@ FX.mount({
     { id: 'fold', label: 'Fold depth', min: 0, max: 2.5, step: 0.01, value: 1.9 },
     { id: 'split', label: 'Prism split', min: 0, max: 1, step: 0.01, value: 0.6 },
     { id: 'shine', label: 'Fold light', min: 0, max: 2, step: 0.01, value: 0.9 },
-    { id: 'soft', label: 'Edge softness', min: 0.002, max: 0.2, step: 0.001, value: 0.05 },
+    { id: 'soft', label: 'Edge softness', min: 0.002, max: 0.2, step: 0.001, value: 0.012 },
     { id: 'tilt', label: 'Tilt', min: -1.2, max: 1.2, step: 0.01, value: -0.35 },
     { id: 'speed', label: 'Flow', min: 0, max: 1, step: 0.01, value: 0.3 },
     { id: 'grain', label: 'Grain', min: 0, max: 0.3, step: 0.01, value: 0.09 }
