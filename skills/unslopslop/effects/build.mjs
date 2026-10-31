@@ -139,7 +139,7 @@ for (const name of readdirSync(root).sort()) {
 const tile = (c, big) => `      <a class="tile${big ? ' big' : ''}" href="${c.slug}/demo.html">
         <img src="${c.slug}/screenshot.jpg" alt="${esc(c.title)} rendered on a test image" loading="lazy" width="960" height="640">
         <span class="name">${esc(c.title)}</span>
-        <span class="meta">${c.moves ? 'moves' : 'still'} · ${/CSS|SVG/.test(c.built) ? 'CSS / SVG' : 'shader'}</span>
+        <span class="meta">${c.moves ? 'moves' : 'still'} · ${/Canvas 2D/.test(c.built) ? 'canvas' : /DOM/.test(c.built) ? 'DOM' : /CSS|SVG/.test(c.built) ? 'CSS / SVG' : 'shader'}</span>
         <span class="fits">${esc(c.fits)}</span>
       </a>`;
 const sections = GROUPS.map(([g, line]) => {
