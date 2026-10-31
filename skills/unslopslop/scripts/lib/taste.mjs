@@ -38,7 +38,7 @@ export const TELLS = new Set([
 ]);
 
 // Runs in the page (serialised with toString(), keep it self-contained). h = makeHelpers().
-export function tasteProbe(h) {
+export function tasteProbe(h, off = []) {
   const vpA = h.vw * h.vh;
   const pageH = Math.max(document.documentElement.scrollHeight, h.vh);
   const clip = (r) => {
@@ -64,12 +64,12 @@ export function tasteProbe(h) {
     let kind = null;
     let op = 1;
     for (let p = e; p && p !== document.documentElement; p = p.parentElement) op *= parseFloat(h.cs(p).opacity);
-    if (!(op >= 0.35)) continue; // a watermark or ghost layer (effective opacity under 0.35) is a craft layer, not the subject
+    if (!off.includes('watermark') && !(op >= 0.35)) continue; // a watermark or ghost layer (effective opacity under 0.35) is a craft layer, not the subject
     if (['IMG', 'VIDEO', 'CANVAS', 'PICTURE'].includes(tag) && r.width >= 120 && r.height >= 80) kind = 'media';
     else if (tag === 'SVG' && r.width >= 160 && r.height >= 100 && !e.querySelector('text')) {
       if (e.querySelectorAll('*').length >= 6) kind = 'drawing';
-      else if (a >= 0.12 * vpA && e.querySelector(SHAPES)) kind = 'field';
-    } else if (!['BODY', 'HTML'].includes(tag) && a >= 0.12 * vpA && /url\(/.test(h.cs(e).backgroundImage) && !/noise|grain/i.test(h.cs(e).backgroundImage)) kind = 'field';
+      else if (!off.includes('field') && a >= 0.12 * vpA && e.querySelector(SHAPES)) kind = 'field';
+    } else if (!off.includes('field') && !['BODY', 'HTML'].includes(tag) && a >= 0.12 * vpA && /url\(/.test(h.cs(e).backgroundImage) && !/noise|grain/i.test(h.cs(e).backgroundImage)) kind = 'field';
     if (kind) cand.push({ el: e, kind, frac: a / vpA });
   }
   const subjects = cand.filter((v) => !cand.some((o) => o !== v && o.el.contains(v.el)));
@@ -77,13 +77,13 @@ export function tasteProbe(h) {
   let mediaFrac = Math.min(1, subjects.reduce((a, v) => a + v.frac, 0));
   // a mosaic: six or more media tiles that together cover the screen read as one field (a wall of work)
   const tiles = subjects.filter((v) => v.kind === 'media').length;
-  const mosaic = tiles >= 6 && mediaFrac >= 0.6 && best.frac < 0.25 ? tiles : 0;
+  const mosaic = !off.includes('mosaic') && tiles >= 6 && mediaFrac >= 0.6 && best.frac < 0.25 ? tiles : 0;
   // the tool itself: a first screen full of controls around a live output (canvas, video, image). The working
   // surface is the smallest panel around that output that holds at least six controls.
   const isControl = (e) => /^(BUTTON|INPUT|SELECT|TEXTAREA)$/.test(e.tagName) || /^(tab|slider|switch|radio|checkbox|menuitem|option)$/.test(e.getAttribute('role') || '');
   const controls = h.all().filter((e) => isControl(e) && clip(h.rect(e)) > 0);
   let tool = 0;
-  if (controls.length >= 10 && best.el && best.frac >= 0.08) {
+  if (!off.includes('tool') && controls.length >= 10 && best.el && best.frac >= 0.08) {
     for (let p = best.el.parentElement; p && p !== document.body; p = p.parentElement) {
       const pa = clip(h.rect(p));
       if (pa >= 0.98 * vpA) break;
@@ -196,7 +196,13 @@ export function tasteProbe(h) {
   let subjectRect = null;
   if (best.el && best.frac >= 0.05 && !(tool > best.frac) && !mosaic) {
     const r = h.rect(best.el);
-    subjectRect = { x: Math.max(0, r.left), y: Math.max(0, r.top), w: Math.min(h.vw, r.right) - Math.max(0, r.left), h: Math.min(h.vh, r.bottom) - Math.max(0, r.top) };
+    subjectRect = { x: Math.max(0, r.left), y: Math.max(0, r.top), w: Math.min(h.vw, r.right) - Math.max(0, r.left), h: Math.min(h.vh, r.bottom) - Math.max(0, r.top), holes: [] };
+    // text drawn over the subject is masked out of the visibility check (it would make an empty canvas look busy)
+    for (const e of texts) {
+      if (best.el.contains(e)) continue;
+      const t = h.rect(e);
+      if (t.right > subjectRect.x && t.left < subjectRect.x + subjectRect.w && t.bottom > subjectRect.y && t.top < subjectRect.y + subjectRect.h && subjectRect.holes.length < 60) subjectRect.holes.push({ x: t.left, y: t.top, w: t.width, h: t.height });
+    }
   }
   return { subjectRect, subjectFrac: +subjectFrac.toFixed(3), subjectKind, mediaFrac: +mediaFrac.toFixed(3), display, overlap, keyword, imagery, app: h.isApp(), pageHeight: pageH, vpA, hier, vw: h.vw, mosaic, tool: +tool.toFixed(3) };
 }
@@ -240,9 +246,15 @@ export async function pixelProbe(b64, rect, vw, vh) {
     }
     const dom = [...bins.values()].reduce((a, v) => (v.n > a.n ? v : a));
     const dr = dom.r / dom.n, dg = dom.g / dom.n, db = dom.b / dom.n;
-    let diff = 0;
-    for (let i = 0; i < p.length; i += 4) if (Math.max(Math.abs(p[i] - dr), Math.abs(p[i + 1] - dg), Math.abs(p[i + 2] - db)) > 40) diff++;
-    out.subjectInk = +(diff / (p.length / 4)).toFixed(3);
+    let diff = 0, seen = 0;
+    const holes = (rect.holes || []).map((o) => ({ l: (o.x - rect.x) * sc / 4, t: (o.y - rect.y) * sc / 4, r: (o.x + o.w - rect.x) * sc / 4, b: (o.y + o.h - rect.y) * sc / 4 }));
+    for (let i = 0, k = 0; i < p.length; i += 4, k++) {
+      const px = k % W, py = (k / W) | 0;
+      if (holes.some((o) => px >= o.l && px <= o.r && py >= o.t && py <= o.b)) continue;
+      seen++;
+      if (Math.max(Math.abs(p[i] - dr), Math.abs(p[i + 1] - dg), Math.abs(p[i + 2] - db)) > 40) diff++;
+    }
+    out.subjectInk = +(diff / Math.max(1, seen)).toFixed(3);
   }
   return out;
 }
@@ -264,7 +276,7 @@ export function tasteDisabled() {
 // (lead at least 4.7% of the viewport width, 67 px at 1440) or clear space around it (space 35% or more). A modest
 // headline therefore proves itself by position and isolation; a crowded 48 px stack of eyebrow, copy, buttons and logos does not.
 // A giant but unsupported headline has one axis; a flat page none.
-export function hierarchyScore(t) {
+export function hierarchyScore(t, off = new Set()) {
   const hi = t.hier;
   if (!hi || !hi.lead) {
     const f = t.app ? 0.6 : 0;
@@ -278,7 +290,7 @@ export function hierarchyScore(t) {
   const pts = 8 * size + 5 * weight + 4 * ink + 4 * space + 4 * lv;
   let frac = pts / 25;
   const axes = [size, weight, ink, space].filter((v) => v >= 0.5).length;
-  const owns = hi.lead / (t.vw || 1440) >= 0.047 || space >= 0.35;
+  const owns = off.has('owns') || hi.lead / (t.vw || 1440) >= 0.047 || space >= 0.35;
   const proven = axes >= 2 && frac >= 0.48 && owns;
   if (t.app) frac = Math.max(frac, 0.6);
   return { frac, axes, proven: proven || !!t.app, why: `lead ${hi.lead} px over body ${hi.body} px = ${hi.ratio}x, weight gap ${hi.weightDiff}, ink gap ${hi.inkDiff}, free space ${Math.round(hi.free * 100)}%, ${hi.levels} levels (${axes} of 4 axes${owns ? '' : ', lead does not own the screen'})${t.app ? ' (app screen, floor 60%)' : ''}` };
@@ -290,9 +302,9 @@ export function tasteScore(t, craft, { compared = false } = {}, off = tasteDisab
   const put = (name, frac, why) => { c[name] = { points: off.has(name) ? 0 : Math.round(TASTE_COMPONENTS[name] * clamp(frac)), max: TASTE_COMPONENTS[name], why }; };
   const f = t.subjectFrac;
   const single = f < 0.1 ? 0 : f < 0.25 ? 0.9 * ramp(f, 0.1, 0.25) : f <= 0.6 ? 1 : f <= 0.97 ? 0.6 : 0.5;
-  const ghost = t.subjectInk !== undefined && t.subjectInk < 0.02 && ['media', 'drawing', 'field'].includes(t.subjectKind);
+  const ghost = !off.has('ghost') && t.subjectInk !== undefined && t.subjectInk < 0.02 && ['media', 'drawing', 'field'].includes(t.subjectKind);
   put('subject', ghost ? 0 : Math.max(single, 0.7 * ramp(t.mediaFrac, 0.1, 0.25)), ghost ? `largest subject ${Math.round(f * 100)}% of the first screen (${t.subjectKind}) is not visible: ${(t.subjectInk * 100).toFixed(1)}% of it differs from its own ground (blank canvas or ghost image)` : `largest subject ${Math.round(f * 100)}% of the first screen (${t.subjectKind || 'none'}), all subjects ${Math.round(t.mediaFrac * 100)}%`);
-  const hr = hierarchyScore(t);
+  const hr = hierarchyScore(t, off);
   put('hierarchy', hr.frac, hr.why);
   put('overlap', t.overlap > 0 ? 1 : 0, t.overlap > 0 ? `${t.overlap} layers overlap the subject` : 'nothing overlaps the subject');
   const g = t.ground === undefined ? 0 : t.ground;
