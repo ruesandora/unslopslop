@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morphing icons · interaction recipes</title>
+<meta name="description" content="Icons that change state by moving their own points: menu to close, play to pause, arrow to check, sound to mute, eye open to shut.">
+<!-- Hand-written recipe demo. Every state is a list of strokes with the same point count; a small loop interpolates the points. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #fbfaf8; color: #171615; display: grid; place-content: center; padding: 32px; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(5, 96px); gap: 18px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: repeat(3, 88px); } }
+  .ib { display: grid; justify-items: center; gap: 8px; padding: 14px 6px 10px; border: 0; border-radius: 14px; background: none; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
+  .ib:hover { background: rgba(23,22,21,.05); }
+  .ib:focus-visible { outline: 2px solid #171615; outline-offset: 2px; }
+  .ib svg { width: 40px; height: 40px; overflow: visible; }
+  .ib path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ib span { color: #55524c; }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <div class="grid" id="grid"></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Morphing icons</h1>
+    <p class="sum">An icon that changes state by moving its own lines, so the eye follows one object instead of watching a swap. The three menu bars fold into a cross, the play triangle splits into two bars, an arrow bends into a check, sound waves cross into a mute mark, an eye closes along its lid.</p>
+    <div class="ctl"><label for="curve">Curve</label><select id="curve"><option value="spring">Spring, 500 ms, no bounce</option><option value="staged">In-out, 620 ms</option><option value="linear">Linear, 300 ms (for comparison)</option></select></div>
+    <div class="ctl"><button id="all" type="button">Toggle all</button></div>
+    <dl class="notes group">
+      <dt>How it is built</dt><dd>Every icon state is a list of strokes on a 24 unit grid, and the two states have the same number of strokes and points. A stroke that should vanish collapses to a point and fades. Curves are sampled into 9 to 13 points, which is smooth at icon sizes with round joins. A small loop eases every point from where it is now, so a second click mid-way turns back without a jump.</dd>
+      <dt>Measured starting values</dt><dd>Plain morph: spring of about 500 ms with no bounce (here a critically damped curve). Two-step morphs: 620 ms cubic-bezier(.65, 0, .35, 1). Blink: about 450 ms. Stroke width stays fixed in screen pixels.</dd>
+      <dt>Accessibility</dt><dd>Each icon is a real button with aria-pressed and a label that names the action, not the drawing. The state is never carried by motion alone.</dd>
+      <dt>Reduced motion</dt><dd>States switch instantly.</dd>
+      <dt>Becomes slop when</dt><dd>Icons morph on hover for no state change, every icon on the page bounces, or one icon family morphs while the rest of the set is static and drawn in another weight.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function line(a, b, n) { var o = []; for (var i = 0; i < n; i++) { var t = i / (n - 1); o.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); } return o; }
+  function arc(cx, cy, r, a0, a1, n) { var o = []; for (var i = 0; i < n; i++) { var a = a0 + (a1 - a0) * i / (n - 1); o.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } return o; }
+  function poly(pts, n) { /* resample a polyline to n points */ var L = [0]; for (var i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); var o = [], tot = L[L.length - 1];
+    for (var k = 0; k < n; k++) { var d = tot * k / (n - 1), j = 1; while (j < L.length - 1 && L[j] < d) j++; var t = (d - L[j - 1]) / ((L[j] - L[j - 1]) || 1); o.push([pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * t, pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * t]); } return o; }
+  function S(pts, o) { return { p: pts, o: o === undefined ? 1 : o }; }
+  var ICONS = [
+    { name: 'Menu', on: 'Close menu', off: 'Open menu',
+      a: [S(line([4, 7], [20, 7], 2)), S(line([4, 12], [20, 12], 2)), S(line([4, 17], [20, 17], 2))],
+      b: [S(line([6, 6], [18, 18], 2)), S(line([12, 12], [12, 12], 2), 0), S(line([6, 18], [18, 6], 2))] },
+    { name: 'Play', on: 'Pause', off: 'Play',
+      a: [S(poly([[7, 5], [18, 12], [18, 12], [7, 19], [7, 5]], 9)), S(poly([[18, 12], [18, 12]], 9), 0)],
+      b: [S(poly([[7, 5], [10, 5], [10, 19], [7, 19], [7, 5]], 9)), S(poly([[14, 5], [17, 5], [17, 19], [14, 19], [14, 5]], 9))] },
+    { name: 'Send', on: 'Sent', off: 'Send',
+      a: [S(poly([[5, 12], [19, 12]], 5)), S(poly([[13, 6], [19, 12], [13, 18]], 7))],
+      b: [S(poly([[12, 12], [12, 12]], 5), 0), S(poly([[5, 12.5], [10, 17.5], [19, 7]], 7))] },
+    { name: 'Sound', on: 'Unmute', off: 'Mute',
+      a: [S(poly([[4, 9.5], [7.5, 9.5], [11.5, 6], [11.5, 18], [7.5, 14.5], [4, 14.5], [4, 9.5]], 11)), S(arc(12, 12, 4, -0.9, 0.9, 11)), S(arc(12, 12, 8, -0.9, 0.9, 11))],
+      b: [S(poly([[4, 9.5], [7.5, 9.5], [11.5, 6], [11.5, 18], [7.5, 14.5], [4, 14.5], [4, 9.5]], 11)), S(line([15, 9.5], [20, 14.5], 11)), S(line([15, 14.5], [20, 9.5], 11))] },
+    { name: 'Eye', on: 'Show', off: 'Hide',
+      a: [S(poly(arc(12, 20, 11, -2.3, -0.84, 13), 13)), S(poly(arc(12, 4, 11, 2.3, 0.84, 13), 13)), S(arc(12, 12, 3, 0, 6.2832, 13))],
+      b: [S(poly(arc(12, 6, 9, 2.4, 0.74, 13), 13)), S(poly(arc(12, 6, 9, 2.4, 0.74, 13), 13), 0), S(arc(12, 15, 0.1, 0, 6.2832, 13), 0)] }
+  ];
+  function d(strokes) { return strokes.map(function (s) { return 'M' + s.p.map(function (p) { return p[0].toFixed(2) + ' ' + p[1].toFixed(2); }).join(' L'); }); }
+  var EASE = { spring: [500, function (t) { var w = 9; return 1 - (1 + w * t) * Math.exp(-w * t); }], staged: [620, function (t) { var x1 = .65, x2 = .35; /* cubic-bezier(.65,0,.35,1) solved numerically */ var lo = 0, hi = 1, u; for (var i = 0; i < 20; i++) { u = (lo + hi) / 2; var x = 3 * (1 - u) * (1 - u) * u * x1 + 3 * (1 - u) * u * u * x2 + u * u * u; if (x < t) lo = u; else hi = u; } return 3 * (1 - u) * u * u + u * u * u; }], linear: [300, function (t) { return t; }] };
+  var grid = $('grid'), items = [];
+  ICONS.forEach(function (ic) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'ib'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', ic.off);
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+    var paths = ic.a.map(function () { var p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); svg.appendChild(p); return p; });
+    var lab = document.createElement('span'); lab.textContent = ic.name; b.appendChild(svg); b.appendChild(lab); grid.appendChild(b);
+    var it = { ic: ic, b: b, paths: paths, cur: JSON.parse(JSON.stringify(ic.a)), from: null, to: ic.a, t0: 0, on: false };
+    function draw() { var ds = d(it.cur); paths.forEach(function (p, i) { p.setAttribute('d', ds[i]); p.style.opacity = it.cur[i].o; }); }
+    it.draw = draw; draw();
+    it.toggle = function () {
+      it.on = !it.on; b.setAttribute('aria-pressed', String(it.on)); b.setAttribute('aria-label', it.on ? ic.on : ic.off);
+      it.from = JSON.parse(JSON.stringify(it.cur)); it.to = it.on ? ic.b : ic.a; it.t0 = performance.now();
+      if (reduce) { it.cur = JSON.parse(JSON.stringify(it.to)); draw(); return; }
+      requestAnimationFrame(step);
+    };
+    function step(now) {
+      var E = EASE[$('curve').value], t = Math.min(1, (now - it.t0) / E[0]), k = E[1](t);
+      it.cur = it.to.map(function (s, i) { return { p: s.p.map(function (p, j) { var f = it.from[i].p[j]; return [f[0] + (p[0] - f[0]) * k, f[1] + (p[1] - f[1]) * k]; }), o: it.from[i].o + (s.o - it.from[i].o) * k }; });
+      draw(); if (t < 1) requestAnimationFrame(step);
+    }
+    b.addEventListener('click', it.toggle); items.push(it);
+  });
+  $('all').addEventListener('click', function () { items.forEach(function (it) { it.toggle(); }); });
+  if (q.has('shot')) { items.forEach(function (it, i) { if (i % 2 === 0) { it.on = true; it.cur = JSON.parse(JSON.stringify(it.ic.b)); it.draw(); } }); }
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

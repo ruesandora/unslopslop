@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mark with a hidden turn · interaction recipes</title>
+<meta name="description" content="A logo mark that changes costume on hover, part by part: each piece has its own delay, origin and overshoot, the eyes follow the pointer and blink.">
+<!-- Hand-written recipe demo. One inline SVG; every part is a CSS transition on transform, opacity or fill. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: #f7f5f1; color: #1b1a18; display: grid; grid-template-rows: auto 1fr; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .nav { display: flex; align-items: center; gap: 28px; padding: 18px 24px; border-bottom: 1px solid rgba(27,26,24,.1); }
+  .nav a { color: inherit; text-decoration: none; font-size: 14px; }
+  .home { display: inline-flex; border-radius: 10px; }
+  .home:focus-visible { outline: 2px solid #1b1a18; outline-offset: 4px; }
+  .big { display: grid; place-content: center; justify-items: center; gap: 14px; }
+  .big .home { width: min(220px, 46vw); }
+  .big p { margin: 0; font-size: 13px; color: #55524c; }
+  .mk { display: block; width: 100%; height: auto; overflow: visible; }
+  .nav .mk { width: 34px; }
+  /* resting mark */
+  .mk .body { fill: #1b1a18; transition: fill .3s cubic-bezier(.22,1,.36,1); }
+  .mk .eyes { transform-box: fill-box; transform-origin: 50% 50%; transition: transform 80ms linear; }
+  .mk .look { transition: transform .18s ease-out; }
+  .mk .eye { fill: #f7f5f1; transform-box: fill-box; transform-origin: 50% 50%; transition: transform .32s cubic-bezier(.34,1.56,.5,1), fill .3s; }
+  .mk[data-blink] .eyes { transform: scaleY(.1); }
+  /* hidden parts */
+  .mk .hat { transform-box: fill-box; transform-origin: 50% 100%; opacity: 0; transform: translateY(-14px) rotate(-8deg); transition: transform .46s cubic-bezier(.34,1.56,.5,1), opacity .2s; }
+  .mk .pom { transform-box: fill-box; transform-origin: 50% 50%; opacity: 0; transform: scale(.2); transition: transform .4s cubic-bezier(.34,1.7,.5,1) .12s, opacity .2s .12s; }
+  .mk .cheek { opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; transform: scale(.4); transition: transform .36s cubic-bezier(.34,1.56,.5,1) .08s, opacity .3s .08s; }
+  .mk .scarf { opacity: 0; transform-box: fill-box; transform-origin: 0% 50%; transform: scaleX(.1); transition: transform .38s cubic-bezier(.22,1,.36,1) .05s, opacity .2s .05s; }
+  .mk .flake { opacity: 0; }
+  /* the turn */
+  .home:hover .mk .body, .home:focus-visible .mk .body, .mk.turn .body { fill: #2d4f86; }
+  .home:hover .mk .hat, .home:focus-visible .mk .hat, .mk.turn .hat { opacity: 1; transform: none; }
+  .home:hover .mk .pom, .home:focus-visible .mk .pom, .mk.turn .pom { opacity: 1; transform: none; }
+  .home:hover .mk .cheek, .home:focus-visible .mk .cheek, .mk.turn .cheek { opacity: .9; transform: none; }
+  .home:hover .mk .scarf, .home:focus-visible .mk .scarf, .mk.turn .scarf { opacity: 1; transform: none; }
+  .home:hover .mk .eye-l, .home:focus-visible .mk .eye-l, .mk.turn .eye-l { transform: translateY(1px) rotate(8deg) scaleY(.62); }
+  .home:hover .mk .eye-r, .home:focus-visible .mk .eye-r, .mk.turn .eye-r { transform: translateY(1px) rotate(-8deg) scaleY(.62); }
+  .home:hover .mk .flake, .home:focus-visible .mk .flake, .mk.turn .flake { animation: twinkle 1.8s step-end .4s infinite; }
+  @keyframes twinkle { 0%, 100% { opacity: .9; } 30% { opacity: .35; } 45% { opacity: 1; } 70% { opacity: .55; } }
+  @media (prefers-reduced-motion: reduce) { .mk * { transition-duration: 1ms !important; transition-delay: 0s !important; animation: none !important; } }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <nav class="nav" aria-label="Example navigation"><a class="home" href="#" aria-label="Home"><svg class="mk" viewBox="-10 -26 120 136" aria-hidden="true"><rect class="body" x="8" y="8" width="84" height="84" rx="30"/><g class="scarf"><rect x="10" y="72" width="80" height="12" rx="6" fill="#c8553d"/><rect x="62" y="78" width="12" height="22" rx="5" fill="#c8553d"/></g><g class="look"><g class="eyes"><ellipse class="eye eye-l" cx="37" cy="48" rx="6" ry="9"/><ellipse class="eye eye-r" cx="63" cy="48" rx="6" ry="9"/></g></g><circle class="cheek" cx="26" cy="62" r="6" fill="#e9877a"/><circle class="cheek" cx="74" cy="62" r="6" fill="#e9877a"/><g class="hat"><path d="M16 18 C20 -8 80 -8 84 18 Z" fill="#e6dccb"/><path d="M34 0 V16 M50 -4 V16 M66 0 V16" stroke="#d2c3a8" stroke-width="3" stroke-linecap="round"/><rect x="10" y="12" width="80" height="14" rx="7" fill="#d2c3a8"/></g><circle class="pom" cx="50" cy="-12" r="9" fill="#e6dccb"/><path class="flake" d="M96 -4 v14 M89 3 h14 M91 -2 l10 10 M101 -2 l-10 10" stroke="#8fb0e0" stroke-width="2" stroke-linecap="round"/></svg></a><a href="#">Work</a><a href="#">Notes</a></nav>
+    <div class="big"><a class="home" href="#" aria-label="Home, enlarged example"><svg class="mk" viewBox="-10 -26 120 136" aria-hidden="true"><rect class="body" x="8" y="8" width="84" height="84" rx="30"/><g class="scarf"><rect x="10" y="72" width="80" height="12" rx="6" fill="#c8553d"/><rect x="62" y="78" width="12" height="22" rx="5" fill="#c8553d"/></g><g class="look"><g class="eyes"><ellipse class="eye eye-l" cx="37" cy="48" rx="6" ry="9"/><ellipse class="eye eye-r" cx="63" cy="48" rx="6" ry="9"/></g></g><circle class="cheek" cx="26" cy="62" r="6" fill="#e9877a"/><circle class="cheek" cx="74" cy="62" r="6" fill="#e9877a"/><g class="hat"><path d="M16 18 C20 -8 80 -8 84 18 Z" fill="#e6dccb"/><path d="M34 0 V16 M50 -4 V16 M66 0 V16" stroke="#d2c3a8" stroke-width="3" stroke-linecap="round"/><rect x="10" y="12" width="80" height="14" rx="7" fill="#d2c3a8"/></g><circle class="pom" cx="50" cy="-12" r="9" fill="#e6dccb"/><path class="flake" d="M96 -4 v14 M89 3 h14 M91 -2 l10 10 M101 -2 l-10 10" stroke="#8fb0e0" stroke-width="2" stroke-linecap="round"/></svg></a><p>Hover or focus the mark. Enlarged copy of the 34 px nav mark.</p></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Mark with a hidden turn</h1>
+    <p class="sum">A small surprise for people who touch the logo: the mark changes costume for a season or a launch, piece by piece. A hat drops in from above and overshoots, a pompom pops a beat later, cheeks and a scarf follow, the eyes squint, and a snowflake flickers like a candle. The resting mark never changes, so the brand stays the brand.</p>
+    <dl class="notes group">
+      <dt>Timing</dt><dd>Body colour 300 ms. Hat 460 ms cubic-bezier(.34, 1.56, .5, 1) from the hat brim; pompom 400 ms with 120 ms delay; scarf 380 ms from the left edge with 50 ms delay; cheeks 360 ms with 80 ms delay; eyes 320 ms with overshoot. Twinkle 1.8 s step-end so it flickers instead of fading. Eyes follow the pointer up to 2.5 units with 180 ms ease-out; a blink is an 80 ms squash every 3.5 to 6 s.</dd>
+      <dt>How it is built</dt><dd>One inline SVG. Hidden parts sit in the resting drawing at opacity 0 and a small scale or offset. Each part has its own transform origin (transform-box: fill-box) and its own delay, so the change reads as a sequence. Hover and focus-visible trigger the same state, so keyboard users get it too.</dd>
+      <dt>Where it fits</dt><dd>A nav mark, a 404 page, a loading mascot. Change the costume per season or per launch; keep the parts inside the mark's own silhouette and palette.</dd>
+      <dt>Reduced motion</dt><dd>The costume still appears, instantly, with no flicker.</dd>
+      <dt>Becomes slop when</dt><dd>The mark animates on its own at rest, the surprise is bigger than the nav, or it is a generic sparkle that any logo could have.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var marks = [].slice.call(document.querySelectorAll('.mk'));
+  addEventListener('pointermove', function (e) {
+    marks.forEach(function (m) { var r = m.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 300) * 2.5;
+      m.querySelector('.look').style.transform = reduce ? '' : 'translate(' + (dx / d * k).toFixed(2) + 'px,' + (dy / d * k).toFixed(2) + 'px)'; });
+  });
+  function blink() { if (!reduce && !document.hidden) marks.forEach(function (m) { m.dataset.blink = ''; setTimeout(function () { delete m.dataset.blink; }, 120); }); setTimeout(blink, 3500 + Math.random() * 2500); }
+  setTimeout(blink, 2500);
+  [].forEach.call(document.querySelectorAll('.home'), function (a) { a.addEventListener('click', function (e) { e.preventDefault(); }); });
+  if (q.has('shot')) marks[1].classList.add('turn');
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>
