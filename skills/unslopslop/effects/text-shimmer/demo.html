@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text shimmer (CSS) · effects library</title>
+<meta name="description" content="A light band that sweeps across a pending label, made with a masked copy of the text so the label itself keeps one solid colour.">
+<!-- Hand-written. Pure CSS: a lighter copy of the label is revealed by a moving mask; the real text never changes colour. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { background: var(--bg, #f6f4f0); color: var(--fg, #161514); display: grid; place-content: center; gap: 28px; padding: 32px; --dur: 1300ms; --band: 9%; --lift: #b9b4ab; }
+  .row { display: flex; align-items: center; gap: 12px; font: 500 17px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .row.big { font-size: clamp(26px, 3.4vw, 40px); font-weight: 600; letter-spacing: -0.02em; }
+  .spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; opacity: .55; animation: spin 900ms linear infinite; }
+  @keyframes spin { to { transform: rotate(1turn); } }
+  /* the effect: the label stays solid; a lighter copy on top is shown only inside a moving band */
+  .shimmer { position: relative; display: inline-block; }
+  .shimmer::after { content: attr(data-text); position: absolute; inset: 0; color: var(--lift); pointer-events: none;
+    -webkit-mask-image: linear-gradient(100deg, transparent calc(50% - var(--band)), #000 50%, transparent calc(50% + var(--band)));
+            mask-image: linear-gradient(100deg, transparent calc(50% - var(--band)), #000 50%, transparent calc(50% + var(--band)));
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    animation: sweep var(--dur) linear infinite; }
+  @keyframes sweep { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0% 0; mask-position: 0% 0; } }
+  .paused .shimmer::after, .paused .spin { animation-play-state: paused; }
+  .bar { width: min(420px, 80vw); height: 12px; border-radius: 6px; background: var(--track, #e6e1d8); position: relative; overflow: hidden; }
+  .bar::after { content: ""; position: absolute; inset: 0; background: var(--lift); opacity: .55;
+    -webkit-mask-image: linear-gradient(100deg, transparent 35%, #000 50%, transparent 65%); mask-image: linear-gradient(100deg, transparent 35%, #000 50%, transparent 65%);
+    -webkit-mask-size: 300% 100%; mask-size: 300% 100%; animation: sweep var(--dur) linear infinite; }
+  @media (prefers-reduced-motion: reduce) { .shimmer::after, .bar::after { animation: none; opacity: 0; } .spin { animation: none; } .row .dots::after { content: "\2026"; } }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <div class="row big"><span class="shimmer" data-text="Searching saved references">Searching saved references</span><span class="dots"></span></div>
+    <div class="row"><span class="spin" aria-hidden="true"></span><span class="shimmer" data-text="Writing the summary (example state)">Writing the summary (example state)</span><span class="dots"></span></div>
+    <div class="bar" aria-hidden="true"></div>
+
+  </main>
+  <aside>
+    <a class="back" href="../index.html">All effects</a>
+    <h1>Text shimmer</h1>
+    <p class="sum">A light band that crosses a label while the system is working, then stops when the result arrives. The label keeps one solid colour and full contrast; a lighter copy of it is shown only inside the moving band, so screen readers, selection and contrast checks see plain text.</p>
+    <div class="ctl"><label for="dur"><span>Sweep (ms)</span><output id="dur-o">1300</output></label><input id="dur" type="range" min="600" max="4000" step="50" value="1300"></div>
+    <div class="ctl"><label for="band"><span>Band half-width (%)</span><output id="band-o">9</output></label><input id="band" type="range" min="4" max="40" step="1" value="9"></div>
+    <div class="group">
+      <div class="ctl"><label for="pal">Palette</label><select id="pal"><option value="paper">Ink on paper</option><option value="night">Light on night</option></select></div>
+      <div class="ctl"><button id="play" type="button">Pause motion</button></div>
+    </div>
+    <dl class="notes group">
+      <dt>How it works</dt><dd>A pseudo-element repeats the label from a data attribute in a lighter colour and sits exactly on top. Its mask is a soft band three times wider than the label; animating the mask position from 100 to 0 percent moves the band from left to right in a straight line. Linear timing, because a sweep that eases looks like it hesitates.</dd>
+      <dt>Measured starting values</dt><dd>1.3 to 2.6 s per sweep, linear, infinite while pending. The lighter tone sits about 35 to 45 points of lightness above the ink on a light ground.</dd>
+      <dt>Cost</dt><dd>Mask position on one small layer: near zero. No script except the demo controls.</dd>
+      <dt>Reduced motion</dt><dd>The band is hidden and an ellipsis shows the pending state instead.</dd>
+      <dt>Becomes slop when</dt><dd>It runs on labels that are not waiting for anything, on headlines as decoration, or it never stops after the work is done. A gradient fill on the text itself is a different, flagged move: here the text keeps one colour.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var stage = $('stage'), reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, playing = !reduce;
+  var PALS = { paper: ['#f6f4f0', '#161514', '#b9b4ab', '#e6e1d8'], night: ['#101217', '#eceef3', '#6e7380', '#232733'] };
+  function upd() {
+    stage.style.setProperty('--dur', $('dur').value + 'ms'); stage.style.setProperty('--band', $('band').value + '%');
+    $('dur-o').textContent = $('dur').value; $('band-o').textContent = $('band').value;
+    var P = PALS[$('pal').value]; stage.style.setProperty('--bg', P[0]); stage.style.setProperty('--fg', P[1]); stage.style.setProperty('--lift', P[2]); stage.style.setProperty('--track', P[3]);
+  }
+  ['dur', 'band'].forEach(function (id) { $(id).addEventListener('input', upd); }); $('pal').addEventListener('change', upd);
+  $('play').textContent = playing ? 'Pause motion' : 'Play motion'; stage.classList.toggle('paused', !playing);
+  $('play').addEventListener('click', function () { playing = !playing; stage.classList.toggle('paused', !playing); $('play').textContent = playing ? 'Pause motion' : 'Play motion'; });
+  upd();
+  if (q.has('shot')) { [].forEach.call(document.querySelectorAll('.shimmer'), function (s) { s.style.setProperty('--x', '0'); }); document.getAnimations().forEach(function (a) { a.currentTime = 520; a.pause(); }); }
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>

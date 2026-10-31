@@ -74,7 +74,7 @@ const shell = ({ slug, title, summary, cost, fallback, slop, effect }) => `<!doc
       <div class="ctl"><label for="src">Source</label>
         <select id="src"><option value="gradient">Generated gradient</option><option value="scene">Test scene</option><option value="upload" disabled>Your image</option></select></div>
       <div class="ctl"><label for="pal">Palette</label>
-        <select id="pal"><option value="dusk">Dusk</option><option value="ember">Ember</option><option value="seaglass">Sea glass</option><option value="graphite">Graphite</option><option value="moss">Moss</option></select></div>
+        <select id="pal"><option value="dusk">Dusk</option><option value="ember">Ember</option><option value="seaglass">Sea glass</option><option value="graphite">Graphite</option><option value="moss">Moss</option><option value="signal">Signal</option></select></div>
       <div class="ctl"><label for="upload">Try your own image (stays in this browser)</label><input id="upload" type="file" accept="image/*"></div>
       <div class="ctl"><button id="play" type="button">Pause motion</button></div>
     </div>
