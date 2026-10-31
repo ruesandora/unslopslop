@@ -1,7 +1,7 @@
 # unslopslop report
 
 - Target: `examples/saas-landing/after.html`
-- Slop score: **8/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 92) and the genre-default tells (0 pts), which count less the more taste is proven. Rule-only pattern slop: 28 (raw 28).
+- Slop score: **8/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 92) and the genre-default tells (0 pts), which count less the more taste is proven. Rule-only pattern slop: 24 (raw 24).
 - Taste proof: **92/100** (higher is better; pass mark 60)
   - subject 30/30: largest subject 31% of the first screen (media), all subjects 31%
   - display 25/25: display line 167 px
@@ -11,13 +11,13 @@
 - Craft score: **98/100** (higher is better; pass mark 70)
 - Overall: **PASS** (needs a slop verdict that is not HEAVY, craft >= 70, taste proof >= 60; UNPROVEN until a side-by-side reference compare was run: detect --compared <compare.png>)
 - Slop verdict: **CLEAN**. Clean: do not touch it. Run the template test (swap the brand name; if it still fits, add one signature move).
-- Rules checked: 97; findings: 7
+- Rules checked: 97; findings: 6
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
-| spacing | 6 |
+| spacing | 2 |
 | color | 4 |
 | icons | 0 |
 | copy | 0 |
@@ -40,14 +40,6 @@
 
 ## spacing
 
-### spacing-off-grid (minor, 4 pts, x8, desktop)
-Padding and gaps ignore a 4 px rhythm. Values like 13, 18 or 22 px show that spacing was typed, not chosen from a scale.
-Fix: Pick a 4 px scale (4, 8, 12, 16, 24, 32, 48, 64) and snap every padding and gap to the nearest step.
-- `div.actions`: rowGap 22px [desktop]
-- `div.actions`: columnGap 22px [desktop]
-- `a.btn`: paddingRight 22px [desktop]
-- `a.btn`: paddingLeft 22px [desktop]
-
 ### spacing-cramped (minor, 2 pts, x1, desktop)
 Text sits against the edge of its box. Buttons and cards with almost no inner padding read as unfinished.
 Fix: Give buttons at least 12 px horizontal and 8 px vertical padding (anything under 8 px horizontal is flagged), cards at least 16 px.
@@ -65,7 +57,7 @@ Fix: Keep the accent for actions, selection, focus, live state and the key data 
 
 ## typography
 
-### type-tight-leading (minor, 4 pts, x7, desktop+mobile)
+### type-tight-leading (minor, 4 pts, x8, desktop+mobile)
 Body text set too tight. Multi-line paragraphs under 1.3 line-height, or letter-spacing below -0.04em, are hard to read.
 Fix: Body line-height 1.5 to 1.7; keep tight leading for headings only and never track tighter than -0.03em.
 - `span.heavy`: letter-spacing -0.045em [desktop]

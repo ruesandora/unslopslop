@@ -3,7 +3,7 @@
   "version": 1,
   "target": "examples/saas-landing/after.html",
   "score": 8,
-  "patternScore": 28,
+  "patternScore": 24,
   "tells": 0,
   "taste": {
     "proof": 92,
@@ -52,11 +52,11 @@
       "accent": 0.308
     }
   },
-  "rawPoints": 28,
+  "rawPoints": 24,
   "verdict": "clean",
   "rulesChecked": 97,
   "byPass": {
-    "spacing": 6,
+    "spacing": 2,
     "color": 4,
     "icons": 0,
     "copy": 0,
@@ -99,48 +99,13 @@
       "points": 7.5
     },
     {
-      "rule": "spacing-off-grid",
-      "pass": "spacing",
-      "severity": "minor",
-      "title": "Padding and gaps ignore a 4 px rhythm",
-      "why": "Values like 13, 18 or 22 px show that spacing was typed, not chosen from a scale.",
-      "fix": "Pick a 4 px scale (4, 8, 12, 16, 24, 32, 48, 64) and snap every padding and gap to the nearest step.",
-      "count": 8,
-      "viewports": [
-        "desktop"
-      ],
-      "examples": [
-        {
-          "el": "div.actions",
-          "detail": "rowGap 22px",
-          "viewport": "desktop"
-        },
-        {
-          "el": "div.actions",
-          "detail": "columnGap 22px",
-          "viewport": "desktop"
-        },
-        {
-          "el": "a.btn",
-          "detail": "paddingRight 22px",
-          "viewport": "desktop"
-        },
-        {
-          "el": "a.btn",
-          "detail": "paddingLeft 22px",
-          "viewport": "desktop"
-        }
-      ],
-      "points": 4
-    },
-    {
       "rule": "type-tight-leading",
       "pass": "typography",
       "severity": "minor",
       "title": "Body text set too tight",
       "why": "Multi-line paragraphs under 1.3 line-height, or letter-spacing below -0.04em, are hard to read.",
       "fix": "Body line-height 1.5 to 1.7; keep tight leading for headings only and never track tighter than -0.03em.",
-      "count": 7,
+      "count": 8,
       "viewports": [
         "desktop",
         "mobile"
@@ -331,7 +296,7 @@
       "visKinds": [
         "media"
       ],
-      "raf": 95,
+      "raf": 94,
       "mut": 19,
       "movers": 8,
       "inVisual": 1,
@@ -349,7 +314,7 @@
       ],
       "app": false,
       "firstTexts": 20,
-      "coverage": 0.6421875
+      "coverage": 0.6390625
     }
   },
   "overall": "pass",
