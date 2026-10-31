@@ -8,7 +8,7 @@ import { makeHelpers } from './helpers.mjs';
 import { score, verdict, rulePoints } from './score.mjs';
 import { BLAND } from './rules-bland.mjs';
 import { craftProbe, craftScore, MOTION_INIT } from './craft.mjs';
-import { tasteProbe, tasteScore, ownerSlop, pixelProbe, TELLS } from './taste.mjs';
+import { tasteProbe, tasteScore, tasteDisabled, ownerSlop, pixelProbe, TELLS } from './taste.mjs';
 
 export const VIEWPORTS = { desktop: { w: 1440, h: 900 }, mobile: { w: 390, h: 844 } };
 // Extra pass: desktop size with the reduced-motion preference on (screenshots are never taken here).
@@ -35,7 +35,7 @@ function pageScript(rules, vp, withCraft = false) {
     for (const r of [${defs}]) {
       try { out[r.id] = r.check(h); } catch (e) { out[r.id] = { error: String(e && e.message || e) }; }
     }
-    if (${withCraft}) { try { out.__taste = (${tasteProbe.toString()})(h); } catch (e) { out.__taste = { error: String(e && e.message || e) }; } try { out.__craft = (${craftProbe.toString()})(h); } catch (e) { out.__craft = { error: String(e && e.message || e) }; } }
+    if (${withCraft}) { try { out.__taste = (${tasteProbe.toString()})(h, ${JSON.stringify([...tasteDisabled()])}); } catch (e) { out.__taste = { error: String(e && e.message || e) }; } try { out.__craft = (${craftProbe.toString()})(h); } catch (e) { out.__craft = { error: String(e && e.message || e) }; } }
     return out;
   })()`;
 }
@@ -109,7 +109,7 @@ export async function analyze(browser, target, { disable = [], only = null, fast
         if (res.__taste.error) errors.push(`taste: ${res.__taste.error}`);
         else {
           tasteSignals = res.__taste;
-          try { Object.assign(tasteSignals, await page.evaluate(`(${pixelProbe.toString()})(${JSON.stringify((await page.screenshot()).toString('base64'))})`)); } catch (e) { errors.push(`taste pixels: ${e.message}`); }
+          try { Object.assign(tasteSignals, await page.evaluate(`(${pixelProbe.toString()})(${JSON.stringify((await page.screenshot()).toString('base64'))}, ${JSON.stringify(tasteSignals.subjectRect)}, ${vp.w}, ${vp.h})`)); } catch (e) { errors.push(`taste pixels: ${e.message}`); }
         }
       }
       if (res.__craft) { if (res.__craft.error) errors.push(`craft: ${res.__craft.error}`); else signals = res.__craft; }

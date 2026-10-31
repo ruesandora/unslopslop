@@ -10,6 +10,9 @@ import { analyze } from '../skills/unslopslop/scripts/lib/analyze.mjs';
 import { tasteScore, ownerSlop, PROOF_PASS, TASTE_COMPONENTS } from '../skills/unslopslop/scripts/lib/taste.mjs';
 import { RICH, TASTE_GOOD } from './fixtures-bland.mjs';
 
+const HIER = { lead: 90, body: 17, ratio: 5.3, weightDiff: 400, inkDiff: 0.4, free: 0.95, levels: 4 };
+const FLAT = { lead: 17, body: 17, ratio: 1, weightDiff: 0, inkDiff: 0, free: 0.2, levels: 1 };
+
 const only = process.env.UNSLOP_TASTE_ONLY;
 let browser, dir, plain, good, goodCompared;
 before(async () => {
@@ -50,24 +53,24 @@ if (!only) {
     assert.ok(good.taste.proof >= PROOF_PASS && good.score <= 20, JSON.stringify([good.taste.proof, good.score]));
   });
   test('tasteScore is pure; owner slop: unproven pulls up, tells count less when proven', () => {
-    const t = { subjectFrac: 0.4, subjectKind: 'media', mediaFrac: 0.4, display: 90, overlap: 1, keyword: 0, app: false, ground: 0.8, accent: 0.01 };
+    const t = { subjectFrac: 0.4, subjectKind: 'media', mediaFrac: 0.4, display: 90, overlap: 1, keyword: 0, app: false, ground: 0.8, accent: 0.01, vw: 1440, hier: HIER };
     assert.deepEqual(tasteScore(t, 80, {}, new Set()), tasteScore(t, 80, {}, new Set()));
     assert.equal(tasteScore(t, 80, {}, new Set()).proof, 100);
     assert.equal(ownerSlop(0, 30), 70);
     assert.ok(ownerSlop(90, 90) < ownerSlop(90, 20));
   });
-  test('caps: no subject caps the proof at 10; a small display line caps it at 55', () => {
-    const t = { subjectFrac: 0, subjectKind: '', mediaFrac: 0, display: 90, overlap: 0, keyword: 0, app: false, ground: 0.8, accent: 0.01 };
+  test('caps: no subject caps the proof at 10; a flat hierarchy caps it at 55', () => {
+    const t = { subjectFrac: 0, subjectKind: '', mediaFrac: 0, display: 90, overlap: 0, keyword: 0, app: false, ground: 0.8, accent: 0.01, vw: 1440, hier: HIER };
     assert.equal(tasteScore(t, 80, {}, new Set()).proof, 10);
-    assert.equal(tasteScore({ ...t, subjectFrac: 0.4, mediaFrac: 0.4, display: 60, overlap: 1 }, 80, {}, new Set()).proof, 55);
+    assert.equal(tasteScore({ ...t, subjectFrac: 0.4, mediaFrac: 0.4, hier: FLAT, overlap: 1 }, 80, {}, new Set()).proof, 55);
   });
   test('a full-bleed or tiny subject earns less than one at 25-60%', () => {
-    const base = { subjectKind: 'media', display: 90, overlap: 1, keyword: 0, app: false, ground: 0.8, accent: 0.01 };
+    const base = { subjectKind: 'media', display: 90, vw: 1440, hier: HIER, overlap: 1, keyword: 0, app: false, ground: 0.8, accent: 0.01 };
     const at = (f) => tasteScore({ ...base, subjectFrac: f, mediaFrac: f }, 80, {}, new Set()).components.subject.points;
     assert.ok(at(0.4) > at(0.99) && at(0.4) > at(0.12) && at(0.12) > at(0.02), `${at(0.4)} ${at(0.99)} ${at(0.12)} ${at(0.02)}`);
   });
   test('a coloured headline keyword loses the keyword points', () => {
-    const t = { subjectFrac: 0.4, mediaFrac: 0.4, display: 90, overlap: 1, keyword: 1, app: false, ground: 0.8, accent: 0.01 };
+    const t = { subjectFrac: 0.4, mediaFrac: 0.4, display: 90, overlap: 1, keyword: 1, app: false, ground: 0.8, accent: 0.01, vw: 1440, hier: HIER };
     assert.equal(tasteScore(t, 80, {}, new Set()).components.keyword.points, 0);
   });
 }

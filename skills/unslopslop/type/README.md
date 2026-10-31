@@ -38,7 +38,7 @@ Our own pages kept repeating one move: a wide grotesk display, a plain sans body
 
 ## Note on the detector
 
-The taste proof in `../scripts/lib/taste.mjs` rewards a display line of 80 px or more on landing pages. The no-giant-size recipes are meant for app screens, dashboards, email, reading pages and teasers, or for a landing page whose first screen has a strong real subject. On a text-only landing page they will be capped by that check; that is a known trade-off, not a bug in the recipe.
+The taste proof in `../scripts/lib/taste.mjs` no longer rewards headline size. It measures the hierarchy of the first screen: lead-to-body ratio, weight contrast, ink contrast, white space around the lead and the number of levels. A no-giant-size recipe earns the points when its lead is set apart by weight, tone, width or position and sits in clear space; a text-only page still needs a real subject (media, a drawing, a pattern field, a tile wall or the tool itself) or its proof is capped at 10. Specimens are measured in `tests/type-library.test.mjs`.
 
 ## Files
 
