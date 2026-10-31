@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { launch } from '../skills/unslopslop/scripts/lib/browser.mjs';
 import { analyze } from '../skills/unslopslop/scripts/lib/analyze.mjs';
 import { hierarchyScore, tasteScore, PROOF_PASS } from '../skills/unslopslop/scripts/lib/taste.mjs';
@@ -67,6 +68,19 @@ if (want('hierarchy')) {
     assert.ok(r.taste.components.hierarchy.points <= 5, JSON.stringify(r.taste.components.hierarchy));
     assert.ok(r.taste.proof <= 55 && r.taste.caps.some((c) => /flat hierarchy/.test(c)), `${r.taste.proof} ${r.taste.caps}`);
   });
+}
+if (want('hierarchy')) {
+  // The six type-only recipes that use no giant size must be able to earn the proof; the specimens are real full pages.
+  const root = new URL('../skills/unslopslop/type/', import.meta.url);
+  for (const id of ['luxury-whisper', 'finance-ledger', 'health-calm', 'swiss-position', 'brutalist-raw', 'technical-field-notes']) {
+    test(`type specimen ${id} (no giant size) earns the hierarchy proof`, async (t) => {
+      browser ??= await launch();
+      const r = await analyze(browser, fileURLToPath(new URL(`${id}/specimen.html`, root)), { compared: true, fast: true });
+      const hc = r.taste.components.hierarchy;
+      t.diagnostic(`${id}: lead ${r.taste.signals.hier.lead} px, ${hc.points}/25, ${hc.why}`);
+      assert.ok(hc.points >= 10 && !/does not own/.test(hc.why) && !r.taste.caps.some((c) => /flat hierarchy/.test(c)), `${hc.points} ${hc.why}`);
+    });
+  }
 }
 if (want('owns')) {
   test('bad: a crowded 48 px lead (size and weight, but no space around it) is not proven; the same lead alone is', async () => {

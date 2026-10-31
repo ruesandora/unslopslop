@@ -67,11 +67,24 @@
         "subjectKind": "media",
         "mediaFrac": 1,
         "display": 95.04,
-        "overlap": 106,
+        "overlap": 107,
         "keyword": 1,
         "app": false,
         "ground": 0.439,
-        "accent": 0
+        "accent": 0,
+        "subjectInk": 0.032,
+        "hier": {
+          "lead": 95,
+          "body": 14.5,
+          "ratio": 6.55,
+          "weightDiff": 450,
+          "inkDiff": 0.933,
+          "free": 0.85,
+          "levels": 16
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -89,8 +102,21 @@
         "overlap": 26,
         "keyword": 0,
         "app": false,
-        "ground": 0.775,
-        "accent": 0.05
+        "ground": 0.774,
+        "accent": 0.047,
+        "subjectInk": 0.446,
+        "hier": {
+          "lead": 86.4,
+          "body": 10,
+          "ratio": 8.64,
+          "weightDiff": 0,
+          "inkDiff": 0.149,
+          "free": 0.842,
+          "levels": 11
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -99,7 +125,7 @@
       "expect": "pass",
       "note": "96 px serif on black, one lit object",
       "craft": 78,
-      "tells": 98,
+      "tells": 99,
       "signals": {
         "subjectFrac": 0.976,
         "subjectKind": "media",
@@ -108,66 +134,116 @@
         "overlap": 16,
         "keyword": 0,
         "app": false,
-        "ground": 0.935,
-        "accent": 0
+        "ground": 0.934,
+        "accent": 0,
+        "subjectInk": 0.017,
+        "hier": {
+          "lead": 96,
+          "body": 18,
+          "ratio": 5.33,
+          "weightDiff": 0,
+          "inkDiff": 0.326,
+          "free": 0.832,
+          "levels": 6
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
       "id": "g04",
       "side": "gold",
-      "expect": "documented-miss",
-      "note": "DOCUMENTED MISS: pattern-as-image page, no first-screen subject measurable, 56 px display",
+      "expect": "pass",
+      "note": "pattern-led page, 56 px display: the pattern field is the subject, hierarchy by ink, space and size ratio (was a documented miss)",
       "craft": 81,
       "tells": 0,
       "signals": {
-        "subjectFrac": 0,
-        "subjectKind": "",
-        "mediaFrac": 0,
+        "subjectFrac": 0.305,
+        "subjectKind": "drawing",
+        "mediaFrac": 0.305,
         "display": 56,
         "overlap": 0,
         "keyword": 0,
         "app": false,
-        "ground": 0.694,
-        "accent": 0.006
+        "ground": 0.695,
+        "accent": 0.006,
+        "subjectInk": 0.33,
+        "hier": {
+          "lead": 56,
+          "body": 20,
+          "ratio": 2.8,
+          "weightDiff": 100,
+          "inkDiff": 0.399,
+          "free": 0.757,
+          "levels": 4
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
       "id": "g05",
       "side": "gold",
-      "expect": "documented-miss",
-      "note": "DOCUMENTED MISS: tool-first first screen, preview video fails headless",
+      "expect": "pass",
+      "note": "tool-first first screen: the tool itself (controls around a live preview) is the subject (was a documented miss)",
       "craft": 75,
       "tells": 34,
       "signals": {
-        "subjectFrac": 0,
-        "subjectKind": "",
-        "mediaFrac": 0,
+        "subjectFrac": 0.485,
+        "subjectKind": "tool",
+        "mediaFrac": 0.294,
         "display": 14,
-        "overlap": 0,
+        "overlap": 3,
         "keyword": 0,
         "app": true,
-        "ground": 0.516,
-        "accent": 0.013
+        "ground": 0.517,
+        "accent": 0.013,
+        "hier": {
+          "lead": 13,
+          "body": 12,
+          "ratio": 1.08,
+          "weightDiff": 100,
+          "inkDiff": 0.214,
+          "free": 1,
+          "levels": 6
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0.485
       }
     },
     {
       "id": "g06",
       "side": "gold",
-      "expect": "documented-miss",
-      "note": "weaker gold, 58 px display (documented miss)",
+      "expect": "pass",
+      "note": "weaker gold, 58 px display over a tile wall (was a documented miss); derived values, not re-rendered: the live page now blocks headless browsers (hierarchy from the private measurement file, free space from first-screen geometry)",
       "craft": 70,
       "tells": 54,
       "signals": {
-        "subjectFrac": 0.051,
-        "subjectKind": "media",
+        "subjectFrac": 0.95,
+        "subjectKind": "mosaic",
         "mediaFrac": 1,
         "display": 58.275,
         "overlap": 1,
         "keyword": 0,
         "app": false,
         "ground": 0.554,
-        "accent": 0.041
-      }
+        "accent": 0.041,
+        "mosaic": 14,
+        "vw": 1440,
+        "hier": {
+          "lead": 58.3,
+          "body": 20,
+          "ratio": 2.91,
+          "weightDiff": 100,
+          "inkDiff": 0.25,
+          "free": 0.9,
+          "levels": 8
+        }
+      },
+      "derived": true
     },
     {
       "id": "c01",
@@ -204,7 +280,19 @@
         "keyword": 0,
         "app": false,
         "ground": 0.859,
-        "accent": 0.05
+        "accent": 0.05,
+        "hier": {
+          "lead": 60,
+          "body": 16,
+          "ratio": 3.75,
+          "weightDiff": 100,
+          "inkDiff": 0.454,
+          "free": 0.792,
+          "levels": 6
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -222,8 +310,20 @@
         "overlap": 0,
         "keyword": 1,
         "app": false,
-        "ground": 0.803,
-        "accent": 0.029
+        "ground": 0.804,
+        "accent": 0.029,
+        "hier": {
+          "lead": 62,
+          "body": 14,
+          "ratio": 4.43,
+          "weightDiff": 400,
+          "inkDiff": 0.247,
+          "free": 0.878,
+          "levels": 9
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -234,15 +334,27 @@
       "craft": 95,
       "tells": 12,
       "signals": {
-        "subjectFrac": 0.467,
-        "subjectKind": "media",
-        "mediaFrac": 0.467,
+        "subjectFrac": 0,
+        "subjectKind": "",
+        "mediaFrac": 0,
         "display": 72,
-        "overlap": 7,
+        "overlap": 0,
         "keyword": 0,
         "app": false,
         "ground": 0.718,
-        "accent": 0.006
+        "accent": 0.006,
+        "hier": {
+          "lead": 72,
+          "body": 18,
+          "ratio": 4,
+          "weightDiff": 200,
+          "inkDiff": 0.406,
+          "free": 0.776,
+          "levels": 5
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -261,7 +373,19 @@
         "keyword": 0,
         "app": false,
         "ground": 0.937,
-        "accent": 0
+        "accent": 0,
+        "hier": {
+          "lead": 72,
+          "body": 15,
+          "ratio": 4.8,
+          "weightDiff": 100,
+          "inkDiff": 0.238,
+          "free": 0.952,
+          "levels": 8
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -279,8 +403,21 @@
         "overlap": 35,
         "keyword": 0,
         "app": false,
-        "ground": 0.854,
-        "accent": 0.019
+        "ground": 0.849,
+        "accent": 0.018,
+        "subjectInk": 0.114,
+        "hier": {
+          "lead": 48,
+          "body": 16,
+          "ratio": 3,
+          "weightDiff": 200,
+          "inkDiff": 0.04,
+          "free": 0.672,
+          "levels": 7
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     },
     {
@@ -314,14 +451,27 @@
         "subjectKind": "media",
         "mediaFrac": 0.978,
         "display": 95.04,
-        "overlap": 101,
+        "overlap": 107,
         "keyword": 1,
         "app": false,
         "ground": 0.549,
-        "accent": 0
+        "accent": 0,
+        "subjectInk": 0.032,
+        "hier": {
+          "lead": 95,
+          "body": 14.5,
+          "ratio": 6.55,
+          "weightDiff": 450,
+          "inkDiff": 0.933,
+          "free": 0.85,
+          "levels": 16
+        },
+        "vw": 1440,
+        "mosaic": 0,
+        "tool": 0
       }
     }
   ],
-  "measuredNote": "Derived measurements only (no third-party pages or names in the repo): first-screen taste signals, craft score and tells points measured on live pages on 30 Oct 2026. g = strong reference pages, c = template-style counters. 'documented-miss' = a strong page the scorer cannot yet recognise; they are listed, not asserted.",
+  "measuredNote": "Derived measurements only (no third-party pages or names in the repo): first-screen taste signals, craft score and tells points measured on live pages on 31 Oct 2026 (g06, c01, b01 and g00: see their notes; c01 and b01 keep older signals without a hierarchy block, so they stay capped). g = strong reference pages, c = template-style counters.",
   "goldFileEnv": "UNSLOP_GOLD_FILE"
 }

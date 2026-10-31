@@ -14,7 +14,7 @@
 //
 // Subject kinds: media, a drawing, a pattern field (large vector or CSS-image field), a mosaic of six or more tiles, or the
 // tool itself (a first screen full of controls around a live output, e.g. a canvas or preview).
-// Caps: no real subject -> proof at most 10; flat hierarchy (fewer than two axes or under 12 of 25 points) on a non-app page -> at most 55.
+// Caps: no real subject -> proof at most 10; flat hierarchy (fewer than two axes, under 10 of 25 points, or a lead that does not own the screen) on a non-app page -> at most 55.
 // Reference gate: even a passing page stays UNPROVEN until a side-by-side compare against a strong
 // reference was run (detect.mjs --compared <compare.png>).
 //
@@ -125,8 +125,19 @@ export function tasteProbe(h, off = []) {
   }
   // typographic hierarchy of the first screen: one record per text element (size, weight, perceived lightness, characters)
   const recs = [];
+  // tight box of the glyphs themselves (the element box of a block is as wide as its column, not its words)
+  const tight = (e) => {
+    let l = 1e9, t = 1e9, rr = -1e9, b = -1e9;
+    for (const n of e.childNodes) {
+      if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+      const g = document.createRange();
+      g.selectNodeContents(n);
+      for (const q of g.getClientRects()) { if (q.width < 1 || q.height < 1) continue; l = Math.min(l, q.left); t = Math.min(t, q.top); rr = Math.max(rr, q.right); b = Math.max(b, q.bottom); }
+    }
+    return rr > l ? { left: l, top: t, right: rr, bottom: b, width: rr - l, height: b - t } : h.rect(e);
+  };
   for (const e of texts) {
-    const s = h.cs(e), r = h.rect(e);
+    const s = h.cs(e), r = tight(e);
     const own = h.own(e);
     if (own.length < 1 || r.width < 3) continue;
     const size = h.px(s.fontSize);
@@ -152,7 +163,17 @@ export function tasteProbe(h, off = []) {
   let leadCands = recs.filter((v) => v.chars >= 1), group = [];
   while (leadCands.length) {
     const m = Math.max(...leadCands.map((v) => v.size));
-    group = leadCands.filter((v) => v.size >= 0.85 * m);
+    // the lead is one headline: the largest text plus lines of near size that touch it (within 1.2 lead sizes), not every
+    // text of that size on the screen
+    const near = leadCands.filter((v) => v.size >= 0.85 * m).sort((x, y) => x.rect.top - y.rect.top);
+    group = [near[0]];
+    for (let grew = true; grew;) {
+      grew = false;
+      for (const v of near) {
+        if (group.includes(v)) continue;
+        if (group.some((g) => Math.max(0, v.rect.left - g.rect.right, g.rect.left - v.rect.right) <= 1.2 * m && Math.max(0, v.rect.top - g.rect.bottom, g.rect.top - v.rect.bottom) <= 1.2 * m)) { group.push(v); grew = true; }
+      }
+    }
     if (group.reduce((a, v) => a + v.chars, 0) >= 3) break;
     leadCands = leadCands.filter((v) => !group.includes(v));
     group = [];
@@ -272,8 +293,8 @@ export function tasteDisabled() {
 //   ink 4       lightness contrast (sqrt of relative luminance) between lead and body, or inside the headline: ramp 0.10 to 0.40
 //   space 4     free share of a halo one lead-size wide around the lead line: ramp 0.6 to 0.95; only counts when the lead stands out (ratio 1.15x to 1.6x)
 //   levels 4    distinct (size step, bold, ink) levels: 1 none, 2 half, 3 to 5 full, 6 to 7 most, 8 or more clutter
-// "Proven" needs at least two axes at half strength, 12 of 25 points, and a lead that owns the screen: either scale
-// (lead at least 4.7% of the viewport width, 67 px at 1440) or clear space around it (space 35% or more). A modest
+// "Proven" needs at least two axes at half strength, 10 of 25 points, and a lead that owns the screen: either scale
+// (lead at least 4.7% of the viewport width, 67 px at 1440) clear space around it (space 35% or more), or a deliberate weight swap (gap of 270 or more). A modest
 // headline therefore proves itself by position and isolation; a crowded 48 px stack of eyebrow, copy, buttons and logos does not.
 // A giant but unsupported headline has one axis; a flat page none.
 export function hierarchyScore(t, off = new Set()) {
@@ -290,8 +311,8 @@ export function hierarchyScore(t, off = new Set()) {
   const pts = 8 * size + 5 * weight + 4 * ink + 4 * space + 4 * lv;
   let frac = pts / 25;
   const axes = [size, weight, ink, space].filter((v) => v >= 0.5).length;
-  const owns = off.has('owns') || hi.lead / (t.vw || 1440) >= 0.047 || space >= 0.35;
-  const proven = axes >= 2 && frac >= 0.48 && owns;
+  const owns = off.has('owns') || hi.lead / (t.vw || 1440) >= 0.047 || space >= 0.35 || weight >= 0.9;
+  const proven = axes >= 2 && frac >= 0.4 && owns;
   if (t.app) frac = Math.max(frac, 0.6);
   return { frac, axes, proven: proven || !!t.app, why: `lead ${hi.lead} px over body ${hi.body} px = ${hi.ratio}x, weight gap ${hi.weightDiff}, ink gap ${hi.inkDiff}, free space ${Math.round(hi.free * 100)}%, ${hi.levels} levels (${axes} of 4 axes${owns ? '' : ', lead does not own the screen'})${t.app ? ' (app screen, floor 60%)' : ''}` };
 }
@@ -302,7 +323,7 @@ export function tasteScore(t, craft, { compared = false } = {}, off = tasteDisab
   const put = (name, frac, why) => { c[name] = { points: off.has(name) ? 0 : Math.round(TASTE_COMPONENTS[name] * clamp(frac)), max: TASTE_COMPONENTS[name], why }; };
   const f = t.subjectFrac;
   const single = f < 0.1 ? 0 : f < 0.25 ? 0.9 * ramp(f, 0.1, 0.25) : f <= 0.6 ? 1 : f <= 0.97 ? 0.6 : 0.5;
-  const ghost = !off.has('ghost') && t.subjectInk !== undefined && t.subjectInk < 0.02 && ['media', 'drawing', 'field'].includes(t.subjectKind);
+  const ghost = !off.has('ghost') && t.subjectInk !== undefined && t.subjectInk < 0.005 && ['media', 'drawing', 'field'].includes(t.subjectKind);
   put('subject', ghost ? 0 : Math.max(single, 0.7 * ramp(t.mediaFrac, 0.1, 0.25)), ghost ? `largest subject ${Math.round(f * 100)}% of the first screen (${t.subjectKind}) is not visible: ${(t.subjectInk * 100).toFixed(1)}% of it differs from its own ground (blank canvas or ghost image)` : `largest subject ${Math.round(f * 100)}% of the first screen (${t.subjectKind || 'none'}), all subjects ${Math.round(t.mediaFrac * 100)}%`);
   const hr = hierarchyScore(t, off);
   put('hierarchy', hr.frac, hr.why);
