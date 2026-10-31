@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt-led product reel · interaction recipes</title>
+<meta name="description" content="A short product film told by typed commands: a checklist that resolves line by line, a title that darkens word by word, then a window that slides in while a command chip types on its edge.">
+<!-- Hand-written recipe demo. One render(t) for three scenes with a scrubber; DOM and CSS transforms only. -->
+<style>
+  :root { --ground: #0e0e10; --panel: #17171a; --line: #2a2a2f; --ink: #ecebe6; --soft: #b9b8b1; --accent: #e7c46a; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+  #stage { position: relative; overflow: hidden; }
+  #stage { --ink: #16171a; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #ecebe8; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .sc { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; padding: 24px; }
+  #a { background: #0f1013; }
+  .term { width: min(560px, 88vw); border-radius: 12px; background: #1a1c21; box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 30px 60px -30px rgba(0,0,0,.8); padding: 14px 18px 20px; font: 13px/1.9 var(--mono); color: #e6e7ea; }
+  .dots { display: flex; gap: 6px; margin-bottom: 10px; } .dots i { width: 9px; height: 9px; border-radius: 50%; background: #3a3d45; }
+  .term .p { color: #8fb1ff; }
+  .term .ok { color: #79d29b; }
+  .title { margin: 0; font-weight: 700; font-size: clamp(30px, 4.6vw, 56px); letter-spacing: -0.035em; color: var(--ink); }
+  .title span { display: inline-block; margin-right: .22em; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 14px; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 20px -12px rgba(0,0,0,.3); margin-bottom: 22px; }
+  .tag i { width: 8px; height: 8px; border-radius: 50%; background: #3f63e0; }
+  .stagewrap { perspective: 1200px; }
+  .win { position: relative; width: min(620px, 86vw); aspect-ratio: 16 / 10; border-radius: 12px; background: #1d1f24; box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 40px 70px -35px rgba(0,0,0,.6); transform-origin: 0% 50%; overflow: visible; }
+  .bar { height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,.06); } .bar i { width: 8px; height: 8px; border-radius: 50%; background: #3a3d45; }
+  .canvas { position: absolute; left: 14px; right: 140px; top: 44px; bottom: 14px; border-radius: 6px; background: #26282e; overflow: hidden; }
+  .side { position: absolute; right: 14px; top: 44px; bottom: 14px; width: 112px; border-radius: 6px; background: #22242a; }
+  .res { position: absolute; inset: 16%; display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; }
+  .res b { display: block; border-radius: 4px; background: #e8e4dc; } .res b:nth-child(2) { background: #c9603f; } .res b:nth-child(3) { grid-column: 1 / -1; height: 14px; background: #4a4d55; }
+  .chip { position: absolute; left: 50%; bottom: -18px; transform: translateX(-50%); white-space: nowrap; padding: 9px 14px; border-radius: 8px; background: #0f1013; color: #f1f2f4; font: 13px/1 var(--mono); box-shadow: 0 10px 24px -10px rgba(0,0,0,.6); }
+  .chip .p { color: #8fb1ff; margin-right: 8px; }
+  .cur { display: inline-block; width: .6em; height: 1.05em; margin-left: 2px; vertical-align: -2px; background: #3f63e0; }
+  .ex { position: absolute; right: 16px; bottom: 12px; margin: 0; font-size: 12px; color: #55565c; } #a .ex { color: #a3a6ad; }
+
+  aside { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 24px 24px 32px; }
+  .back { color: var(--soft); text-decoration: none; font-size: 13px; }
+  .back:hover, .back:focus-visible { color: var(--ink); }
+  h1 { font-size: 26px; line-height: 1.15; margin: 16px 0 8px; font-weight: 600; letter-spacing: -0.01em; }
+  .sum { margin: 0 0 24px; color: var(--soft); }
+  .ctl { display: grid; gap: 6px; margin: 0 0 16px; }
+  .ctl label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .ctl output { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); min-height: 24px; }
+  select, button { font: inherit; font-size: 14px; color: var(--ink); background: #212126; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-height: 40px; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 16px; }
+  .notes { font-size: 13px; color: var(--soft); }
+  .notes dt { color: var(--ink); margin-top: 12px; }
+  .notes dd { margin: 2px 0 0; }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  .shot .wrap { grid-template-columns: 1fr; } .shot aside { display: none; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; height: auto; } #stage { height: 62vh; min-height: 320px; } aside { border-left: 0; border-top: 1px solid var(--line); padding: 20px 16px 32px; } .shot #stage { height: 100vh; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main id="stage">
+    <section class="sc" id="a" aria-label="Scene one, checklist"><div class="term"><div class="dots"><i></i><i></i><i></i></div><div id="cmd"></div><div id="lines"></div></div><p class="ex">Example film, placeholder copy.</p></section>
+    <section class="sc" id="b" aria-label="Scene two, title"><p class="title" id="title"><span>Meet</span><span>the</span><span>tools.</span></p></section>
+    <section class="sc" id="c" aria-label="Scene three, command"><span class="tag" id="tag"><i></i>Layout</span><div class="stagewrap"><div class="win" id="win"><div class="bar"><i></i><i></i><i></i></div><div class="canvas"><div class="res" id="res"><b></b><b></b><b></b></div></div><div class="side"></div><div class="chip" id="chip"><span class="p">&gt;</span><span id="typed"></span><span class="cur" id="cursor"></span></div></div></div><p class="ex">Example film, placeholder copy.</p></section>
+
+  </main>
+  <aside>
+    <a class="back" href="../README.md">All recipes</a>
+    <h1>Prompt-led product reel</h1>
+    <p class="sum">A short product film where typed commands carry the story. A dark terminal resolves a checklist line by line, a light title darkens word by word, then a product window slides in with a slight turn while a command chip on its bottom edge types the request and the result appears.</p>
+    <div class="ctl"><label for="t"><span>Time (ms)</span><output id="t-o">0</output></label><input id="t" type="range" min="0" max="9000" step="10" value="0"></div>
+    <div class="ctl"><button id="play" type="button">Play</button></div>
+    <dl class="notes group">
+      <dt>Measured beats</dt><dd>Command typed at about 40 characters per second. Checklist: a new line every 400 ms, arriving dim and reaching full tone in 250 ms; the last line in the success colour. Title: each word goes from a pale tone to ink in 220 ms, 120 ms apart. Window: slides 60 px and turns from 10 degrees to 0 in 700 ms ease-out, the label pill above it fades in 200 ms earlier. Chip text at 40 characters per second with a block cursor that blinks every 530 ms; the result appears 300 ms after the last character.</dd>
+      <dt>How it is built</dt><dd>render(t) sets every scene from the time alone: which scene is visible, how many characters are typed, each line's tone, each word's tone, the window transform. A scrubber and a Play button drive it. Export frames by stepping t; a test can assert any frame.</dd>
+      <dt>Where it fits</dt><dd>Launch films for tools and agents, a demo loop in a hero, a 4:5 social cut. The commands should be real requests the product handles.</dd>
+      <dt>Reduced motion</dt><dd>Shows the final frame of the last scene.</dd>
+      <dt>Becomes slop when</dt><dd>The commands are vague ("make it better"), the window shows a fake interface with nothing in it, or the typing cursor keeps blinking after the film ends.</dd>
+    </dl>
+
+  </aside>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, q = new URLSearchParams(location.search);
+  if (q.has('shot')) root.classList.add('shot');
+  function $(id) { return document.getElementById(id); }
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CMD = 'set up the workspace', LINES = ['Layout: grid, type scale, spacing', 'Colour: palette pairs, contrast', 'Motion: timings, reduced motion', 'Review: detector, screenshots'], DONE = '✓ 4 tools ready', ASK = 'Make the hero calmer.';
+  var CPS = 40, END = 9000;
+  var lines = $('lines'); LINES.concat([DONE]).forEach(function (l, i) { var d = document.createElement('div'); d.textContent = (i < LINES.length ? '• ' : '') + l; if (i === LINES.length) d.className = 'ok'; lines.appendChild(d); });
+  var lineEls = [].slice.call(lines.children), words = [].slice.call($('title').children);
+  function c(v) { return Math.max(0, Math.min(1, v)); }
+  function out(p) { return 1 - Math.pow(1 - p, 3); }
+  function mixc(a, b, t) { return 'rgb(' + a.map(function (v, i) { return Math.round(v + (b[i] - v) * t); }).join(',') + ')'; }
+  function render(t) {
+    var sc = t < 3300 ? 'a' : t < 4700 ? 'b' : 'c';
+    ['a', 'b', 'c'].forEach(function (k) { $(k).style.visibility = k === sc ? 'visible' : 'hidden'; });
+    var typed = Math.floor(c((t - 200) / (CMD.length / CPS * 1000)) * CMD.length);
+    $('cmd').innerHTML = '<span class="p">&gt;</span> ' + CMD.slice(0, typed).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    var t0 = 200 + CMD.length / CPS * 1000 + 250;
+    lineEls.forEach(function (el, i) { var p = c((t - t0 - i * 400) / 250); el.style.visibility = t >= t0 + i * 400 ? 'visible' : 'hidden'; el.style.opacity = (0.35 + 0.65 * p).toFixed(3); });
+    words.forEach(function (w, i) { var p = c((t - 3450 - i * 120) / 220); w.style.color = mixc([201, 200, 196], [22, 23, 26], p); });
+    var tp = c((t - 4700) / 200), wp = out(c((t - 4900) / 700));
+    $('tag').style.opacity = tp; $('win').style.opacity = c((t - 4900) / 250);
+    $('win').style.transform = 'translateX(' + ((1 - wp) * 60).toFixed(1) + 'px) rotateY(' + (-(1 - wp) * 10).toFixed(2) + 'deg)';
+    var ts = 5700, n = Math.floor(c((t - ts) / (ASK.length / CPS * 1000)) * ASK.length); $('typed').textContent = ASK.slice(0, n);
+    var typedEnd = ts + ASK.length / CPS * 1000, rp = c((t - typedEnd - 300) / 400);
+    $('cursor').style.visibility = (t < typedEnd + 1200 && Math.floor(t / 530) % 2 === 0) || t < typedEnd ? 'visible' : 'hidden';
+    if (t >= END - 50) $('cursor').style.visibility = 'hidden';
+    $('res').style.opacity = rp; $('res').style.transform = 'translateY(' + ((1 - out(rp)) * 6).toFixed(1) + 'px)';
+    $('t-o').textContent = Math.round(t);
+  }
+  var t0p = 0, playing = false;
+  function frame(now) { if (!playing) return; var t = now - t0p; if (t >= END) { t = END; playing = false; $('play').textContent = 'Play'; } $('t').value = t; render(t); if (playing) requestAnimationFrame(frame); }
+  $('play').addEventListener('click', function () { playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; if (playing) { var cur = Number($('t').value); if (cur >= END) cur = 0; t0p = performance.now() - cur; requestAnimationFrame(frame); } });
+  $('t').addEventListener('input', function () { playing = false; $('play').textContent = 'Play'; render(Number($('t').value)); });
+  var shotT = Number(q.get('t') || (q.has('shot') ? 6800 : NaN));
+  if (!isNaN(shotT)) { $('t').value = shotT; render(shotT); }
+  else if (reduce) { $('t').value = END; render(END); }
+  else { render(0); playing = true; $('play').textContent = 'Pause'; t0p = performance.now(); requestAnimationFrame(frame); }
+  window.__fxReady = true;
+})();
+
+</script>
+</body>
+</html>
