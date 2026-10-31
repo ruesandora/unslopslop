@@ -9,7 +9,7 @@
 @font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
 
 /* Same combination as the landing page: bone ground, ink type and rules, cobalt for the letters (the product's output),
-   signal yellow only for today and the one primary action. */
+   signal yellow only for today, the one live mark. */
 :root {
   --bone: #eeebe3;
   --bone-2: #e4e0d5;
@@ -59,8 +59,8 @@ main { padding: 24px 32px 48px; min-width: 0; }
 .seg { display: flex; border: 1px solid var(--line-2); height: 40px; }
 .seg button { border: 0; background: transparent; padding: 0 12px; cursor: pointer; transition: background-color 150ms ease-out; }
 .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bone); }
-.primary { height: 40px; padding: 0 16px; border: 0; background: var(--yellow); color: var(--ink); font-weight: 700; cursor: pointer; transition: background-color 150ms ease-out; }
-.primary:hover { background: #ffe05a; }
+.primary { height: 40px; padding: 0 16px; border: 0; background: var(--ink); color: var(--bone); font-weight: 700; cursor: pointer; transition: background-color 150ms ease-out; }
+.primary:hover { background: var(--ink-2); }
 
 /* ---------- the chase map: the product's own output, drawn on the ground ---------- */
 .map { position: relative; margin-top: 16px; height: 470px; }
@@ -69,7 +69,7 @@ main { padding: 24px 32px 48px; min-width: 0; }
 .map .lane b { font-weight: 700; }
 .map .amt { position: absolute; right: 0; height: 32px; display: flex; align-items: center; font-size: 14px; font-weight: 700; }
 .map .axis { position: absolute; bottom: 0; font-size: 13px; transform: translateX(-50%); white-space: nowrap; }
-.map .today { position: absolute; top: 0; font: 700 13px/1 var(--text); background: var(--yellow); padding: 4px 8px; transform: translateX(-50%); white-space: nowrap; }
+.map .today { position: absolute; top: 0; font: 700 13px/1 var(--text); background: var(--yellow); padding: 6px 8px; transform: translateX(-50%); white-space: nowrap; }
 .key { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin: 12px 0 0; padding: 0; list-style: none; font-size: 14px; }
 .key svg { vertical-align: -1px; margin-right: 8px; fill: var(--cobalt); }
 
@@ -85,7 +85,7 @@ main { padding: 24px 32px 48px; min-width: 0; }
 .tone i { display: inline-block; width: 10px; background: var(--cobalt); }
 .tone.t1 i { height: 6px; } .tone.t2 i { height: 10px; } .tone.t3 i { height: 14px; }
 .rows .sum { font-weight: 700; min-width: 72px; text-align: right; }
-.rows .paid { font-size: 14px; font-weight: 700; }
+.rows .paid { font-size: 14px; }
 /* the work queue is the one raised surface: a floor shadow, negative spread */
 .raised { background: #f7f5ef; padding: 16px 20px 20px; margin: -16px -20px 0; box-shadow: 0 1px 2px rgba(18, 20, 31, .08), 0 14px 30px -18px rgba(18, 20, 31, .35); }
 .block .acts { display: flex; gap: 12px; margin-top: 16px; }
@@ -126,6 +126,8 @@ tfoot td { border-bottom: 0; font-weight: 700; }
   .rows .tone { grid-column: 1; grid-row: 2; }
   .rows .sum { grid-row: 1 / span 2; grid-column: 2; }
   .ghost { height: 44px; }
+  .raised { margin: -16px -16px 0; padding: 16px; }
+  .block h2 { flex-wrap: wrap; gap: 4px 12px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 </style>
@@ -186,8 +188,8 @@ tfoot td { border-bottom: 0; font-weight: 700; }
       <section class="block" aria-labelledby="m-title">
         <h2 id="m-title">Matched this week <span>from the bank feed</span></h2>
         <ul class="rows">
-          <li><span class="who"><b>Fern &amp; Field</b><span>INV-0402 · 2 reminders cancelled</span></span><span class="paid">Paid 28 Oct</span><span class="sum">€1,750</span></li>
-          <li><span class="who"><b>Kite Studio</b><span>INV-0407 · paid before any letter</span></span><span class="paid">Paid 27 Oct</span><span class="sum">€980</span></li>
+          <li><span class="who"><b>Fern &amp; Field</b><span>INV-0402 · 2 reminders cancelled</span></span><span class="paid">Settled 28 Oct</span><span class="sum">€1,750</span></li>
+          <li><span class="who"><b>Kite Studio</b><span>INV-0407 · paid before any letter</span></span><span class="paid">Settled 27 Oct</span><span class="sum">€980</span></li>
         </ul>
       </section>
     </div>

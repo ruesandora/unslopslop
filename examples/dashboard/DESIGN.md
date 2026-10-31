@@ -5,14 +5,14 @@ The working screen of the same product. One question: what is open, and which le
 
 ## Direction brief
 - Adjectives: exact, calm, legible.
-- Combination (first screen, measured): bone `#eeebe3` ground 61%; ink type and rules; cobalt `#2636c8` only for letters (the product's output); yellow `#f3d33b` 1.1%, only for today and the one primary action ("Review 6 letters").
+- Combination (first screen, measured): bone `#eeebe3` ground 61%; ink type and rules; cobalt `#2636c8` only for letters (the product's output); yellow `#f3d33b` (cobalt and yellow together 1.1% of pixels), only for today, the one live mark; the primary action ("Review 6 letters") is ink.
 - Type: Schibsted Grotesk for the title and the lead sentence; Atkinson Hyperlegible Next for everything read, ids and amounts included, tabular figures. The lead is a sentence with the figures inside it, never a giant number.
 - Texture: the chase map is drawn as an ordered dither (`skills/unslopslop/effects/ordered-dither`, 4 x 4 matrix, 2 levels, 3 px cells): sent letters dithered, tomorrow's letters solid, later ones a sparse ghost. No second texture.
 - Depth: ground, the sidebar in a second tone, the chase map, the today line crossing every lane, and the work queue as the one raised surface (floor shadow with negative spread).
 - Motion: the map draws in left to right once (1.6 s, ease-out, `render(t)`); drawer 300 ms in-out on phones; hover 150 ms. Reduced motion: final state.
 - Signature move: the chase map, one lane per invoice, block height = tone (friendly, firm, final), the six letters going out tomorrow standing solid against the yellow today line.
 - Rejected defaults: greeting title, four KPI cards, rainbow chart (`before.html`); the bare document (`after-v1.html`); the earlier dark version with a giant outstanding figure (now a hard no).
-- References: **C13** (gold): the tool is the first screen, one strong colour only for the live thing (their playhead, our today line). **C18** (gold): colour is state, never decoration (cobalt = letter, yellow = today). **C12** (gold): a code-drawn 1-bit pattern carries the image.
+- References: **C13** (gold): the tool is the first screen, one strong colour only for the live thing (their playhead, our today line). **C18** (gold): colour is state, never decoration (cobalt = letter, yellow = today, ink = action). **C12** (gold): a code-drawn 1-bit pattern carries the image.
 
 ## Reference gate (1440 x 900, `ref-gate-*.png`)
 
@@ -21,7 +21,7 @@ The working screen of the same product. One question: what is open, and which le
 | Display size | 95 px (tool UI on C13: 11 to 14 px) | 56 px | 40 px title, 24 px lead sentence (app screen, out of scope for the 84 px line) |
 | Subject area | 55% panel | 45% pattern | 41% chase map (canvas) |
 | Overlap | none | none | yes: lane names, amounts, axis and the today label sit on the drawing |
-| Colour shares | 83 / 9 / 2 | 74 / 21 / 0.4 | 61 bone / about 8 cobalt / 1.1 yellow |
+| Colour shares | 83 / 9 / 2 | 74 / 21 / 0.4 | 61 bone; cobalt and yellow together 1.1% of pixels |
 | Depth layers | ground, panel, graph | ground, panel, pattern | ground, sidebar tone, map, today line, raised queue |
 | Corner labels | none | none | none (app chrome instead) |
 | Motion | one demo | 6 s demo loop | one 1.6 s draw-in |
