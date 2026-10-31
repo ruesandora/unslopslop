@@ -2,291 +2,227 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fluxly: late invoices, chased politely</title>
-<meta name="description" content="Fluxly sends a friendly reminder on day 3, a firm one on day 7, and stops the moment the money lands.">
-<link rel="preload" href="../assets/fonts/schibsted-grotesk-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="Fluxly sends a friendly reminder on day 3, a firm one on day 7, and stops the moment the money lands in your account.">
 <style>
-/* Type: Schibsted Grotesk for headlines and labels; Atkinson Hyperlegible Next for reading text and every number,
-   chosen because invoice ids and amounts must never be misread (slashed 0, distinct 1/l/I). */
-@font-face { font-family: "Schibsted Grotesk"; src: url("../assets/fonts/schibsted-grotesk-latin-var.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
-@font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("../assets/fonts/schibsted-grotesk-latin-var.woff2") format("woff2"); font-weight: 400 900; font-display: block; }
+@font-face { font-family: "Atkinson Hyperlegible Next"; src: url("../assets/fonts/atkinson-hyperlegible-next-latin-var.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
 
-/* Combination "night ledger": ink ground, bone text; periwinkle (light cobalt) fills carry ink text for action and the paid state,
-   deep cobalt only in drawn graphics. */
+/* Combination: bone ground (about 55%), ink type, one cobalt field (the subject), signal yellow only for the action and the paid moment. */
 :root {
-  --ink: #0c0f17; --ink-2: #131826; --ink-3: #1a2031; --ink-4: #222a3e;
-  --line: rgba(236, 230, 218, .1); --line-2: rgba(236, 230, 218, .18);
-  --bone: #ece6da; --bone-2: #c9c4b8;
-  --cobalt: #3a55f0; --cobalt-lit: #9cacff;
-  --in: cubic-bezier(.16, 1, .3, 1);
-  --head: "Schibsted Grotesk", system-ui, sans-serif;
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --bone: #eeebe3;
+  --ink: #12141f;
+  --ink-2: #2b2e3b;
+  --cobalt: #2636c8;
+  --cobalt-deep: #1d2a9e;
+  --yellow: #f3d33b;
+  --line: rgba(18, 20, 31, .16);
+  --line-on-dark: rgba(238, 235, 227, .18);
+  --display: "Schibsted Grotesk", system-ui, sans-serif;
+  --text: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 * { box-sizing: border-box; }
-html { background: var(--ink); }
-body { margin: 0; color: var(--bone); font: 400 18px/1.6 "Atkinson Hyperlegible Next", system-ui, sans-serif; background: var(--grain), var(--ink); -webkit-font-smoothing: antialiased; }
-::selection { background: var(--cobalt); color: #fff; }
-a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-:focus-visible { outline: 2px solid var(--cobalt-lit); outline-offset: 3px; border-radius: 6px; }
-h1, h2, h3 { font-family: var(--head); margin: 0; text-wrap: balance; }
-p { margin: 0; text-wrap: pretty; }
-.num { font-variant-numeric: tabular-nums; }
-.wrap { max-width: 1312px; margin: 0 auto; padding: 0 32px; }
-.btn { white-space: nowrap; display: inline-flex; align-items: center; padding: 14px 22px; border-radius: 10px; background: var(--cobalt-lit); color: var(--ink); font: 600 17px var(--head); text-decoration: none; border: 0; cursor: pointer; transition: background-color 160ms ease-out; }
-.btn:hover { background: #b6c2ff; }
-.quiet { color: var(--bone); padding: 12px 4px; font-weight: 500; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bone); color: var(--ink); font: 400 19px/1.5 var(--text); font-variant-numeric: tabular-nums; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); margin: 0; }
+.label { font: 600 13px/1.3 var(--text); letter-spacing: .12em; text-transform: uppercase; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
 
-/* ---------- top */
-.top { display: flex; align-items: center; justify-content: space-between; padding: 24px 0; }
-.mark { display: inline-flex; align-items: center; gap: 10px; font: 700 22px var(--head); letter-spacing: -.01em; text-decoration: none; }
-.top nav { display: flex; gap: 32px; font-size: 16px; }
-.top nav a { text-decoration: none; padding: 8px 0; color: var(--bone-2); transition: color 140ms ease-out; }
-.top nav a:hover { color: var(--bone); }
+/* ---------- first screen: a poster with one subject ---------- */
+.hero { position: relative; height: 100vh; min-height: 720px; max-height: 1000px; overflow: hidden; }
+.field { position: absolute; z-index: 4; top: 0; right: 0; bottom: 0; width: 31%; background: var(--cobalt); overflow: hidden; }
+.field canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.field .tag { position: absolute; color: var(--bone); white-space: nowrap; opacity: 0; transition: opacity 240ms var(--ease-out); }
+.field .tag.on { opacity: 1; }
+.field .tag[data-w]::after { content: attr(data-w); display: block; margin-top: 4px; }
+.field .tag.paid { padding-left: 12px; }
+.field .tag.cut { text-decoration: line-through; }
 
-/* ---------- hero */
-.hero { padding: 56px 0 0; position: relative; isolation: isolate; }
-.hero::before { content: ""; position: absolute; z-index: -1; inset: -120px -32px 0 -32px; pointer-events: none;
-  background: linear-gradient(118deg, transparent 38%, rgba(236, 230, 218, .045) 52%, rgba(156, 172, 255, .06) 58%, transparent 70%), radial-gradient(40% 30% at 78% 8%, rgba(236, 230, 218, .07), transparent 70%);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-.hero h1 { font-size: clamp(48px, 7vw, 104px); font-weight: 700; line-height: .94; letter-spacing: -.035em; max-width: 14ch; }
-.hero h1 span { font-weight: 500; }
-.hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-top: 32px; }
-.hero-foot p { font-size: 20px; max-width: 42ch; }
-.actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.top { position: absolute; z-index: 6; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 24px 32px 24px 48px; }
+.brand { padding: 12px 0; font: 800 22px/1 var(--display); letter-spacing: -.02em; text-decoration: none; }
+.nav { display: flex; gap: 24px; color: var(--bone); background: var(--cobalt); padding: 0 4px; }
+.nav a { text-decoration: none; padding: 8px 0; border-bottom: 1px solid transparent; transition: border-color 160ms ease-out; }
+.nav a:hover { border-color: currentColor; }
 
-/* ---------- product stage: the app window and a floating email preview that overlaps it */
-.stage { position: relative; margin-top: 56px; padding-bottom: 232px; background-image: radial-gradient(52% 64% at 60% 40%, rgba(58, 85, 240, .2), rgba(58, 85, 240, .05) 48%, transparent 74%); }
-.app { position: relative; display: grid; grid-template-columns: 280px 1fr; min-height: 540px; border-radius: 16px; background: var(--ink-2); border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(255, 255, 255, .05) inset, 0 40px 80px -40px rgba(0, 0, 0, .28); overflow: hidden; }
-.list { border-right: 1px solid var(--line); padding: 16px 12px; background: rgba(12, 15, 23, .35); }
-.list-head { display: flex; justify-content: space-between; padding: 4px 8px 12px; font: 600 15px var(--head); }
-.list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.list li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 10px; border-radius: 10px; font-size: 15px; }
-.list li.sel { background: var(--ink-4); box-shadow: inset 0 0 0 1px var(--line-2); }
-.list li b { font-weight: 600; }
-.list li span { color: var(--bone-2); font-size: 14px; }
-.list li .amt { text-align: right; }
-.detail { padding: 24px 32px; display: grid; grid-template-rows: auto auto 1fr; gap: 28px; }
-.dhead { display: flex; justify-content: space-between; align-items: start; gap: 24px; }
-.who { font: 700 24px var(--head); letter-spacing: -.01em; }
-.meta { margin-top: 4px; font-size: 15px; color: var(--bone-2); }
-.state { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--ink-3); border: 1px solid var(--line-2); font: 600 14px var(--head); white-space: nowrap; transition: background-color 240ms var(--in), color 240ms var(--in); }
-.state i { width: 8px; height: 8px; border-radius: 50%; background: var(--bone); }
-.state.paid { background: var(--cobalt-lit); border-color: var(--cobalt-lit); color: var(--ink); }
-.state.paid i { background: var(--ink); }
-.amount { font-weight: 700; font-size: 30px; text-align: right; margin-top: 8px; }
-.ruler { position: relative; height: 84px; margin: 8px 8px 0; }
-.track, .fill { position: absolute; left: 0; right: 0; top: 40px; height: 2px; }
-.track { background: var(--line-2); }
-.fill { background: var(--cobalt-lit); transform-origin: left; transform: scaleX(0); }
-.tick { position: absolute; top: 58px; width: 32px; margin-left: -16px; text-align: center; font-size: 14px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
-.node { position: absolute; top: 32px; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: var(--ink-2); border: 2px solid var(--bone-2); transition: background-color 240ms var(--in), border-color 240ms var(--in), opacity 240ms var(--in); }
-.node.on { background: var(--cobalt-lit); border-color: var(--cobalt-lit); }
-.node.off { border-style: dashed; opacity: .55; }
-.node-label { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font: 600 14px var(--head); color: var(--bone-2); }
-.node-label.on { color: var(--bone); }
-.node-label.off { text-decoration: line-through; }
-.node-label.last { transform: translateX(-100%); margin-left: 12px; }
-.head { position: absolute; top: 26px; width: 2px; height: 28px; margin-left: -1px; background: var(--bone); border-radius: 2px; }
-.log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.log li { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 16px; opacity: 0; transform: translateY(10px); }
-.log li .d { font-weight: 700; font-size: 15px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
-.log li .t { font-size: 14px; color: var(--bone-2); font-variant-numeric: tabular-nums; }
-.log li.paid .w { color: var(--cobalt-lit); font-weight: 700; }
-.log li.reply .w { font-style: italic; }
+.headline { font-family: var(--display); position: absolute; z-index: 3; left: 44px; top: 15%; margin: 0; font-size: clamp(56px, 11.6vw, 168px); line-height: 1; letter-spacing: -.045em; white-space: nowrap; padding: 16px 32px 36px 0; }
+.headline .heavy { display: block; font-weight: 820; }
+.headline .thin { display: block; font-weight: 380; letter-spacing: -.035em; }
+.headline .p { margin-left: -.16em; }
+.field .tag { font-variant-numeric: tabular-nums; }
+.headline.copy { color: var(--bone); z-index: 1; }
 
-.mail { position: absolute; right: -8px; bottom: 0; width: 460px; border-radius: 14px; background: var(--ink-3); border: 1px solid var(--line-2); box-shadow: 0 2px 6px rgba(0, 0, 0, .2), 0 40px 70px -24px rgba(0, 0, 0, .28); overflow: hidden; opacity: 0; }
-.mail-top { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line); font: 600 14px var(--head); }
-.att { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
-.att img { display: block; }
-.mail-top span:last-child { color: var(--bone-2); font-weight: 500; }
-.mail-body { padding: 18px 20px 22px; }
-.mail-to { font-size: 15px; color: var(--bone-2); }
-.mail-subject { margin-top: 10px; font: 700 21px/1.25 var(--head); letter-spacing: -.01em; }
-.mail-text { margin-top: 10px; font-size: 16px; line-height: 1.55; }
-.hctl { display: flex; gap: 10px; align-items: center; justify-content: end; }
-.replay { background: none; border: 1px solid var(--line-2); color: var(--bone); padding: 6px 12px; border-radius: 8px; font: 500 15px var(--head); cursor: pointer; transition: border-color 160ms ease-out; }
-.replay:hover { border-color: var(--bone-2); }
+.lede { position: absolute; z-index: 3; left: 48px; bottom: 112px; width: min(560px, 46%); }
+.lede p { margin: 0 0 26px; font-size: 20px; line-height: 1.5; color: var(--ink); }
+.actions { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.btn { display: inline-block; font: 700 17px/1 var(--text); text-decoration: none; padding: 16px 24px; background: var(--yellow); color: var(--ink); border: 0; transition: background-color 160ms ease-out; }
+.btn:hover { background: #ffe05a; }
+.link { display: inline-block; padding: 12px 0; font-weight: 700; text-underline-offset: 5px; text-decoration-thickness: 2px; }
 
-/* ---------- letters editor */
-section.band { padding-top: 160px; }
-.split { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: center; }
-.split > * { min-width: 0; }
-.split h2 { font-size: clamp(38px, 4.4vw, 60px); font-weight: 700; line-height: 1; letter-spacing: -.03em; }
-.split h2 + p { margin-top: 24px; font-size: 20px; max-width: 38ch; }
-.panel { border-radius: 16px; background: var(--ink-2); border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 40px 80px -40px rgba(0, 0, 0, .28); overflow: hidden; }
-.bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-.tabs, .seg { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--ink); border: 1px solid var(--line); }
-.tabs button, .seg button { border: 0; background: none; color: var(--bone-2); padding: 9px 16px; border-radius: 8px; font: 600 15px var(--head); cursor: pointer; transition: background-color 180ms var(--in), color 180ms var(--in); }
-.tabs button[aria-selected=true], .seg button[aria-pressed=true] { background: var(--bone); color: #151821; }
+.corner { position: absolute; z-index: 5; bottom: 30px; }
+.corner.left { left: 48px; margin: 0; }
+.corner.right { left: calc(69% + 32px); top: 104px; bottom: auto; margin: 0; color: var(--bone); background: var(--cobalt); }
+
+/* ---------- letters (grain: effects/grain-overlay, 8%, overlay; the only texture on this screen) ---------- */
+.grain { position: absolute; inset: 0; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='3' intercept='-1'/%3E%3CfeFuncG type='linear' slope='3' intercept='-1'/%3E%3CfeFuncB type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 204px; opacity: .08; mix-blend-mode: overlay; }
+
+.dark { background: var(--ink); color: var(--bone); }
+.wrap { max-width: 1344px; margin: 0 auto; padding: 0 48px; }
+.letters { position: relative; isolation: isolate; padding: 128px 0 136px; }
+.letters h2 { font-size: clamp(44px, 6.4vw, 92px); line-height: .94; letter-spacing: -.04em; font-weight: 820; max-width: 11ch; }
+.letters .grid { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; margin-top: 72px; align-items: start; }
+.letters .say { font-size: 20px; line-height: 1.55; max-width: 30ch; margin: 0; }
+.editor { border: 1px solid var(--line-on-dark); background: #1a1d2b; }
+.editor .bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line-on-dark); }
+.tabs { display: flex; gap: 4px; }
+.tabs button { font: 600 15px/1 var(--text); color: var(--bone); background: transparent; border: 1px solid transparent; padding: 10px 14px; cursor: pointer; transition: background-color 160ms ease-out, border-color 160ms ease-out; }
+.tabs button[aria-selected="true"] { background: var(--bone); color: var(--ink); }
+.tabs button:hover { border-color: var(--line-on-dark); }
 .pair { display: grid; grid-template-columns: 1fr 1fr; }
-.pair .letter + .letter { border-left: 1px solid var(--line); }
-.same { font: 600 15px var(--head); color: var(--bone-2); }
-.voice { font: 700 14px var(--head); letter-spacing: .02em; color: var(--cobalt-lit); margin-bottom: 10px; }
-.letter { padding: 24px 24px 8px; min-height: 220px; }
-.letter .subject { font: 700 22px/1.2 var(--head); letter-spacing: -.015em; }
-.letter .body { margin-top: 12px; font-size: 17px; max-width: 46ch; }
-.swap { animation: smear 220ms var(--in) both; }
-@keyframes smear { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } }
-.rules { margin: 16px 0 0; padding: 0 28px 20px; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; font-size: 16px; }
-.rules li { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--line); }
-.rules li b { font: 600 16px var(--head); }
+.voice { padding: 26px 24px 30px; }
+.voice + .voice { border-left: 1px solid var(--line-on-dark); }
+.voice h3 { font: 700 23px/1.25 var(--display); letter-spacing: -.01em; margin: 10px 0 12px; }
+.voice p { margin: 0; font-size: 17px; line-height: 1.55; }
+.voice .who { margin: 0; font-size: 15px; font-weight: 700; }
+.swap { transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out), filter 200ms var(--ease-out); }
+.swap.out { opacity: 0; transform: translateY(6px); filter: blur(2px); }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line-on-dark); }
+.rules li { display: flex; justify-content: space-between; gap: 12px; padding: 14px 24px; font-size: 16px; border-bottom: 1px solid var(--line-on-dark); }
+.rules li:nth-child(odd) { border-right: 1px solid var(--line-on-dark); }
+.rules li:nth-last-child(-n+2) { border-bottom: 0; }
+.rules b { font-weight: 700; }
 
-/* ---------- bank match */
-.matchband .split { grid-template-columns: 7fr 5fr; }
-.matchband { margin-top: 128px; padding: 96px 0; border-block: 1px solid var(--line); background-color: #0f1320; }
-.feed table { width: 100%; border-collapse: collapse; font-size: 16px; }
-.feed th { text-align: left; font: 600 15px var(--head); padding: 16px 20px; border-bottom: 1px solid var(--line); }
-.feed th:last-child, .feed td:last-child { text-align: right; }
-.feed td { padding: 16px 20px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-.feed td:last-child { font-weight: 700; white-space: nowrap; }
-.feed tr:last-child td { border-bottom: 0; }
-.feed tr.hit td { background: rgba(58, 85, 240, .16); }
-.tag { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 10px; border-radius: 999px; background: var(--cobalt-lit); color: var(--ink); font: 600 13px var(--head); }
+/* ---------- bank match ---------- */
+.match { padding: 136px 0; }
+.match .grid { display: grid; grid-template-columns: 6fr 5fr; gap: 72px; align-items: center; }
+.match h2 { font-size: clamp(40px, 3.9vw, 56px); line-height: 1; letter-spacing: -.035em; font-weight: 820; }
+.match p { font-size: 20px; line-height: 1.55; margin: 28px 0 0; max-width: 34ch; }
+table { width: 100%; border-collapse: collapse; font-size: 17px; }
+caption { text-align: left; padding: 0 0 14px; }
+th { text-align: left; font: 600 13px/1.3 var(--text); letter-spacing: .12em; text-transform: uppercase; padding: 0 16px 12px; border-bottom: 2px solid var(--ink); }
+td { padding: 17px 16px; border-bottom: 1px solid var(--line); }
+td:last-child, th:last-child { text-align: right; }
+tr.hit td { background: var(--cobalt); color: var(--bone); border-bottom-color: var(--cobalt); }
+tr.hit td:first-child::after { content: "matched"; margin-left: 10px; font: 700 12px/1 var(--text); letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--bone); color: var(--bone); padding: 3px 6px; vertical-align: 2px; }
 
-/* ---------- questions + close */
-.faq { margin-top: 160px; display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start; }
-.faq h2 { font-size: 44px; font-weight: 700; line-height: 1.02; letter-spacing: -.03em; }
+/* ---------- questions ---------- */
+.faq { padding: 120px 0 128px; border-top: 1px solid var(--line); }
+.faq .grid { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; }
+.faq h2 { font-size: 44px; line-height: 1; letter-spacing: -.03em; font-weight: 820; }
 details { border-bottom: 1px solid var(--line); }
-details:first-of-type { border-top: 1px solid var(--line); }
-summary { cursor: pointer; padding: 20px 0; font: 600 19px var(--head); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-summary::after { content: "+"; font-size: 22px; line-height: 1; transition: rotate 200ms var(--in); }
-details[open] summary::after { rotate: 45deg; }
-details p { padding: 0 0 20px; max-width: 60ch; }
-.close { margin-top: 160px; padding: 120px 0 104px; position: relative; border-top: 1px solid var(--line); }
-.close h2 { font-size: clamp(44px, 5.2vw, 76px); font-weight: 700; line-height: .98; letter-spacing: -.035em; max-width: 21ch; }
-.close .actions { margin-top: 40px; }
-footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15px; display: flex; justify-content: space-between; gap: 24px; color: var(--bone-2); }
+details:first-child { border-top: 1px solid var(--line); }
+summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 20px; padding: 22px 0; font: 700 20px/1.35 var(--display); }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-weight: 400; transition: transform 200ms var(--ease-out); }
+details[open] summary::after { transform: rotate(45deg); }
+details p { margin: 0 0 24px; max-width: 56ch; }
 
-@media (max-width: 1100px) {
-  .split, .faq, .matchband .split { grid-template-columns: 1fr; gap: 40px; }
-}
-@media (max-width: 760px) {
+/* ---------- close ---------- */
+.close { background: var(--cobalt); color: var(--bone); padding: 120px 0 56px; overflow: hidden; }
+.close h2 { font-size: clamp(52px, 8.6vw, 124px); line-height: .88; letter-spacing: -.05em; font-weight: 820; }
+.close h2 .thin { display: block; font-weight: 380; }
+.p { margin-left: -.14em; }
+.close .wrap { position: relative; }
+.close h2, .close .actions { position: relative; z-index: 1; max-width: 62%; }
+#ladder { position: absolute; right: 0; top: -120px; width: 34%; height: 560px; display: block; }
+.close .actions { margin-top: 56px; }
+.close .link { color: var(--bone); }
+.foot { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 120px; padding-top: 22px; border-top: 1px solid var(--line-on-dark); font-size: 15px; }
+
+/* ---------- phones ---------- */
+@media (max-width: 820px) {
+  .hero { height: auto; min-height: 0; max-height: none; overflow: visible; padding: 92px 0 0; }
+  .top { padding: 20px 20px; }
+  .nav { display: none; }
+  .nav.open { display: flex; position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; width: min(300px, 82vw); flex-direction: column; gap: 4px; padding: 84px 24px 24px; font-size: 20px; box-shadow: 0 0 0 100vmax rgba(18, 20, 31, .45); }
+  .nav.open a { padding: 12px 0; }
+  .menu[aria-expanded="true"] { position: relative; z-index: 21; }
+  .menu { display: inline-block !important; }
+  .headline { position: relative; left: auto; top: auto; padding: 0 20px; font-size: 54px; white-space: normal; }
+  .field { position: relative; width: 100%; height: 330px; margin-top: -60px; }
+  #ladder { display: none; }
+  .w9 { display: none; }
+  .close h2, .close .actions { max-width: none; }
+  .tag[data-w]::after, .tag[data-day="14"] { display: none; }
+  .lede { position: relative; left: auto; bottom: auto; width: auto; padding: 30px 20px 0; }
+  .lede p { font-size: 18px; }
+  .corner.left { position: relative; bottom: auto; left: auto; margin: 22px 20px 44px !important; }
+  .corner.right { position: relative; left: auto; top: auto; bottom: auto; color: var(--ink); background: transparent; text-align: left; margin: 14px 20px 0; }
   .wrap { padding: 0 20px; }
-  .top nav a:not(:last-child) { display: none; }
-  .hero { padding-top: 24px; }
-  .hero::before { inset: -120px -20px 0 -20px; }
-  .hero-foot { flex-direction: column; align-items: start; }
-  .app { grid-template-columns: 1fr; min-height: 0; }
-  .list { display: none; }
-  .detail { padding: 20px; gap: 20px; }
-  .dhead { flex-direction: column; gap: 12px; }
-  .amount { text-align: left; }
-  .tick:nth-child(even) { visibility: hidden; }
-  .node-label { font-size: 13px; }
-  .replay { min-height: 44px; padding: 10px 14px; }
-  .log li { grid-template-columns: 56px 1fr; }
-  .log li .t { display: none; }
-  .mail { position: relative; right: auto; width: auto; margin: -24px 12px 0; }
-  .stage { padding-bottom: 0; }
-  section.band, .faq, .close { margin-top: 0; padding-top: 96px; }
-  .matchband { margin-top: 96px; padding: 72px 0; }
-  .rules { grid-template-columns: 1fr; padding: 0 20px 16px; }
+  .letters, .match, .faq { padding: 80px 0; }
+  .letters .grid, .match .grid, .faq .grid { grid-template-columns: 1fr; gap: 36px; }
+  .letters .grid { margin-top: 36px; }
   .pair { grid-template-columns: 1fr; }
-  .pair .letter + .letter { border-left: 0; border-top: 1px solid var(--line); }
-  .same { display: none; }
-  .letter { padding: 20px 20px 8px; }
-  .tabs button, .seg button { padding: 10px 12px; }
-  .feed td:nth-child(2) { display: none; }
-  .feed th:nth-child(2) { display: none; }
-  .feed td { white-space: normal; padding: 12px 14px; height: auto; }
-  .feed td:last-child { white-space: nowrap; }
-  .feed th { padding: 14px; }
-  .close { padding: 72px 0 64px; }
-  footer { flex-direction: column; }
+  .voice + .voice { border-left: 0; border-top: 1px solid var(--line-on-dark); }
+  .rules { grid-template-columns: 1fr; }
+  .rules li:nth-child(odd) { border-right: 0; }
+  .rules li:nth-last-child(2) { border-bottom: 1px solid var(--line-on-dark); }
+  .editor .bar { flex-wrap: wrap; gap: 8px; }
+  table { font-size: 15px; }
+  td, th { padding-left: 8px; padding-right: 8px; }
+  .hide-s { display: none; }
+  .close { padding-top: 80px; }
+  .foot { margin-top: 72px; }
 }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+.menu { display: none; font: 700 16px/1 var(--text); background: var(--ink); color: var(--bone); border: 0; padding: 12px 16px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <a class="mark" href="#" aria-label="Fluxly home">
-      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 13h20" stroke="#ece6da" stroke-width="2" stroke-linecap="round"/><circle cx="6" cy="13" r="3" fill="#ece6da"/><circle cx="13" cy="13" r="3" fill="#ece6da"/><circle cx="20" cy="13" r="4" fill="#3a55f0"/></svg>
-      Fluxly
-    </a>
-    <nav aria-label="Main">
-      <a href="#letters">Letters</a>
-      <a href="#paid">Bank matching</a>
-      <a href="#questions">Questions</a>
-      <a href="#start">Sign in</a>
-    </nav>
-  </header>
 
-  <main>
-    <section class="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title">Late invoices, <span>chased politely.</span></h1>
-      <div class="hero-foot">
-        <p>Fluxly sends a friendly reminder on day 3, a firm one on day 7, and goes quiet the moment the money lands in your account.</p>
-        <div class="actions">
-          <a class="btn" href="#start">Connect your invoices</a>
-          <a class="quiet" href="#letters">Read the three letters</a>
-        </div>
+<header class="top">
+  <a class="brand" href="#">Fluxly</a>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a href="#letters">Letters</a>
+    <a href="#paid">Bank matching</a>
+    <a href="#faq">Questions</a>
+    <a href="#">Sign in</a>
+  </nav>
+  <button class="menu" type="button" aria-controls="site-nav" aria-expanded="false">Menu</button>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 class="headline" id="hero-title"><span class="heavy">Late invoices<span class="p">,</span></span><span class="thin">chased politely<span class="p">.</span></span></h1>
+
+    <div class="field" id="field">
+      <canvas id="route" role="img" aria-label="An invoice's fourteen days after its due date: a friendly letter on day 3, a firm one on day 7, the payment on day 9, and the final notice on day 14 never sent."></canvas>
+      <span class="tag label" data-day="3" data-w="Friendly">Day 3</span>
+      <span class="tag label" data-day="7" data-w="Firm">Day 7</span>
+      <span class="tag label paid" data-day="9"><span class="w9">Day 9 · </span>Paid</span>
+      <span class="tag label cut" data-day="14">Day 14 · Final, not sent</span>
+    </div>
+    <p class="corner right label">INV-0412 · North Pier Studio · €2,400</p>
+
+    <div class="lede">
+      <p>Fluxly sends a friendly reminder on day 3 and a firm one on day&nbsp;7. The moment the money lands in your account, it stops.</p>
+      <div class="actions">
+        <a class="btn" href="#">Connect your invoices</a>
+        <a class="link" href="#letters">Read the three letters</a>
       </div>
+    </div>
+    <p class="corner left label">Sent from your own address · weekdays 09:00 to 17:00</p>
+  </section>
 
-      <div class="stage">
-        <div class="app" aria-label="Example: Fluxly showing invoice INV-0412. A friendly reminder on day 3, a firm one on day 7, the client replies on day 8, payment is matched on day 9 and the day 14 notice is cancelled.">
-          <aside class="list" aria-hidden="true">
-            <div class="list-head"><span>Open invoices</span><span class="num">5</span></div>
-            <ul>
-              <li class="sel"><b>North Pier Studio</b><b class="amt">€2,400</b><span>INV-0412</span><span class="amt num" id="lstate">7 days late</span></li>
-              <li><b>Marlow Press</b><b class="amt">€1,220</b><span>INV-0409</span><span class="amt">8 days late</span></li>
-              <li><b>Hollis &amp; Grey</b><b class="amt">€540</b><span>INV-0418</span><span class="amt">3 days late</span></li>
-              <li><b>Kite Studio</b><b class="amt">€2,600</b><span>INV-0423</span><span class="amt">due 7 Nov</span></li>
-              <li><b>Fern &amp; Field</b><b class="amt">€3,150</b><span>INV-0422</span><span class="amt">due 3 Nov</span></li>
-            </ul>
-          </aside>
-          <div class="detail">
-            <div class="dhead">
-              <div>
-                <div class="who">North Pier Studio</div>
-                <div class="meta num">INV-0412 · issued 19 Sep · due 3 Oct</div>
-              </div>
-              <div>
-                <div class="hctl"><button class="replay" id="replay" type="button" aria-label="Replay the example">Replay</button><span class="state" id="state"><i></i><span id="statetext" class="num">Due today</span></span></div>
-                <div class="amount">€2,400.00</div>
-              </div>
-            </div>
-            <div class="ruler" id="ruler" aria-hidden="true"><div class="track"></div><div class="fill" id="fill"></div></div>
-            <ul class="log" id="log">
-              <li><span class="d">Day 3</span><span class="w">Friendly reminder sent to accounts@northpier.example</span><span class="t">6 Oct 09:00</span></li>
-              <li><span class="d">Day 7</span><span class="w">Firm reminder sent with bank details</span><span class="t">10 Oct 09:00</span></li>
-              <li class="reply"><span class="d">Day 8</span><span class="w">Sam replied: &ldquo;Sorry, it slipped through. Paying tomorrow.&rdquo;</span><span class="t">11 Oct 16:40</span></li>
-              <li class="paid"><span class="d">Day 9</span><span class="w">€2,400.00 received and matched to INV-0412</span><span class="t">12 Oct 14:12</span></li>
-              <li><span class="d">Day 14</span><span class="w">Final notice cancelled, nothing else will be sent</span><span class="t">12 Oct 14:12</span></li>
-            </ul>
-          </div>
-        </div>
-        <article class="mail" id="mail" aria-hidden="true">
-          <div class="mail-top"><span id="mtitle">Reminder 1 of 3</span><span class="att"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='30' viewBox='0 0 24 30'%3E%3Crect x='.5' y='.5' width='23' height='29' rx='2' fill='%231a2031' stroke='%23c9c4b8'/%3E%3Cpath d='M5 7h11M5 11h7M5 16h14M5 20h14' stroke='%23c9c4b8' stroke-width='1.4'/%3E%3Cpath d='M5 25h8' stroke='%239cacff' stroke-width='2'/%3E%3C/svg%3E" width="24" height="30" alt="">INV-0412.pdf</span><span id="mtone">Friendly</span></div>
-          <div class="mail-body">
-            <div class="mail-to">To accounts@northpier.example, from your own address</div>
-            <div class="mail-subject" id="subj">Quick nudge on invoice 0412</div>
-            <div class="mail-text" id="mtext">Hi Sam, a small reminder that invoice 0412 for €2,400 was due on 3 October. The PDF is attached again in case it got buried. Thanks, Ana</div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="band" id="letters" aria-labelledby="letters-title">
-      <div class="split">
-        <div>
-          <h2 id="letters-title">Three letters, in your voice</h2>
-          <p>Write each letter once, warm or firm, and approve it. Fluxly fills in the client, the amount and the dates, and sends it from your own address on a weekday morning.</p>
-        </div>
-        <div class="panel">
+  <section class="dark letters" id="letters" aria-labelledby="letters-title">
+    <div class="grain" aria-hidden="true"></div>
+    <div class="wrap">
+      <h2 id="letters-title">Three letters in your voice</h2>
+      <div class="grid">
+        <p class="say">Write each letter once, warm or firm, and approve it. Fluxly fills in the client, the amount and the dates, and sends it from your own address on a weekday morning.</p>
+        <div class="editor">
           <div class="bar">
             <div class="tabs" role="tablist" aria-label="Letter">
               <button type="button" role="tab" aria-selected="true" data-step="0">Day 3</button>
               <button type="button" role="tab" aria-selected="false" data-step="1">Day 7</button>
               <button type="button" role="tab" aria-selected="false" data-step="2">Day 14</button>
             </div>
-            <span class="same">Same letter, two voices</span>
           </div>
-          <div class="pair" id="letter" role="tabpanel" aria-live="polite">
-            <div class="letter"><div class="voice">Warm</div><div class="subject" id="wsubj">Just checking in on invoice 0412</div><div class="body" id="wbody">Hope your week is going well. Invoice 0412 for €2,400 was due on 3 October; could you take a look when you have a moment?</div></div>
-            <div class="letter"><div class="voice">Firm</div><div class="subject" id="fsubj">Invoice 0412 is overdue</div><div class="body" id="fbody">Invoice 0412 for €2,400 was due on 3 October and is still open. Please pay it this week or tell me what is holding it up.</div></div>
+          <div class="pair swap" id="letter" role="tabpanel" aria-live="polite">
+            <div class="voice"><p class="who">Warm voice</p><h3 id="wsubj">Just checking in on invoice 0412</h3><p id="wbody">Hope your week is going well. Invoice 0412 for €2,400 was due on 3 October; could you take a look when you have a moment?</p></div>
+            <div class="voice"><p class="who">Firm voice</p><h3 id="fsubj">Invoice 0412 is overdue</h3><p id="fbody">Invoice 0412 for €2,400 was due on 3 October and is still open. Please pay it this week or tell me what is holding it up.</p></div>
           </div>
           <ul class="rules">
             <li><span>Sends between</span><b>09:00 and 17:00</b></li>
@@ -296,126 +232,234 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: 15p
           </ul>
         </div>
       </div>
-    </section>
-  </main>
-</div>
+    </div>
+  </section>
 
-<section class="matchband" id="paid" aria-labelledby="paid-title">
-  <div class="wrap split">
-    <div class="panel feed">
+  <section class="match" id="paid" aria-labelledby="paid-title">
+    <div class="wrap grid">
       <table>
-        <thead><tr><th>Bank feed, 12 Oct</th><th>Reference</th><th>Amount</th></tr></thead>
+        <thead><tr><th>Bank feed, 12 Oct</th><th class="hide-s">Reference</th><th>Amount</th></tr></thead>
         <tbody>
-          <tr><td>Paper Lane Supplies</td><td>Card</td><td>− €38.20</td></tr>
-          <tr><td>Hollis &amp; Grey</td><td>Transfer</td><td>+ €1,150.00</td></tr>
-          <tr class="hit"><td>North Pier Studio<span class="tag">matched</span></td><td>INV-0412</td><td>+ €2,400.00</td></tr>
-          <tr><td>Studio rent</td><td>Direct debit</td><td>− €900.00</td></tr>
-          <tr><td>Marlow Press</td><td>Transfer</td><td>+ €640.00</td></tr>
+          <tr><td>Paper Lane Supplies</td><td class="hide-s">Card</td><td>− €38.20</td></tr>
+          <tr><td>Hollis &amp; Grey</td><td class="hide-s">Transfer</td><td>+ €1,150.00</td></tr>
+          <tr class="hit"><td>North Pier Studio</td><td class="hide-s">INV-0412</td><td>+ €2,400.00</td></tr>
+          <tr><td>Studio rent</td><td class="hide-s">Direct debit</td><td>− €900.00</td></tr>
+          <tr><td>Marlow Press</td><td class="hide-s">Transfer</td><td>+ €640.00</td></tr>
         </tbody>
       </table>
+      <div>
+        <h2 id="paid-title">The money lands<span class="p">,</span> the chase stops</h2>
+        <p>Fluxly reads your bank feed and matches incoming transfers to invoice numbers. A match cancels every reminder still waiting, so nobody is chased for money they already sent.</p>
+      </div>
     </div>
-    <div>
-      <h2 id="paid-title">It stops when you are paid</h2>
-      <p>Fluxly reads your bank feed and matches incoming transfers to invoice numbers. A match cancels every reminder still waiting, so nobody is chased for money they already sent.</p>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap grid">
+      <h2 id="faq-title">Before you connect anything</h2>
+      <div>
+        <details><summary>Can I edit a reminder before it goes out?</summary><p>Yes. Every message waits in your queue for 24 hours. Change the text, move the date or cancel it there.</p></details>
+        <details><summary>Does it write to my client on weekends?</summary><p>No. Letters go out on weekdays between 9:00 and 17:00 in your client's time zone.</p></details>
+        <details><summary>What if a client disputes the invoice?</summary><p>Pause the schedule from the invoice page. Nothing else is sent until you resume it.</p></details>
+        <details><summary>Can Fluxly move money from my account?</summary><p>No. It reads your bank feed with read-only access, only to match incoming payments to invoice numbers. Disconnect the bank in Settings at any time and Fluxly stops reading at once.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="close" aria-labelledby="close-title">
+  <div class="wrap">
+    <canvas id="ladder" aria-hidden="true"></canvas>
+    <h2 id="close-title">Send the invoice<span class="p">.</span> <span class="thin">Fluxly does the chasing<span class="p">.</span></span></h2>
+    <div class="actions">
+      <a class="btn" href="#">Connect your invoices</a>
+      <a class="link" href="#letters">See the letters first</a>
+    </div>
+    <div class="foot">
+      <span>Fluxly is a made-up product for the unslopslop examples; every name and amount on this page is example data.</span>
+      <span>Reads your bank feed, never moves money.</span>
     </div>
   </div>
-</section>
-
-<div class="wrap">
-  <section class="faq" id="questions" aria-labelledby="faq-title">
-    <h2 id="faq-title">Questions freelancers ask</h2>
-    <div>
-      <details><summary>Can I edit a reminder before it goes out?</summary><p>Yes. Every message waits in your queue for 24 hours. Change the text, move the date or cancel it there.</p></details>
-      <details><summary>Does it write to my client on weekends?</summary><p>No. Letters go out on weekdays between 9:00 and 17:00 in your client's time zone.</p></details>
-      <details><summary>What if a client disputes the invoice?</summary><p>Pause the schedule from the invoice page. Nothing else is sent until you resume it.</p></details>
-      <details><summary>Can Fluxly move money from my account?</summary><p>No. It reads your bank feed with read-only access, only to match incoming payments to invoice numbers. Disconnect the bank in Settings at any time and Fluxly stops reading at once.</p></details>
-    </div>
-  </section>
-
-  <section class="close" id="start" aria-labelledby="close-title">
-    <h2 id="close-title">Send the invoice. Fluxly does the chasing.</h2>
-    <div class="actions"><a class="btn" href="#start">Connect your invoices</a><a class="quiet" href="#letters">See the letters first</a></div>
-  </section>
-
-  <footer>
-    <span>Fluxly is a made-up product for the unslopslop example. All names and amounts are samples.</span>
-  </footer>
-</div>
+</footer>
 
 <script>
-// The hero demo is a pure function of time: render(t) sets every moving part from t (ms).
-// It plays once and rests on the final frame. Reduced motion: final frame at once.
-(() => {
-  const $ = (id) => document.getElementById(id);
-  const ruler = $('ruler'), fill = $('fill'), mail = $('mail'), state = $('state'), statetext = $('statetext'), lstate = $('lstate');
-  const logRows = [...$('log').children];
-  const DAYS = 14, END = 7800;
-  const xOf = (d) => (d / DAYS) * 100 + '%';
-  for (let d = 0; d <= DAYS; d++) { const t = document.createElement('div'); t.className = 'tick'; t.style.left = xOf(d); t.textContent = d; ruler.appendChild(t); }
-  const NODES = [[3, 'Friendly'], [7, 'Firm'], [14, 'Final notice']].map(([d, label]) => {
-    const n = document.createElement('div'); n.className = 'node'; n.style.left = xOf(d);
-    const l = document.createElement('div'); l.className = 'node-label' + (d === DAYS ? ' last' : ''); l.style.left = xOf(d); l.textContent = label;
-    ruler.append(n, l); return { d, n, l };
-  });
-  const head = document.createElement('div'); head.className = 'head'; ruler.appendChild(head);
-  const MAILS = [
-    { title: 'Reminder 1 of 3', tone: 'Friendly', subject: 'Quick nudge on invoice 0412', text: 'Hi Sam, a small reminder that invoice 0412 for €2,400 was due on 3 October. The PDF is attached again in case it got buried. Thanks, Ana' },
-    { title: 'Reminder 2 of 3', tone: 'Firm', subject: 'Invoice 0412 is now a week late', text: 'Hi Sam, invoice 0412 for €2,400 is now seven days past due. Bank details are below; please quote the invoice number. If something is holding it up, reply and tell me. Ana' },
-  ];
+/* ---------- the subject: one invoice's fourteen days, drawn as an ordered dither (effects/ordered-dither, 4 x 4 matrix, 2 levels) ---------- */
+(function () {
+  const field = document.getElementById('field');
+  const cv = document.getElementById('route');
+  const ctx = cv.getContext('2d');
+  const tags = [...field.querySelectorAll('.tag')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const BONE = [238, 235, 227], COBALT = [38, 54, 200], YELLOW = '#f3d33b';
+  const B4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
   const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
-  const seg = [[0, 400, 0, 0], [400, 1500, 0, 3], [1500, 2900, 3, 3], [2900, 4100, 3, 7], [4100, 5300, 7, 7], [5300, 6100, 7, 9]];
-  const dayAt = (t) => { for (const [a, b, d0, d1] of seg) if (t < b) return d0 + (d1 - d0) * ease((t - a) / (b - a)); return 9; };
-  const local = (t, a, dur) => ease((t - a) / dur);
-  const ROW_AT = [1500, 4100, 5200, 6100, 6700];
-  let shown = -1;
-  function render(t) {
-    const day = dayAt(t), paid = t >= 6100;
-    fill.style.transform = `scaleX(${day / DAYS})`;
-    head.style.left = xOf(day);
-    for (const nd of NODES) {
-      const on = day >= nd.d - 1e-6, off = paid && nd.d > 9;
-      nd.n.className = 'node' + (on ? ' on' : '') + (off ? ' off' : '');
-      nd.l.className = 'node-label' + (nd.d === DAYS ? ' last' : '') + (on ? ' on' : '') + (off ? ' off' : '');
-    }
-    logRows.forEach((r, i) => { const k = local(t, ROW_AT[i], 260); r.style.opacity = k; r.style.transform = `translateY(${(1 - k) * 10}px)`; r.style.filter = k < 1 ? `blur(${(1 - k) * 3}px)` : 'none'; });
-    const idx = day >= 7 - 1e-6 ? 1 : day >= 3 - 1e-6 ? 0 : -1;
-    if (idx !== shown && idx >= 0) { const m = MAILS[idx]; $('mtitle').textContent = m.title; $('mtone').textContent = m.tone; $('subj').textContent = m.subject; $('mtext').textContent = m.text; shown = idx; }
-    const k = idx < 0 ? 0 : local(t, idx === 0 ? 1500 : 4100, 420);
-    mail.style.opacity = idx < 0 ? 0 : idx === 0 ? k : 1;
-    mail.style.transform = `translateY(${idx < 0 ? 24 : (1 - k) * (idx === 0 ? 24 : 10)}px)`;
-    mail.querySelector('.mail-body').style.filter = idx === 1 && k < 1 ? `blur(${(1 - k) * 3}px)` : 'none';
-    const late = Math.floor(day + 1e-6);
-    if (paid) { statetext.textContent = 'Paid on 12 Oct'; state.className = 'state paid'; lstate.textContent = 'paid'; }
-    else { statetext.textContent = late >= 1 ? `${late} ${late === 1 ? 'day' : 'days'} late` : 'Due today'; state.className = 'state'; lstate.textContent = late >= 1 ? `${late} days late` : 'due today'; }
-  }
-  window.fluxlyRender = render;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  let start = null, raf = 0;
-  const frame = (now) => { if (start === null) start = now; const t = now - start; render(Math.min(t, END)); if (t < END) raf = requestAnimationFrame(frame); };
-  const play = () => { cancelAnimationFrame(raf); shown = -1; if (reduce.matches) { render(END); return; } start = null; raf = requestAnimationFrame(frame); };
-  $('replay').addEventListener('click', play);
-  play();
+  const DAYS = 14, PAID = 9, DUR = 6.8;
+  // tone ladder: friendly, firm, final. h = height as a share of the field, from the bottom edge
+  const STEPS = [{ d: 3, h: 0.30 }, { d: 7, h: 0.55 }, { d: 14, h: 0.78 }];
 
-  // letters editor: three steps x three tones, real interaction; the letter swaps with a short slide and blur
-  const L = [
-    [['Just checking in on invoice 0412', 'Hope your week is going well. Invoice 0412 for €2,400 was due on 3 October; could you take a look when you have a moment?'],
-     ['Quick nudge on invoice 0412', 'A small reminder that invoice 0412 for €2,400 was due on 3 October. The PDF is attached again in case it got buried.'],
-     ['Invoice 0412 is overdue', 'Invoice 0412 for €2,400 was due on 3 October and is still open. Please pay it this week or tell me what is holding it up.']],
-    [['A second note on invoice 0412', 'Invoice 0412 is a week late now. If it helps, the bank details are below, and I am happy to answer any questions about it.'],
-     ['Invoice 0412 is now a week late', 'Invoice 0412 for €2,400 is now seven days past due. You can pay by bank transfer to the account below, quoting the invoice number.'],
-     ['Payment needed for invoice 0412', 'Invoice 0412 for €2,400 is seven days overdue. Please pay it by Friday 17 October, or reply today if there is a problem with it.']],
-    [['Last reminder for invoice 0412', 'This is my last written reminder for invoice 0412. I will call next week if it is still open, so we can sort it out together.'],
-     ['Final notice for invoice 0412', 'This is the last reminder before I follow up by phone. Please settle invoice 0412 for €2,400 this week.'],
-     ['Final notice: invoice 0412', 'Invoice 0412 for €2,400 is fourteen days overdue. If it is not paid by Friday I will call to agree the next step.']],
-  ];
-  let step = 0;
-  const letter = $('letter');
-  const show = () => {
-    $('wsubj').textContent = L[step][0][0]; $('wbody').textContent = L[step][0][1];
-    $('fsubj').textContent = L[step][2][0]; $('fbody').textContent = L[step][2][1];
-    letter.classList.remove('swap'); void letter.offsetWidth; letter.classList.add('swap');
+  let W = 0, H = 0, cell = 4, img = null, geo = null;
+  function size() {
+    const r = field.getBoundingClientRect();
+    W = Math.round(r.width); H = Math.round(r.height);
+    cell = innerWidth <= 820 ? 3 : 4;
+    cv.width = W; cv.height = H;
+    img = ctx.createImageData(W, H);
+    // day width chosen so the day-14 column is cut by the right edge of the screen
+    const x0 = W * 0.1, dayW = 0.9 * W / 14.36;
+    geo = { x0, dayW, colW: 2.4 * dayW, line: H * 0.3 };
+  }
+  const dayX = (d) => geo.x0 + geo.dayW * d;
+
+  // luma of the scene at (x, y): three columns lit from above, rising from the bottom edge
+  function luma(x, y, s) {
+    let v = 0;
+    for (let i = 0; i < STEPS.length; i++) {
+      const st = STEPS[i], k = s.rise[i];
+      if (k <= 0 || Math.abs(x - dayX(st.d)) > geo.colW / 2) continue;
+      const hTop = H - H * st.h * k;
+      if (y < hTop) continue;
+      const f = (y - hTop) / Math.max(1, H - hTop);
+      v += (1 - 0.82 * Math.pow(f, 0.8)) * s.alpha[i];
+    }
+    return v;
+  }
+
+  function draw(t) {
+    const day = Math.min(PAID, PAID * ease(t / (DUR - 1.4)));
+    const head = dayX(day);
+    const rise = STEPS.map((st) => st.d === 14 ? 1 : ease((day - st.d + 0.2) / 0.9));
+    // the final notice stands as a scheduled ghost, then thins out when the payment lands
+    const paidK = ease((t - (DUR - 1.4)) / 1.0);
+    const alpha = STEPS.map((st) => st.d === 14 ? 0.5 - 0.2 * paidK : 1);
+    const s = { rise, alpha };
+    const d = img.data;
+    for (let cy = 0; cy < H; cy += cell) {
+      for (let cx = 0; cx < W; cx += cell) {
+        const v = luma(cx + cell / 2, cy + cell / 2, s);
+        const th = B4[((cy / cell) & 3) * 4 + ((cx / cell) & 3)];
+        const c = v > th ? BONE : COBALT;
+        for (let yy = cy; yy < Math.min(H, cy + cell); yy++) {
+          let o = (yy * W + cx) * 4;
+          for (let xx = cx; xx < Math.min(W, cx + cell); xx++, o += 4) { d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255; }
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    // crisp layer: the playhead, then the payment
+    ctx.fillStyle = 'rgb(238,235,227)';
+    ctx.fillRect(Math.round(head) - 1, Math.round(geo.line), 2, H);
+    if (paidK > 0) {
+      ctx.fillStyle = YELLOW;
+      ctx.globalAlpha = paidK;
+      ctx.fillRect(Math.round(dayX(PAID)) - 3, Math.round(geo.line), 6, H);
+      ctx.globalAlpha = 1;
+    }
+    // labels sit on the drawing: on top of each column, at the top of the payment line
+    for (const tg of tags) {
+      const dd = +tg.dataset.day;
+      const st = STEPS.find((q) => q.d === dd);
+      let x = dayX(dd) - geo.colW / 2, y;
+      if (dd === PAID) { x = innerWidth <= 820 ? dayX(PAID) + 10 : dayX(PAID) - 10 - tg.offsetWidth; y = geo.line - 4; }
+      else {
+        y = H - H * st.h - tg.offsetHeight - 12;
+        if (x + tg.offsetWidth > W - 8) { x = dayX(dd) - geo.colW / 2 - tg.offsetWidth - 12; y = H - H * st.h; }
+      }
+      tg.style.left = x + 'px';
+      tg.style.top = y + 'px';
+      const on = dd === PAID || dd === 14 ? paidK > 0.5 : day >= dd - 0.1;
+      tg.classList.toggle('on', on);
+    }
+  }
+
+  let start = 0, last = -1;
+  function frame(now) {
+    if (!start) start = now;
+    const t = (now - start) / 1000;
+    draw(Math.min(t, DUR));
+    if (t < DUR) requestAnimationFrame(frame);
+    last = t;
+  }
+  function boot() {
+    size();
+    if (reduce) { draw(DUR); return; }
+    requestAnimationFrame(frame);
+  }
+  addEventListener('resize', () => { size(); draw(last < 0 || last >= DUR || reduce ? DUR : last); placeCopy(); });
+  document.fonts.ready.then(() => { boot(); placeCopy(); });
+
+  /* ---------- the headline changes colour where it crosses the cobalt field ---------- */
+  const h1 = document.getElementById('hero-title');
+  let copy = null;
+  function placeCopy() {
+    if (!copy) {
+      copy = document.createElement('div');
+      copy.className = 'headline copy';
+      copy.setAttribute('aria-hidden', 'true');
+      copy.innerHTML = h1.innerHTML;
+      field.appendChild(copy);
+    }
+    const hr = h1.getBoundingClientRect(), fr = field.getBoundingClientRect();
+    const cs = getComputedStyle(h1);
+    copy.style.position = 'absolute';
+    copy.style.left = (hr.left - fr.left) + 'px';
+    copy.style.top = (hr.top - fr.top) + 'px';
+    copy.style.width = hr.width + 'px';
+    copy.style.padding = cs.padding;
+    copy.style.fontSize = cs.fontSize;
+  }
+})();
+
+/* ---------- closing band: the same tone ladder, still (ordered dither, 4 x 4, 4 px cells) ---------- */
+(function () {
+  const cv = document.getElementById('ladder');
+  if (!cv || getComputedStyle(cv).display === 'none') return;
+  cv.style.height = (document.querySelector('.close .foot').offsetTop + 120) + 'px'; // the columns stand on the footer rule
+  const W = cv.width = Math.round(cv.getBoundingClientRect().width), H = cv.height = Math.round(cv.getBoundingClientRect().height);
+  const ctx = cv.getContext('2d'), img = ctx.createImageData(W, H), d = img.data, cell = 4;
+  const B4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
+  const cols = [[0.18, 0.34], [0.5, 0.6], [0.82, 0.86]], cw = W * 0.2;
+  for (let y = 0; y < H; y += cell) for (let x = 0; x < W; x += cell) {
+    let v = 0;
+    for (const [cx, h] of cols) { const top = H * (1 - h); if (Math.abs(x - W * cx) < cw / 2 && y > top) v = 1 - 0.82 * Math.pow((y - top) / (H - top), 0.8); }
+    const c = v > B4[((y / cell) & 3) * 4 + ((x / cell) & 3)] ? [238, 235, 227] : [38, 54, 200];
+    for (let yy = y; yy < Math.min(H, y + cell); yy++) for (let xx = x; xx < Math.min(W, x + cell); xx++) { const o = (yy * W + xx) * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255; }
+  }
+  ctx.putImageData(img, 0, 0);
+})();
+
+/* ---------- phones: the navigation opens as a drawer from the right ---------- */
+(function () {
+  const btn = document.querySelector('.menu'), nav = document.getElementById('site-nav');
+  const set = (open) => {
+    nav.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? 'Close' : 'Menu';
+    if (open) nav.querySelector('a').focus();
   };
-  document.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => { step = +b.dataset.step; document.querySelectorAll('[data-step]').forEach((x) => x.setAttribute('aria-selected', x === b)); show(); }));
+  btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); } });
+  document.addEventListener('click', (e) => { if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== btn) set(false); });
+  nav.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+})();
+
+/* ---------- letters: the pair swaps in 200 ms ---------- */
+(function () {
+  const L = [
+    ['Just checking in on invoice 0412', 'Hope your week is going well. Invoice 0412 for €2,400 was due on 3 October; could you take a look when you have a moment?', 'Invoice 0412 is overdue', 'Invoice 0412 for €2,400 was due on 3 October and is still open. Please pay it this week or tell me what is holding it up.'],
+    ['A second note on invoice 0412', 'I know things get busy. Invoice 0412 for €2,400 is now a week late; could you let me know when it will be paid?', 'Invoice 0412: payment needed this week', 'Invoice 0412 for €2,400 is now a week overdue. Please pay it by Friday, or reply today if something is wrong with it.'],
+    ['Last reminder for invoice 0412', 'I would rather sort this out between us. Invoice 0412 for €2,400 is two weeks late; please pay it or call me this week.', 'Final notice: invoice 0412', 'Invoice 0412 for €2,400 is two weeks overdue. If it is not paid within seven days I will pass it to a collection service.']
+  ];
+  const tabs = [...document.querySelectorAll('.tabs button')];
+  const pair = document.getElementById('letter');
+  const ids = ['wsubj', 'wbody', 'fsubj', 'fbody'].map((i) => document.getElementById(i));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  tabs.forEach((b) => b.addEventListener('click', () => {
+    tabs.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    const set = () => ids.forEach((el, i) => { el.textContent = L[+b.dataset.step][i]; });
+    if (reduce) { set(); return; }
+    pair.classList.add('out');
+    setTimeout(() => { set(); pair.classList.remove('out'); }, 200);
+  }));
 })();
 </script>
 </body>

@@ -20,8 +20,9 @@ test('intake captures fonts, palette, full easing curves and a catalogue row', a
     const [dir] = (await readdir(root)).filter((d) => d.startsWith('2026-10-30-'));
     const notes = await readFile(join(root, dir, 'notes.md'), 'utf8');
     assert.match(notes, /Schibsted Grotesk/);
-    assert.match(notes, /rgb\(12, 15, 23\)/);
-    assert.match(notes, /cubic-bezier\(0\.16, 1, 0\.3, 1\)/);
+    // fixture is the v4 landing page: its cobalt field and its ease-out curve
+    assert.match(notes, /rgb\(38, 54, 200\)/);
+    assert.match(notes, /cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
     assert.match(notes, /`domain:web`/);
     assert.ok((await stat(join(root, dir, 'thumb.jpg'))).size > 1000);
     assert.match(await readFile(join(root, 'catalog.md'), 'utf8'), /\| 2026-10-30 \| Fluxly.*domain:web, mood:calm/);

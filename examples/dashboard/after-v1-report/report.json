@@ -2,22 +2,135 @@
   "tool": "unslopslop",
   "version": 1,
   "target": "examples/dashboard/after-v1.html",
-  "score": 0,
-  "rawPoints": 0,
-  "verdict": "clean",
-  "rulesChecked": 85,
+  "score": 90,
+  "patternScore": 15,
+  "tells": 0,
+  "taste": {
+    "proof": 10,
+    "pass": false,
+    "compared": false,
+    "components": {
+      "subject": {
+        "points": 0,
+        "max": 30,
+        "why": "largest subject 0% of the first screen (none), all subjects 0%"
+      },
+      "display": {
+        "points": 15,
+        "max": 25,
+        "why": "display line 32 px (app screen)"
+      },
+      "overlap": {
+        "points": 0,
+        "max": 15,
+        "why": "nothing overlaps the subject"
+      },
+      "ground": {
+        "points": 11,
+        "max": 15,
+        "why": "ground colour 87% of the first screen, accents 7.0%"
+      },
+      "keyword": {
+        "points": 15,
+        "max": 15,
+        "why": "no coloured headline keyword"
+      }
+    },
+    "caps": [
+      "no real subject on the first screen: proof capped at 10"
+    ],
+    "signals": {
+      "subjectFrac": 0,
+      "subjectKind": "",
+      "mediaFrac": 0,
+      "display": 32,
+      "overlap": 0,
+      "keyword": 0,
+      "imagery": 0,
+      "app": true,
+      "pageHeight": 900,
+      "vpA": 1296000,
+      "ground": 0.872,
+      "accent": 0.07
+    }
+  },
+  "rawPoints": 15,
+  "verdict": "heavy",
+  "rulesChecked": 97,
   "byPass": {
     "spacing": 0,
-    "color": 0,
+    "color": 7.5,
     "icons": 0,
     "copy": 0,
-    "typography": 0,
+    "typography": 7.5,
     "layout": 0,
     "detail": 0,
     "imagery": 0,
     "motion": 0
   },
-  "findings": [],
+  "findings": [
+    {
+      "rule": "color-faded-text",
+      "pass": "color",
+      "severity": "major",
+      "title": "Faded support text",
+      "why": "Light grey support text that passes the bare minimum still reads as faded; it is the \"muted subtitle\" look of generated pages and tires the eye.",
+      "fix": "Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.",
+      "count": 2,
+      "viewports": [
+        "desktop",
+        "mobile"
+      ],
+      "examples": [
+        {
+          "el": "p.lead",
+          "detail": "6.68:1 \"across 3 invoices, against $6…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.note",
+          "detail": "6.68:1 \"Next reminders go out tomorro…\"",
+          "viewport": "desktop"
+        },
+        {
+          "el": "p.lead",
+          "detail": "6.68:1 \"across 3 invoices, against $6…\"",
+          "viewport": "mobile"
+        },
+        {
+          "el": "p.note",
+          "detail": "6.68:1 \"Next reminders go out tomorro…\"",
+          "viewport": "mobile"
+        }
+      ],
+      "points": 7.5
+    },
+    {
+      "rule": "type-heading-muted-subtitle",
+      "pass": "typography",
+      "severity": "major",
+      "title": "Heading plus grey subtitle, section after section",
+      "why": "A heading followed by a smaller, greyed paragraph in every section is the template rhythm of generated landing pages.",
+      "fix": "Let the section open with its content (a product view, a table, a list) or write one sentence in the main text colour. Vary how sections start.",
+      "count": 2,
+      "viewports": [
+        "desktop"
+      ],
+      "examples": [
+        {
+          "el": "h1 + p.lead",
+          "detail": "\"Open invoices\" with a greyed subtitle",
+          "viewport": "desktop"
+        },
+        {
+          "el": "h2 + p.meta",
+          "detail": "\"Overdue amount, last 6 weeks\" with a greyed subtitle",
+          "viewport": "desktop"
+        }
+      ],
+      "points": 7.5
+    }
+  ],
   "craft": {
     "score": 62,
     "passMark": 70,

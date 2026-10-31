@@ -1,21 +1,27 @@
 # unslopslop report
 
 - Target: `examples/dashboard/before.html`
-- Slop score: **100/100** (lower is better; raw points before the 100 cap: 160.5)
+- Slop score: **92/100** (owner reading: 100 is the worst). It is the worse of "taste not proven" (100 minus the taste proof 10) and the genre-default tells (124 pts), which count less the more taste is proven. Rule-only pattern slop: 100 (raw 183.5).
+- Taste proof: **10/100** (higher is better; pass mark 60). no real subject on the first screen: proof capped at 10
+  - subject 0/30: largest subject 0% of the first screen (none), all subjects 0%
+  - display 15/25: display line 32 px (app screen)
+  - overlap 0/15: nothing overlaps the subject
+  - ground 10/15: ground colour 46% of the first screen, accents 5.6%
+  - keyword 15/15: no coloured headline keyword
 - Craft score: **49/100** (higher is better; pass mark 70)
-- Overall: **FAIL** (needs a clean slop verdict and craft >= 70)
+- Overall: **FAIL** (needs a slop verdict that is not HEAVY, craft >= 70, taste proof >= 60; UNPROVEN until a side-by-side reference compare was run: detect --compared <compare.png>)
 - Slop verdict: **HEAVY**. Rebuild: the page is carrying a lot of generic patterns. Re-direct (DESIGN.md), then run the fix passes in order and re-run this detector after each pass.
-- Rules checked: 85; findings: 24
+- Rules checked: 97; findings: 26
 
 ## Points by fix pass
 
 | Pass | Points |
 |---|---|
 | spacing | 4 |
-| color | 73 |
+| color | 80.5 |
 | icons | 12 |
-| copy | 11 |
-| typography | 16.5 |
+| copy | 23 |
+| typography | 20 |
 | layout | 19.5 |
 | detail | 20.5 |
 | imagery | 0 |
@@ -89,6 +95,14 @@ Fix: Use a neutral, low-alpha shadow with a real offset, or no shadow and a 1 px
 - `div.kpi`: boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px [desktop]
 - `div.kpi`: boxShadow rgba(99, 102, 241, 0.18) 0px 8px 30px 0px [desktop]
 
+### color-faded-text (major, 7.5 pts, x2, desktop+mobile)
+Faded support text. Light grey support text that passes the bare minimum still reads as faded; it is the "muted subtitle" look of generated pages and tires the eye.
+Fix: Readable text at 7:1 or more (4.5:1 from 24 px up). Rank with size and weight, not by greying text out.
+- `p.sub`: 2.36:1 "Here's what's happening with …" [desktop]
+- `small`: 1.93:1 "Avg. days to pay" [desktop]
+- `p.sub`: 2.36:1 "Here's what's happening with …" [mobile]
+- `small`: 1.93:1 "Avg. days to pay" [mobile]
+
 ### color-accent-decorative (minor, 4 pts, x22, desktop)
 Accent colour spent on decoration. When the accent paints rules, tags and ornaments, it no longer tells the reader what to press or what changed.
 Fix: Keep the accent for actions, selection, focus, live state and the key data series. Decoration goes neutral.
@@ -109,6 +123,14 @@ Fix: Use one consistent line-icon set (one size, one stroke width) or remove the
 
 ## copy
 
+### copy-emoji (major, 12 pts, x6, desktop)
+Emoji in the page. Emoji in headings, buttons, labels or body copy are the most visible AI tell.
+Fix: Remove them. Use words, or one icon set drawn for the product. Keep emoji only if the brief says the user asked for them (<meta name="unslop-brief" content="emoji: reason">).
+- `a.on`: 📊 Dashboard [desktop]
+- `a`: 🧾 Invoices [desktop]
+- `a`: 👥 Clients [desktop]
+- `a`: 💬 Reminders [desktop]
+
 ### copy-fake-data (major, 9 pts, x3, desktop)
 Stock fake names and data. Acme, Globex, John Doe and "User 1" are the placeholder cast of generated demos.
 Fix: Use plausible, specific sample entries, and label them as sample data.
@@ -128,6 +150,11 @@ Eyebrow label above the heading. A small, spaced, uppercase tag above every head
 Fix: Delete it, or fold the information into the heading. Keep at most one, and only if it carries a fact.
 - `div.eyebrow`: Overview [desktop]
 
+### type-ai-default-font (major, 6 pts, x1, desktop)
+AI-default font. Display serifs and text faces that agents pick by reflex (the list in references/ai-default-fonts.md) make every generated page sound the same.
+Fix: Choose a face for this project and write why in the brief. To keep a listed face on purpose, add <meta name="unslop-brief" content="font: Family, reason">.
+- `body`: inter [desktop]
+
 ### type-heavy-weight (minor, 4 pts, x8, desktop)
 Heavy weights carry the hierarchy. Weights of 800 to 900, or bold on most text, flatten emphasis. Hierarchy should come from size and colour.
 Fix: Use 400 and 500 (600 sparingly). Let size and tone do the ranking.
@@ -143,12 +170,6 @@ Fix: Raise captions and labels to at least 13 px (body 16 px).
 - `div.eyebrow`: 11px [desktop]
 - `small`: 12px [desktop]
 - `span`: 12px [desktop]
-
-### type-reflex-font (minor, 2.5 pts, x2, desktop)
-Reflex font family. Inter, Poppins, Space Grotesk and a few others are what models pick without a reason.
-Fix: Choose a family on purpose and write the reason in DESIGN.md. A system stack is better than an unexamined default.
-- `body`: inter [desktop]
-- `h1`: inter [desktop]
 
 ## layout
 
