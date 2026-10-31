@@ -65,7 +65,7 @@
     </div>
     <dl class="notes group">
       <dt>How it works</dt><dd>The source is drawn small (one pixel per cell) and read once. Each dot stores its home, its size from darkness (square root, so area follows tone) and a spring offset. The lens sets a target offset and a size boost with a smooth falloff; a ripple is a ring that grows at a fixed speed and pushes the dots it crosses. Springs are integrated in fixed 8 ms steps so the feel does not change with frame rate.</dd>
-      <dt>Measured starting values</dt><dd>Cell 6 to 8 px. Lens 60 to 70 px, swell about 0.55, push 4 to 5 px. Spring stiffness 1600, damping 68 (settles in about 150 ms with no visible bounce). Ripple 0.75 px per ms, 30 px wide, about 400 ms life.</dd>
+      <dt>Starting values (tuned by eye)</dt><dd>Cell 6 to 9 px. Lens 70 px, swell 0.6, push 5 px. Spring stiffness 1150, damping 56 (settles in about 200 ms with a barely visible give). Ripple 0.55 px per ms, 44 px wide, about 520 ms life, so the ring reads as a soft wave rather than a snap.</dd>
       <dt>Cost</dt><dd>One arc per dot per frame while something moves; the loop sleeps when every spring is at rest. A 1440 x 900 stage at 7 px is about 26 000 dots: fine on a laptop, raise the cell to 9 px on phones.</dd>
       <dt>Fallback and reduced motion</dt><dd>Reduced motion draws the screen once and ignores the pointer until Play is pressed. No canvas means the section shows its background colour; put the real image behind it if the picture matters.</dd>
       <dt>Becomes slop when</dt><dd>The dots draw nothing in particular (a dot sphere because dot spheres are popular), the lens is on every card, or the field sits behind body text. One reactive field per page, showing the product, the mark or a real photo.</dd>
@@ -84,7 +84,7 @@
     signal: { paper: '#0b0d14', a: '#2f5bf0', b: '#f2603c', hint: '#c9ccd6' },
     moss: { paper: '#efece2', a: '#24331f', b: '#7d8f3a', hint: '#45463c' }
   };
-  var K = 1600, C = 68, STEP = 8, RIPPLE_SPEED = 0.75, RIPPLE_W = 30, RIPPLE_LIFE = 420;
+  var K = 1150, C = 56, STEP = 8, RIPPLE_SPEED = 0.55, RIPPLE_W = 44, RIPPLE_LIFE = 520;
   var cv = $('dots'), ctx = cv.getContext('2d'), stage = $('stage');
   var dots = [], W = 0, H = 0, dpr = 1, upload = null, playing = !reduce, running = false, visible = true;
   var pointer = { x: -9999, y: -9999, on: 0, target: 0 }, ripples = [], last = 0, acc = 0;
@@ -150,7 +150,7 @@
   }
   function frame(t) {
     if (!playing || !visible) { running = false; return; }
-    var dt = Math.min(64, t - (last || t)); last = t; acc += dt; var busy = false;
+    var first = !last, dt = Math.min(64, t - (last || t)); last = t; acc += dt; var busy = first;
     while (acc >= STEP) { busy = step(STEP) || busy; acc -= STEP; }
     draw();
     if (busy) requestAnimationFrame(frame); else { running = false; last = 0; }

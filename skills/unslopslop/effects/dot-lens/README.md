@@ -14,7 +14,7 @@ Live demo: [`demo.html`](demo.html) (open the file in a browser; move the pointe
 
 ## How it works
 
-The source is drawn at one pixel per cell and read once. Each dot keeps its home position, a size from darkness (square root, so area follows tone) and an offset on a spring. Under the pointer a smooth lens raises the size and sets an outward target offset; the springs (stiffness 1600, damping 68, 8 ms steps) carry the dots there and back without a visible bounce. A click adds a ring that grows at 0.75 px per ms and pushes the dots it crosses for about 400 ms. Paper areas draw a much smaller, fainter screen so the grid stays visible. The loop sleeps when every spring is at rest.
+The source is drawn at one pixel per cell and read once. Each dot keeps its home position, a size from darkness (square root, so area follows tone) and an offset on a spring. Under the pointer a smooth lens raises the size and sets an outward target offset; the springs (stiffness 1150, damping 56, 8 ms steps; values tuned by eye for this demo) carry the dots there and back with only a slight give. A click adds a ring that grows at 0.55 px per ms, 44 px wide, and pushes the dots it crosses for about 520 ms. Paper areas draw a much smaller, fainter screen so the grid stays visible. The loop sleeps when every spring is at rest.
 
 ## Parameters
 
