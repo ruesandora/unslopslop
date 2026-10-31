@@ -1,6 +1,6 @@
 FX.mount({
   title: 'Light ribbon',
-  summary: 'One folded sheet of light crossing a dark void. The sheet splits into a cool edge and a warm edge like light through a prism, and brightens where it folds. Built for a cover or a hero with a large title on top.',
+  summary: 'One folded sheet of light crossing a dark void. The sheet splits into a cool edge and a warm edge like light split by a glass edge, and brightens where it folds. Built for a cover or a hero with a large title on top.',
   cost: 'A few sines and two samples of the same field per pixel; no texture reads. Light. Animated at 30 fps; one still frame under reduced motion.',
   fallback: 'No WebGL: the CSS gradient. A still frame exported as WebP (1600 px, about 120 KB with grain) is the zero-script version.',
   slop: 'Used as a generic purple-blue screensaver behind every section, or with the void removed so the whole frame is colour. The dark void is half the effect: keep at least a third of the frame empty.',
@@ -8,7 +8,7 @@ FX.mount({
   params: [
     { id: 'width', label: 'Sheet width', min: 0.05, max: 1.2, step: 0.01, value: 0.6 },
     { id: 'fold', label: 'Fold depth', min: 0, max: 2.5, step: 0.01, value: 1.9 },
-    { id: 'split', label: 'Prism split', min: 0, max: 1, step: 0.01, value: 0.6 },
+    { id: 'split', label: 'Colour split', min: 0, max: 1, step: 0.01, value: 0.6 },
     { id: 'shine', label: 'Fold light', min: 0, max: 2, step: 0.01, value: 0.9 },
     { id: 'soft', label: 'Edge softness', min: 0.002, max: 0.2, step: 0.001, value: 0.012 },
     { id: 'tilt', label: 'Tilt', min: -1.2, max: 1.2, step: 0.01, value: -0.35 },

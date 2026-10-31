@@ -1,6 +1,6 @@
 # Light ribbon
 
-One folded sheet of light crossing a dark void. The sheet splits into a cool edge and a warm edge like light through a prism, and brightens where it folds. Built for a cover or a hero with a large title on top.
+One folded sheet of light crossing a dark void. The sheet splits into a cool edge and a warm edge like light split by a glass edge, and brightens where it folds. Built for a cover or a hero with a large title on top.
 
 ![Light ribbon](screenshot.jpg)
 
@@ -14,7 +14,7 @@ Live demo: [`demo.html`](demo.html) (open the file in a browser; sliders change 
 
 ## How it works
 
-The sheet is every point whose height, after a smooth wave bend, sits inside a band. Where the band is seen edge-on (the height barely changes as you move up) the sheet is folding: that spot gets the highlight colour. Where the bend turns the sheet over, its back shows in a darker, cooler tone. Across its width the sheet runs from the cool colour to the warm colour; the prism split sets how sharp that change is. Outside the band is the void colour with a faint halo. Grain goes on last.
+The sheet is every point whose height, after a smooth wave bend, sits inside a band. Where the band is seen edge-on (the height barely changes as you move up) the sheet is folding: that spot gets the highlight colour. Where the bend turns the sheet over, its back shows in a darker, cooler tone. Across its width the sheet runs from the cool colour to the warm colour; the colour split sets how sharp that change is. Outside the band is the void colour with a faint halo. Grain goes on last.
 
 Palette roles: void (most of the frame), cool edge, warm edge, highlight. A good proportion is roughly 40 to 55 percent void, 25 percent cool, 15 percent warm, under 5 percent highlight.
 
@@ -24,7 +24,7 @@ Palette roles: void (most of the frame), cool edge, warm edge, highlight. A good
 |---|---|---|
 | Sheet width | 0.05 to 1.2 | 0.6 |
 | Fold depth | 0 to 2.5 | 1.9 |
-| Prism split | 0 to 1 | 0.6 |
+| Colour split | 0 to 1 | 0.6 |
 | Fold light | 0 to 2 | 0.9 |
 | Edge softness | 0.002 to 0.2 | 0.012 |
 | Tilt | -1.2 to 1.2 | -0.35 |
